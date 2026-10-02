@@ -2,7 +2,9 @@
  * ============================================================
  * CONTENU ÉDITORIAL — PRINCIA · Chapter 18
  * ============================================================
- * ⚠️  BROUILLON — VALIDATION DE STANE REQUISE (doc 00 §3.3)
+ * ⚠️  Volet lettre : VALIDÉ PAR STANE le 2 octobre 2026
+ *     (« la lettre est bonne, on la garde comme elle est »).
+ *     Toute modification ultérieure passe par Stane, directement ici.
  *
  * Tous les textes ci-dessous sont construits UNIQUEMENT à partir
  * des faits fournis et validés par le créateur dans le document
@@ -65,6 +67,48 @@ export const libraryContent = {
   backToLibrary: "Retour à la bibliothèque",
 };
 
+/**
+ * -- 5.1 : Système fictionnel de la bibliothèque --
+ * La blue library existe comme une vraie institution : elle a un nom,
+ * un règlement, des cotes de volumes, une carte de lectrice et une
+ * bibliothécaire qui laisse des notes de marge.
+ * Toutes les plaisanteries ci-dessous restent strictement ancrées
+ * aux faits validés du document 00 (même règle que la lettre).
+ */
+export const libraryCodex = {
+  institution: "Blue Library — Grande Salle Bleue",
+  collection: "Fonds Princia",
+  registration: "Enregistrée sous la référence PRC-18",
+  rulesTitle: "Règlement de la Grande Salle Bleue",
+  rulesNote: "Affiché à l'entrée, relu chaque matin par la bibliothécaire.",
+  rules: [
+    "Article 1 — Le bleu ciel est la teinte officielle de l'établissement. Toute autre couleur se soumet, négocie, ou ressort.",
+    "Article 2 — La lettre ne se gagne pas, ne se débloque pas. Elle se lit, quand on veut, autant de fois qu'on veut.",
+    "Article 3 — L'enquête est facultative. La bibliothécaire décline toute responsabilité en cas de détective soudainement très investi.",
+    "Article 4 — Aucun volume de ce fonds ne sera jamais en retard. Dans cette bibliothèque, certaines lectures attendent — elles ne s'annulent pas.",
+  ],
+  stampText: "EX · LIBRIS",
+  stampSubline: "PRC-18 · Blue Library",
+} as const;
+
+/** Carte de lectrice — fiche d'identité de Princia, selon les faits validés. */
+export const readerCard = {
+  title: "Carte de lectrice",
+  stamp: "Notice certifiée conforme",
+  fields: [
+    { label: "Titulaire", value: "Princia" },
+    { label: "N° de carte", value: "PRC-18" },
+    { label: "Statut", value: "Lectrice émérite — romans et enquêtes" },
+    {
+      label: "Rayons fréquentés",
+      value: "Lecture · séries policières · informatique · génie environnemental (EPAK)",
+    },
+    { label: "Signe distinctif", value: "Allégeance officielle et documentée au bleu ciel" },
+    { label: "Validité", value: "À vie — renouvelable à chaque chapitre" },
+  ],
+  footnote: "Émise par la Grande Salle Bleue, en ce mois d'octobre 2026.",
+} as const;
+
 export interface BirthdayChapter {
   id: string;
   number: string;
@@ -72,6 +116,10 @@ export interface BirthdayChapter {
   title: string;
   paragraphs: string[];
   aside?: string;
+  /** Cote du volume dans le fonds (système fictionnel 5.1). */
+  callNumber: string;
+  /** Note de marge de la bibliothécaire (voix, pas un souvenir). */
+  marginNote: string;
   /** Dégradé de la couverture du livre (tokens bleus, doc 02 §08.1). */
   gradient: { top: string; bottom: string };
 }
@@ -87,6 +135,8 @@ export const birthdayChapters: BirthdayChapter[] = [
       "Ce n'était pas encore la grande complicité de plus tard. Juste le début. Mais les débuts comptent toujours — surtout ceux qui tiennent.",
     ],
     aside: "Premier chapitre d'une très longue histoire.",
+    callNumber: "PRC-18/6E·01",
+    marginNote: "Volume inaugural du fonds. La bibliothécaire certifie n'avoir jamais vu une histoire commencer si discrètement pour finir en collection entière.",
     gradient: { top: "#5B9BEB", bottom: "#24559F" },
   },
   {
@@ -99,6 +149,8 @@ export const birthdayChapters: BirthdayChapter[] = [
       "C'est là aussi que s'est installée notre manière d'être : de l'humour, du sérieux quand il le faut, et cette façon de se comprendre sans avoir besoin de tout expliquer.",
     ],
     aside: "Les années fondations de l'amitié.",
+    callNumber: "PRC-18/4E-3E·02",
+    marginNote: "Le service des archives a tenté d'inventorier les discussions de ce volume. Résultat officiel : « trop nombreuses ». Dossier clos, évidemment.",
     gradient: { top: "#3978D4", bottom: "#174A91" },
   },
   {
@@ -111,6 +163,8 @@ export const birthdayChapters: BirthdayChapter[] = [
       "Mais certaines amitiés ne s'effacent pas. Elles se mettent en attente, comme un marque-page glissé dans un chapitre qu'on a toujours l'intention de reprendre.",
     ],
     aside: "Un intermède — pas une fin.",
+    callNumber: "PRC-18/MP·03",
+    marginNote: "Période dite du marque-page. Ce volume n'a jamais été mis en retour d'emprunt : dans cette bibliothèque, on savait que la lecture reprendrait.",
     gradient: { top: "#7EAFE8", bottom: "#2D65B8" },
   },
   {
@@ -124,6 +178,8 @@ export const birthdayChapters: BirthdayChapter[] = [
       "Cette fois, c'est reparti pour de bon.",
     ],
     aside: "La preuve que certaines histoires refusent de s'arrêter.",
+    callNumber: "PRC-18/TLE·04",
+    marginNote: "Notice de relocalisation : volume retrouvé sur le même campus. Deux établissements, un chemin — la bibliothécaire appelle ça un heureux classement.",
     gradient: { top: "#3978D4", bottom: "#15345B" },
   },
   {
@@ -137,6 +193,8 @@ export const birthdayChapters: BirthdayChapter[] = [
       "Entre le bleu, les romans et les séries policières, il n'en fallait pas plus pour imaginer cette expérience : une bibliothèque qui en cache peut-être une, d'enquête…",
     ],
     aside: "Le bleu n'est pas qu'une couleur. C'est un état d'esprit.",
+    callNumber: "PRC-18/BL·05",
+    marginNote: "Répertorié dans toutes les nuances du bleu, y compris là où personne ne l'attendait. Dossier Lamborghini : toujours en attente de financement.",
     gradient: { top: "#8EC5FF", bottom: "#24559F" },
   },
 ];
