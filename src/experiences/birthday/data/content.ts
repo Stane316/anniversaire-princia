@@ -45,6 +45,23 @@ export const welcomeContent = {
   footnote: "Une expérience unique, préparée pour tes dix-huit ans.",
 };
 
+/**
+ * -- 5.3 : Enveloppe scellée (phase d'entrée orchestrée) --
+ * Même système fictionnel que la bibliothèque : l'invitation arrive
+ * scellée à la cire, cachetée PRC-18. Texte extérieur uniquement —
+ * l'intérieur de l'invitation reste welcomeContent (déjà relu).
+ */
+export const invitationContent = {
+  addressee: "À l'ouverture personnelle de Princia",
+  origin: "PRC-18 · La Grande Salle Bleue",
+  postage: "Affranchi en bleu, évidemment",
+  sealLabel: "Briser le sceau et ouvrir l'invitation",
+  sealCta: "Briser le sceau",
+  skip: "Passer l'introduction",
+  replay: "Refermer l'enveloppe",
+  openedNote: "L'enveloppe est ouverte. Le sceau se reformera si tu veux revoir l'instant.",
+} as const;
+
 /** -- BL-02 : Couverture -- */
 export const coverContent = {
   eyebrow: "Une expérience préparée pour le 4 octobre 2026",
@@ -232,25 +249,38 @@ export const finaleContent = {
   toLibrary: "Revoir les chapitres",
 };
 
-/** -- The 18th Case -- */
+/** -- The 18th Case (5.5 : version « vrai dossier ») -- */
 export const caseContent = {
+  reference: "ENQ-18/10-04",
   intro: {
     stamp: "Dossier n° 18",
     title: "The 18th Case",
+    fileMeta: [
+      "Retrouvé entre les rayonnages de la Grande Salle Bleue",
+      "Classification : affaire de couleur — priorité absolue",
+      "Restitution à la bibliothèque exigée après lecture",
+    ],
     paragraphs: [
       "Une étrange affaire a été retrouvée entre les rayonnages de la Blue Library. Tout y tourne autour d'un seul et même chiffre : 18.",
       "À toi d'en découvrir la vérité, indice après indice.",
     ],
+    mention: "La bibliothécaire jure n'avoir rien à voir avec ce dossier. Personne ne l'a crue.",
     note: "Aucune obligation : la lettre et la bibliothèque te restent accessibles à tout moment.",
     start: "Ouvrir le dossier",
     back: "Retour à la bibliothèque",
   },
   conclusion: {
     stamp: "Affaire classée",
+    verdictStamp: "RÉSOLUE",
     title: "Enquête résolue",
     paragraphs: [
       "Tu as résolu l'affaire n° 18 sans difficulté majeure — le doute n'était plus permis depuis longtemps.",
       "Aucun suspect n'est resté sur la touche, et la principale intéressée s'en sort magnifiquement bien. Comme toujours.",
+    ],
+    mentions: [
+      "Pièces versées au dossier : 03 — pièces disparues : 00.",
+      "Mention finale : le détective en titre du jour restera dans les annales de la Grande Salle Bleue.",
+      "Recommandation d'archivage : ranger ce dossier au rayon des certitudes, sous-cote bleue.",
     ],
     toLetter: "Lire la lettre, si ce n'est pas déjà fait",
     toLibrary: "Retour à la bibliothèque",
@@ -292,6 +322,7 @@ export const caseSteps = [
     stamp: "Indice 01",
     title: "Le rêve sur quatre roues",
     body: "Premier élément du dossier : les notes mentionnent un cadeau rêvé depuis longtemps. Il roule vite, il fait tourner les têtes… et il n'existe, semble-t-il, qu'en une seule couleur acceptable.",
+    mention: "Archiviste, au dossier : ce rêve est consigné depuis si longtemps qu'il possède sa propre étagère.",
     cta: "À toi de trancher",
     riddle: {
       kind: "choice",
@@ -305,6 +336,7 @@ export const caseSteps = [
       stamp: "Élément vérifié",
       title: "La Lamborghini bleue",
       body: "Exact. Le rêve est consigné noir sur blanc : une Lamborghini, bleue naturellement. Le budget, lui, maintient qu'il manque encore quelques pièces au dossier pour applaudir.",
+      mention: "Nota de l'archiviste : le tricycle bleu n'a jamais été une option sérieuse. Officiellement.",
     },
   },
   {
@@ -313,6 +345,7 @@ export const caseSteps = [
     stamp: "Indice 02",
     title: "La couleur omniprésente",
     body: "Deuxième élément : le dossier rapporte une couleur qui s'est immiscée jusque dans les pièces les plus inattendues. On ne citera rien de précis. Mais certains lieux, apparemment, en disent bleu.",
+    mention: "Certains lieux de ce dossier resteront volontairement flous. La couleur, elle, a été interrogée : elle a tout avoué.",
     cta: "Je sais où cela va",
     riddle: {
       kind: "text",
@@ -327,6 +360,31 @@ export const caseSteps = [
       stamp: "Élément vérifié",
       title: "Le bleu, évidemment",
       body: "Dossier refermé sur la couleur : bleu, partout, toujours. Même là où personne ne soupçonnait son rôle. Le mystère était profond — enfin, disons, domestique.",
+      mention: "Versement accepté : une couleur, zéro zone blanche. Le dossier est dense.",
+    },
+  },
+  {
+    id: "clue-3",
+    type: "clue" as const,
+    stamp: "Indice 03",
+    title: "Le recoupement géographique",
+    body: "Troisième élément versé : après des années sans localisation commune, le dossier note que le sujet et l'enquêteur arpentent de nouveau le même campus universitaire. Reste à le nommer.",
+    mention: "Le plan joint au dossier est dessiné au stylo bleu. Évidemment.",
+    cta: "Je localise l'affaire",
+    riddle: {
+      kind: "text",
+      question: "Sur quel campus se déroule le recoupement ?",
+      acceptedAnswers: ["abomey-calavi", "abomey calavi", "abomeycalavi"],
+      hint: "Deux mots, un tiret : A…-C…",
+      placeholder: "Nom du campus…",
+    } satisfies CaseRiddle,
+    wrongFeedback: "Ce n'est pas ce campus-là. Un indice supplémentaire est disponible, si tu veux.",
+    hint: "Deux mots, un tiret : A…-C…",
+    reveal: {
+      stamp: "Élément vérifié",
+      title: "Abomey-Calavi",
+      body: "Localisation confirmée : même campus, deux établissements — le génie environnemental à l'EPAK d'un côté, pas loin de l'autre. La géographie de l'affaire tient en une phrase : les chemins finissent toujours par se recroiser.",
+      mention: "Classée définitivement. La distance officielle entre les deux établissements : « raisonnable ».",
     },
   },
 ] as const;

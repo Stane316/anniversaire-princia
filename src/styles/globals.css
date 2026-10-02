@@ -1487,3 +1487,265 @@ a {
     perspective: none;
   }
 }
+
+/* ---------- 5.3 : Enveloppe scellée & invitation ---------- */
+.invitation-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  gap: var(--space-8);
+  padding: var(--space-10) var(--space-5);
+  overflow: clip;
+  perspective: 1100px;
+}
+
+/* L'enveloppe */
+.envelope {
+  position: relative;
+  width: min(360px, 84vw);
+  aspect-ratio: 360 / 224;
+  filter: drop-shadow(0 24px 44px rgba(21, 52, 91, 0.22));
+  transform-style: preserve-3d;
+}
+.envelope__back {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: linear-gradient(170deg, #f2f8ff 0%, #e2eefc 100%);
+  border: 1px solid var(--color-border-strong);
+}
+.envelope__front {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: linear-gradient(160deg, #f8fbff 0%, #e9f2fd 100%);
+  clip-path: polygon(0 16%, 50% 54%, 100% 16%, 100% 100%, 0 100%);
+}
+.envelope__flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 58%;
+  transform-origin: 50% 0%;
+  background: linear-gradient(180deg, #d9e9fc 0%, #bcd7f7 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  z-index: 3;
+}
+.envelope__flap::after {
+  /* liseré bleu au bord du rabat */
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%, 48% 96%, 3% 3%);
+  background: rgba(57, 120, 212, 0.25);
+}
+.envelope__address {
+  position: absolute;
+  left: var(--space-5);
+  bottom: var(--space-4);
+  z-index: 4;
+  pointer-events: none;
+}
+.envelope__addressee {
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  color: var(--color-blue-deep);
+}
+.envelope__origin {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+.envelope__postage {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 4;
+  padding: 4px 7px;
+  border: 1px dashed var(--color-primary);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--color-primary);
+  transform: rotate(2.5deg);
+  pointer-events: none;
+}
+
+/* Le sceau de cire bleue : deux moitiés qui se brisent. */
+.envelope__seal {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  width: 88px;
+  height: 88px;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  filter: drop-shadow(0 6px 10px rgba(21, 52, 91, 0.3));
+}
+.envelope__seal-half {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #eaf3ff;
+  letter-spacing: 0.02em;
+  background:
+    radial-gradient(circle at 32% 28%, #6aa5ee 0%, #3978d4 38%, #24559f 78%, #174a91 100%);
+}
+.envelope__seal-half--l {
+  left: 0;
+  border-radius: 999px 0 0 999px;
+  justify-content: flex-end;
+  padding-right: 4px;
+  box-shadow: inset -3px 0 4px rgba(11, 30, 58, 0.35);
+}
+.envelope__seal-half--r {
+  right: 0;
+  border-radius: 0 999px 999px 0;
+  justify-content: flex-start;
+  padding-left: 4px;
+  box-shadow: inset 3px 0 4px rgba(11, 30, 58, 0.35);
+}
+
+/* Boutons du rituel */
+.invitation-stage__cta {
+  z-index: 6;
+}
+.invitation-stage__skip {
+  z-index: 6;
+}
+
+/* L'invitation révélée */
+.invitation-card {
+  position: relative;
+  max-width: 640px;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-strong);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.95)),
+    var(--color-surface);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-10) var(--space-7) var(--space-8);
+  text-align: center;
+  overflow: hidden;
+  z-index: 2;
+}
+.invitation-card::before {
+  /* filigrane bibliothèque dans le papier */
+  content: "PRC-18";
+  position: absolute;
+  right: -18px;
+  bottom: -30px;
+  font-family: var(--font-mono);
+  font-size: 7rem;
+  font-weight: 700;
+  color: rgba(57, 120, 212, 0.06);
+  pointer-events: none;
+}
+.invitation-card > .exlibris {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+}
+.invitation-card__inner {
+  position: relative;
+  align-items: center;
+}
+.invitation-card__title {
+  outline: none;
+  text-wrap: balance;
+}
+.invitation-card__replay {
+  font-size: var(--text-caption);
+}
+.invitation-card__sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .invitation-stage {
+    perspective: none;
+  }
+}
+
+/* ---------- 5.5 : Dossier « vrai casier » ---------- */
+.case-reference {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.case-counter {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--color-primary-strong);
+}
+.case-exhibit {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  transform: rotate(1.4deg);
+}
+.case-filemeta {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.case-filemeta li {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--color-text-secondary);
+  padding-left: var(--space-4);
+  position: relative;
+}
+.case-filemeta li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+}
+.case-file--verdict {
+  position: relative;
+}
+.case-file--verdict > .exlibris {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+}
+@media (max-width: 560px) {
+  .case-file--verdict > .exlibris {
+    position: static;
+    margin-left: auto;
+    display: flex;
+  }
+}
+.case-file--verdict .case-exhibit {
+  transform: rotate(-1.4deg);
+}
