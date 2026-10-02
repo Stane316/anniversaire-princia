@@ -28,6 +28,13 @@ import { isChoiceCorrect, isTextCorrect } from "../riddle";
 import { caseProgressMemory } from "../../../data/repositories";
 import { Icon } from "../../../components/ui/Icon";
 import { useReducedMotion } from "../../../motion/useReducedMotion";
+import { MarginNote } from "../../../components/library/MarginNote";
+import { ExLibrisStamp } from "../../../components/library/ExLibrisStamp";
+
+/** Numéro de pièce à la Jenny : A-01, A-02… (pure présentation). */
+function exhibitNumber(clueIndex: number): string {
+  return `A-0${clueIndex + 1}`;
+}
 
 type ClueStep = Extract<CaseStep, { type: "clue" }>;
 
@@ -103,9 +110,16 @@ export function CasePage() {
     <BirthdayLayout back={{ to: "/birthday/bibliotheque", label: caseContent.intro.back }}>
       <section className="container container--readable section" style={{ paddingBlock: "var(--space-12)" }}>
         <header className="stack" style={{ alignItems: "start", marginBottom: "var(--space-8)" }}>
+          <p className="case-reference">
+            Réf. {caseContent.reference} — versée à la Grande Salle Bleue
+          </p>
           <div className="cluster cluster--between" style={{ width: "100%" }}>
             <span className="case-stamp">{caseContent.intro.stamp}</span>
-            <div className="case-progress" role="img" aria-label={`Progression : ${solvedCount} indice${solvedCount > 1 ? "s" : ""} résolu${solvedCount > 1 ? "s" : ""} sur ${CLUES.length}`}>
+            <div
+              className="case-progress"
+              role="img"
+              aria-label={`Progression : ${solvedCount} indice${solvedCount > 1 ? "s" : ""} résolu${solvedCount > 1 ? "s" : ""} sur ${CLUES.length}`}
+            >
               {CLUES.map((clue, i) => (
                 <span
                   key={clue.id}
@@ -120,6 +134,10 @@ export function CasePage() {
               ))}
             </div>
           </div>
+          <p className="case-counter">
+            Pièces vérifiées : {String(solvedCount).padStart(2, "0")}/{String(CLUES.length).padStart(2, "0")}
+            {" "}— disparues : 00
+          </p>
           <h1 className="h1">{caseContent.intro.title}</h1>
         </header>
 
@@ -127,6 +145,11 @@ export function CasePage() {
         {progress === 0 && (
           <div ref={fileRef} className="case-file stack">
             <span className="case-stamp">Ouverture</span>
+            <ul className="case-filemeta" aria-label="Mentions du dossier">
+              {caseContent.intro.fileMeta.map((meta) => (
+                <li key={meta}>{meta}</li>
+              ))}
+            </ul>
             <div className="prose">
               {caseContent.intro.paragraphs.map((paragraph) => (
                 <p key={paragraph.slice(0, 40)} style={{ fontSize: "var(--text-body-lg)" }}>
@@ -134,6 +157,7 @@ export function CasePage() {
                 </p>
               ))}
             </div>
+            <MarginNote label="La bibliothécaire, au dossier">{caseContent.intro.mention}</MarginNote>
             <p className="alert alert--info">
               <Icon name="sparkles" size={18} />
               <span>{caseContent.intro.note}</span>
@@ -150,9 +174,15 @@ export function CasePage() {
         {/* -------- Étape : indice + énigme (CASE-03/04/05) -------- */}
         {progress >= 1 && progress % 2 === 1 && currentClue && (
           <div ref={fileRef} className="case-file stack-lg">
-            <span className="case-stamp">{currentClue.stamp}</span>
+            <div className="cluster cluster--between" style={{ alignItems: "start" }}>
+              <span className="case-stamp">{currentClue.stamp}</span>
+              <span className="case-exhibit">
+                Pièce {exhibitNumber(CLUES.indexOf(currentClue))} — à manipuler avec gants
+              </span>
+            </div>
             <h2 className="h3">{currentClue.title}</h2>
             <p style={{ fontSize: "var(--text-body-lg)" }}>{currentClue.body}</p>
+            <MarginNote label="La bibliothécaire, au dossier">{currentClue.mention}</MarginNote>
 
             <div className="stack" role="group" aria-label={currentClue.riddle.question}>
               <h3 className="h4">{currentClue.riddle.question}</h3>
@@ -250,6 +280,7 @@ export function CasePage() {
               {currentClue.reveal.title}
             </h3>
             <p style={{ fontSize: "var(--text-body-lg)" }}>{currentClue.reveal.body}</p>
+            <MarginNote label="La bibliothécaire, au dossier">{currentClue.reveal.mention}</MarginNote>
             <div>
               <button type="button" className="btn btn--primary" onClick={() => goTo(progress + 1)}>
                 {progress + 1 >= LAST_STEP ? "Refermer le dossier" : "Indice suivant"}
@@ -261,7 +292,14 @@ export function CasePage() {
 
         {/* -------- Étape : conclusion (CASE-07) -------- */}
         {onConclusion && (
-          <div ref={fileRef} className="case-file stack-lg">
+          <div ref={fileRef} className="case-file stack-lg case-file--verdict">
+            <ExLibrisStamp
+              text={caseContent.conclusion.verdictStamp}
+              subline={`Réf. ${caseContent.reference}`}
+              size={128}
+              rotate={-10}
+              ink="rgba(23, 74, 145, 0.7)"
+            />
             <span className="case-stamp">{caseContent.conclusion.stamp}</span>
             <h2 className="h2">{caseContent.conclusion.title}</h2>
             {caseContent.conclusion.paragraphs.map((paragraph) => (
@@ -269,6 +307,11 @@ export function CasePage() {
                 {paragraph}
               </p>
             ))}
+            <ul className="case-filemeta" aria-label="Mentions finales du dossier">
+              {caseContent.conclusion.mentions.map((mention) => (
+                <li key={mention}>{mention}</li>
+              ))}
+            </ul>
             <div className="cluster">
               <Link to="/birthday/lettre" className="btn btn--primary">
                 <Icon name="letter" size={16} />

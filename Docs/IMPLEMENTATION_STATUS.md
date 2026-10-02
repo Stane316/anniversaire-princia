@@ -77,14 +77,15 @@ Mis à jour après chaque implémentation. Date de référence : 2 octobre 2026.
 | 5.2 | Livre à pages tournantes (3D CSS + anime.js) | P0 | Vague 1 validée | ✅ Fait (2 oct. 2026) | `ReadingBook` ; reduced-motion = navigation instantanée |
 | 5.3 | Entrée immersive orchestrée | P0 | — | ✅ Fait (2 oct. 2026) | Enveloppe cachetée → sceau brisé → invitation ; skippable, mémorisée, reduced-motion = immédiate |
 | 5.4 | Volume sous scellé (dévoilé le 4 oct.) | P1 | Contenu Stane | ⬜ Proposée | Dépendance : texte de Stane |
-| 5.5 | The 18th Case enrichi | P1 | — | ⬜ Proposée | Toujours facultatif |
+| 5.5 | The 18th Case enrichi (vrai dossier) | P1 | — | ✅ Fait (2 oct. 2026) | 3 pièces (Lambo, bleu, campus), mentions de la bibliothécaire, verdict « RÉSOLUE » |
 | 5.6 | Micro-interactions de présence | P1 | — | ⬜ Proposée | |
 | 5.7 | Intégration contenus personnels de Stane | P1 | Contenu Stane | ⬜ Proposée | Dépendance : matière de Stane |
 
 ## BASELINE DE STABILITÉ — après 5.3 (2 oct. 2026, §04.2)
 
 - **Parcours validés :** `/` (enveloppe → invitation) → couverture → bibliothèque → chapitre (livre) → lettre → enquête → finale → espace ; les 5 features quotidiennes.
-- **Tests :** 21/21. **Typecheck :** 0 erreur. **Build :** OK (93 pré-caches).
+- **Tests :** 26/26 (dont intégrité du dossier d'enquête). **Typecheck :** 0 erreur. **Build :** OK (93 pré-caches).
+- **5.5 :** référence ENQ-18/10-04 servie dans le bundle ; routes /birthday/enquete, bibliothèque, lettre en 200 ; matrice rejouée : aucun fichier 5.1/5.2/5.3 touché.
 - **Smoke preview prod :** routes 200 ; classes `envelope__seal-half`, `envelope__flap`, bouton skip présents dans le bundle/CSS servis.
 - **Erreurs connues :** aucune. **Non bloquant ouvert :** ressenti visuel de la séquence (rythme/ampleur) à valider par Stane sur appareil.
 - **Éléments protégés :** corps de la lettre (test gelé), contenu de `welcomeContent` (réutilisé tel quel, non modifié), geste de feuilletage 5.2.

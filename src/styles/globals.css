@@ -1684,3 +1684,68 @@ a {
     perspective: none;
   }
 }
+
+/* ---------- 5.5 : Dossier « vrai casier » ---------- */
+.case-reference {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.case-counter {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--color-primary-strong);
+}
+.case-exhibit {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  transform: rotate(1.4deg);
+}
+.case-filemeta {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.case-filemeta li {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--color-text-secondary);
+  padding-left: var(--space-4);
+  position: relative;
+}
+.case-filemeta li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+}
+.case-file--verdict {
+  position: relative;
+}
+.case-file--verdict > .exlibris {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+}
+@media (max-width: 560px) {
+  .case-file--verdict > .exlibris {
+    position: static;
+    margin-left: auto;
+    display: flex;
+  }
+}
+.case-file--verdict .case-exhibit {
+  transform: rotate(-1.4deg);
+}
