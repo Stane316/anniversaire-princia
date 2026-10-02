@@ -13,9 +13,11 @@
  */
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import { ToastProvider } from "../components/ui/Toast";
 import { Icon } from "../components/ui/Icon";
 import { visitMemory } from "../data/repositories";
+import { getDaypart } from "../lib/daypart";
 import { WelcomePage } from "../experiences/birthday/pages/WelcomePage";
 import { CoverPage } from "../experiences/birthday/pages/CoverPage";
 import { LibraryPage } from "../experiences/birthday/pages/LibraryPage";
@@ -64,6 +66,12 @@ function NotFoundPage() {
 }
 
 export function App() {
+  // 5.6 — Ciel ambiant : teinte posée UNE fois au démarrage (aucune
+  // boucle d'animation ; purement esthétique, derrière le contenu).
+  useEffect(() => {
+    document.body.dataset["daypart"] = getDaypart();
+  }, []);
+
   return (
     <ToastProvider>
       <BrowserRouter>

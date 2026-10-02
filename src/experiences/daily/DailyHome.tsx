@@ -14,6 +14,12 @@ import { Icon } from "../../components/ui/Icon";
 import type { IconName } from "../../components/ui/Icon";
 import { bookRepository, taskRepository, winRepository, visitMemory } from "../../data/repositories";
 import { dueLabel } from "../../lib/datetime";
+import { daypartLabel, getDaypart } from "../../lib/daypart";
+import {
+  birthdayCountdown,
+  presenceGreeting,
+  wordOfTheDay,
+} from "./data/presence";
 
 interface Summary {
   books: number;
@@ -66,6 +72,9 @@ function FeatureCard({
 
 export function DailyHome() {
   const [summary, setSummary] = useState<Summary | null>(null);
+  // 5.6 — Présence : évaluée une fois au rendu (dates réelles, pas de boucle).
+  const daypart = getDaypart();
+  const countdown = birthdayCountdown();
 
   useEffect(() => {
     // Première visite de l'espace : mémorisée pour les prochains accès
@@ -104,8 +113,10 @@ export function DailyHome() {
 
   return (
     <section className="container section container--editorial page-enter">
-      <header className="stack" style={{ marginBottom: "var(--space-10)" }}>
-        <p className="kicker">Ton espace</p>
+      <header className="stack" style={{ marginBottom: "var(--space-8)" }}>
+        <p className="kicker">
+          {presenceGreeting(daypart)} · Ton espace
+        </p>
         <h1 className="h2">Bienvenue dans la suite, Princia</h1>
         <p className="lead" style={{ maxWidth: "62ch" }}>
           La bibliothèque du cadeau racontait des chapitres déjà écrits. Ici, c'est toi qui
@@ -113,6 +124,21 @@ export function DailyHome() {
           obligatoire — tout t'appartient.
         </p>
       </header>
+
+      {/* 5.6 — Bande de présence : compte à rebours + mot du jour. */}
+      <aside className="presence" aria-label="Présence du jour" style={{ marginBottom: "var(--space-10)" }}>
+        <div className={`presence__countdown presence__countdown--${countdown.tone}`}>
+          <span className="presence__badge">{countdown.badge}</span>
+          <div>
+            <p className="presence__eyebrow">Les 18 ans, relève du dossier</p>
+            <p className="presence__line">{countdown.line}</p>
+          </div>
+        </div>
+        <blockquote className="presence__word">
+          <p className="presence__eyebrow">Mot du jour — {daypartLabel[daypart]}</p>
+          <p className="presence__quote">{wordOfTheDay()}</p>
+        </blockquote>
+      </aside>
 
       <div
         className="stack"

@@ -78,13 +78,14 @@ Mis à jour après chaque implémentation. Date de référence : 2 octobre 2026.
 | 5.3 | Entrée immersive orchestrée | P0 | — | ✅ Fait (2 oct. 2026) | Enveloppe cachetée → sceau brisé → invitation ; skippable, mémorisée, reduced-motion = immédiate |
 | 5.4 | Volume sous scellé (dévoilé le 4 oct.) | P1 | Contenu Stane | ⬜ Proposée | Dépendance : texte de Stane |
 | 5.5 | The 18th Case enrichi (vrai dossier) | P1 | — | ✅ Fait (2 oct. 2026) | 3 pièces (Lambo, bleu, campus), mentions de la bibliothécaire, verdict « RÉSOLUE » |
-| 5.6 | Micro-interactions de présence | P1 | — | ⬜ Proposée | |
+| 5.6 | Micro-interactions de présence | P1 | — | ✅ Fait (2 oct. 2026) | Ciel ambiant (4 moments), mot du jour, compte à rebours réel J-N, transitions cartes |
 | 5.7 | Intégration contenus personnels de Stane | P1 | Contenu Stane | ⬜ Proposée | Dépendance : matière de Stane |
 
 ## BASELINE DE STABILITÉ — après 5.3 (2 oct. 2026, §04.2)
 
 - **Parcours validés :** `/` (enveloppe → invitation) → couverture → bibliothèque → chapitre (livre) → lettre → enquête → finale → espace ; les 5 features quotidiennes.
-- **Tests :** 26/26 (dont intégrité du dossier d'enquête). **Typecheck :** 0 erreur. **Build :** OK (93 pré-caches).
+- **Tests :** 31/31 (+ présence : moments, compte à rebours réel, mot du jour déterministe). **Typecheck :** 0 erreur. **Build :** OK (93 pré-caches).
+- **5.6 :** `ambient-sky` servi dans le CSS, « Mot du jour » dans le bundle ; routes /app/* 200 ; matrice rejouée (aucun fichier des vagues précédentes touché, hors App.tsx+DailyHome).
 - **5.5 :** référence ENQ-18/10-04 servie dans le bundle ; routes /birthday/enquete, bibliothèque, lettre en 200 ; matrice rejouée : aucun fichier 5.1/5.2/5.3 touché.
 - **Smoke preview prod :** routes 200 ; classes `envelope__seal-half`, `envelope__flap`, bouton skip présents dans le bundle/CSS servis.
 - **Erreurs connues :** aucune. **Non bloquant ouvert :** ressenti visuel de la séquence (rythme/ampleur) à valider par Stane sur appareil.
