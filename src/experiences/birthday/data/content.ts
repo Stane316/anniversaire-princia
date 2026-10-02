@@ -45,6 +45,23 @@ export const welcomeContent = {
   footnote: "Une expérience unique, préparée pour tes dix-huit ans.",
 };
 
+/**
+ * -- 5.3 : Enveloppe scellée (phase d'entrée orchestrée) --
+ * Même système fictionnel que la bibliothèque : l'invitation arrive
+ * scellée à la cire, cachetée PRC-18. Texte extérieur uniquement —
+ * l'intérieur de l'invitation reste welcomeContent (déjà relu).
+ */
+export const invitationContent = {
+  addressee: "À l'ouverture personnelle de Princia",
+  origin: "PRC-18 · La Grande Salle Bleue",
+  postage: "Affranchi en bleu, évidemment",
+  sealLabel: "Briser le sceau et ouvrir l'invitation",
+  sealCta: "Briser le sceau",
+  skip: "Passer l'introduction",
+  replay: "Refermer l'enveloppe",
+  openedNote: "L'enveloppe est ouverte. Le sceau se reformera si tu veux revoir l'instant.",
+} as const;
+
 /** -- BL-02 : Couverture -- */
 export const coverContent = {
   eyebrow: "Une expérience préparée pour le 4 octobre 2026",

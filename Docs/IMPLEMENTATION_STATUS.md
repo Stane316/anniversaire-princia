@@ -75,21 +75,20 @@ Mis à jour après chaque implémentation. Date de référence : 2 octobre 2026.
 | 4.5–4.6 | Commit, synchronisation, instructions de livraison | P0 | Phase 4 | 🔧 En cours | Commits poussés (`4fa0ccc`, `ba4d145`) ; 4.6 = déploiement par Stane |
 | 5.1 | Système fictionnel de la bibliothèque | P0 | Vague 1 validée | ✅ Fait (2 oct. 2026) | Cotes, règlement, carte de lectrice, tampons, notes de bibliothécaire |
 | 5.2 | Livre à pages tournantes (3D CSS + anime.js) | P0 | Vague 1 validée | ✅ Fait (2 oct. 2026) | `ReadingBook` ; reduced-motion = navigation instantanée |
-| 5.3 | Entrée immersive orchestrée | P0 | — | ⬜ Proposée, en attente de feu vert | Skippable, contenu jamais bloqué |
+| 5.3 | Entrée immersive orchestrée | P0 | — | ✅ Fait (2 oct. 2026) | Enveloppe cachetée → sceau brisé → invitation ; skippable, mémorisée, reduced-motion = immédiate |
 | 5.4 | Volume sous scellé (dévoilé le 4 oct.) | P1 | Contenu Stane | ⬜ Proposée | Dépendance : texte de Stane |
 | 5.5 | The 18th Case enrichi | P1 | — | ⬜ Proposée | Toujours facultatif |
 | 5.6 | Micro-interactions de présence | P1 | — | ⬜ Proposée | |
 | 5.7 | Intégration contenus personnels de Stane | P1 | Contenu Stane | ⬜ Proposée | Dépendance : matière de Stane |
 
-## BASELINE DE STABILITÉ — après Vague 1 (5.1 + 5.2), 2 oct. 2026 (§04.2)
+## BASELINE DE STABILITÉ — après 5.3 (2 oct. 2026, §04.2)
 
-- **Parcours validés :** entrée → couverture → bibliothèque → chapitre (livre) → lettre → enquête → finale → espace ; les 5 features quotidiennes.
-- **Tests :** 21/21 (énigmes, dates, validateurs, intégrité codex + garde-fou lettre validée).
-- **Typecheck :** `npx tsc -b` 0 erreur. **Build :** OK, 93 entrées pré-cachées (1,69 MiB).
-- **Smoke preview prod :** routes clés 200 ; bundle et CSS contiennent le nouveau système (vérifié par contenu servi).
-- **Commit :** voir historique de la branche de session (complet + poussé).
-- **Erreurs connues :** aucune. **Non bloquant ouvert :** contrôle visuel humain de la vague (flip/rendu) sur appareil.
-- **Ne pas modifier sans justification :** corps de la lettre (gelé par test), pattern hooks `loading|ready|error`, suppression = modale unique, données hors cache HTTP.
+- **Parcours validés :** `/` (enveloppe → invitation) → couverture → bibliothèque → chapitre (livre) → lettre → enquête → finale → espace ; les 5 features quotidiennes.
+- **Tests :** 21/21. **Typecheck :** 0 erreur. **Build :** OK (93 pré-caches).
+- **Smoke preview prod :** routes 200 ; classes `envelope__seal-half`, `envelope__flap`, bouton skip présents dans le bundle/CSS servis.
+- **Erreurs connues :** aucune. **Non bloquant ouvert :** ressenti visuel de la séquence (rythme/ampleur) à valider par Stane sur appareil.
+- **Éléments protégés :** corps de la lettre (test gelé), contenu de `welcomeContent` (réutilisé tel quel, non modifié), geste de feuilletage 5.2.
+- **Matrice de non-régression exécutée pour 5.3 :** démarrage/navigation/contenu (routes 200), interactions (skip + replay testés en code), motion non bloquant (invitation dans le DOM dès l'ouverture ; timeline annulée au démontage ; reduced-motion = phase « open » immédiate), données (clé `seenIntro` ajoutée via `safeStorage`, jamais d'exception). Aucun fichier des 5.1/5.2/features quotidiennes touché.
 
 ### Matrice de non-régression exécutée pour la Vague 1 (§04.3)
 | Domaine | Résultat | Méthode |

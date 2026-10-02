@@ -78,6 +78,7 @@ export const winRepository = {
 const KEYS = {
   visitedDailySpace: "princia.chapter18.visitedDailySpace",
   caseProgress: "princia.chapter18.caseProgress",
+  seenIntro: "princia.chapter18.seenIntro",
 } as const;
 
 /** localStorage protégé : jamais d'exception si indisponible (doc 03 §9.3). */
@@ -106,6 +107,13 @@ export const visitMemory = {
   },
   markDailySpaceVisited(): void {
     safeStorage.set(KEYS.visitedDailySpace, "yes");
+  },
+  /** Séquence d'entrée (5.3) : déjà vue → invitation directement ouverte. */
+  hasSeenIntro(): boolean {
+    return safeStorage.get(KEYS.seenIntro) === "yes";
+  },
+  markIntroSeen(): void {
+    safeStorage.set(KEYS.seenIntro, "yes");
   },
 };
 
