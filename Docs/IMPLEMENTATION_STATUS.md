@@ -71,8 +71,40 @@ Mis à jour après chaque implémentation. Date de référence : 2 octobre 2026.
 | 3.4 | Bibliothèque de lecture (CRUD) | P1 | 3.3 | ✅ Fait | `src/features/reading/` |
 | 3.5 | Planner universitaire (tâches/échéances) | P1 | 3.3 | ✅ Fait | Badges in-app (AUJOURD'HUI / EN RETARD / J-N) ; pas de notification push |
 | 3.6 | Petites victoires + À découvrir (état vide honnête) | P1 | 3.3 | ✅ Fait | État vide « signées Stane » ; 3 liens externes **vérifiés actifs le 2 oct. 2026** |
-| 4.1–4.4 | Audits finaux (fonctionnel, non-régression, technique, confidentialité) | P0 | Toutes | 🔧 En cours | Pré-audit passé : `tsc -b` 0 erreur, tests 16/16, build OK, smoke HTTP (routes, manifest, sw.js, icônes) 200 ; audit appareil réel + validation humaine restants |
-| 4.5–4.6 | Commit, synchronisation, instructions de livraison | P0 | Phase 4 | 🔧 En cours | Commit unique préparé |
+| 4.1–4.4 | Audits finaux (fonctionnel, non-régression, technique, confidentialité) | P0 | Toutes | ✅ Faits (2 oct. 2026, session 2) | Détail ci-dessous ; points réservés au réel : hors ligne sur téléphone (Stane), déploiement (Stane) |
+| 4.5–4.6 | Commit, synchronisation, instructions de livraison | P0 | Phase 4 | 🔧 En cours | Commit `4fa0ccc` poussé ; 4.6 = déploiement par Stane |
+
+## AUDITS 4.1–4.4 — session du 2 octobre 2026 (soir)
+
+### 4.1 — Audit fonctionnel
+| Contrôle | Commande | Résultat |
+|---|---|---|
+| Toutes les routes (11) + manifest + sw + icône | `curl` sur preview prod | ✅ 200 ×14 |
+| Démarrage app / fallback SPA | idem | ✅ |
+| Tests unitaires | `npm test` | ✅ 16/16 (0,6 s) |
+| **Réservé au réel** : hors ligne avion-mode sur téléphone | — | ⏳ test par Stane après déploiement |
+
+### 4.2 — Audit de non-régression (matrice doc 04 §04.3)
+| Domaine | Résultat | Méthode |
+|---|---|---|
+| Démarrage | ✅ | preview + curl 200 |
+| Build | ✅ | `npm run build` rejoué : succès, 93 entrées pré-cachées |
+| Navigation / contenu / interactions / données | ✅ code + routes | vérifié au niveau commandes et structure (11 routes 200 ; persistance testée en code) |
+| Responsive / console navigateur / accessibilité | ✅ niveau code | media queries, `prefers-reduced-motion`, focus visibles, aria ; **œil humain : en attente** |
+| Motion non bloquant | ✅ | animations purement décoratives, contenu rendu indépendamment |
+| Rééxécution après cette session | ✅ | tsc/tests/build rejoués à chaque vague |
+
+### 4.3 — Audit technique
+- `npx tsc -b` : **0 erreur** (après `npm ci` — `node_modules` non persisté par l'environnement, commande documentée).
+- Bundle : JS 366 kB (115,65 kB gzip), CSS 32,56 kB — en-dessous du seuil de vigilance.
+- Dette : 0 TODO/FIXME. Dépendances : toutes utilisées (animejs inclus dans 2 pages).
+- Note : `npx tsc` seul sans node_modules installe un faux paquet « tsc » — toujours passer par `npm ci` d'abord (consigné pour éviter de rejouer cette erreur).
+
+### 4.4 — Audit sécurité & confidentialité
+- Scan secrets (clés/tokens/mots de passe) dans `src/`, `public/`, `scripts/` : **0 occurrence**.
+- Aucun appel réseau sortant dans le code applicatif (`fetch/axios/XMLHttpRequest` : 0) ; seules URL externes : les 3 liens « À découvrir » (cliqués par l'utilisatrice seulement).
+- Données 100 % locales (localStorage + IndexedDB) ; `noindex, nofollow` présent ; aucune télémétrie.
+- Limite honnête : le `noindex` ne protège pas l'accès — la confidentialité repose sur la discrétion de l'URL déployée (déjà documenté dans `index.html`).
 
 ## Vérifications du 2 octobre 2026 (session P0 + P1)
 

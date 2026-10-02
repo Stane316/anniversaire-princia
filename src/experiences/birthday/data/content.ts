@@ -2,7 +2,9 @@
  * ============================================================
  * CONTENU ÉDITORIAL — PRINCIA · Chapter 18
  * ============================================================
- * ⚠️  BROUILLON — VALIDATION DE STANE REQUISE (doc 00 §3.3)
+ * ⚠️  Volet lettre : VALIDÉ PAR STANE le 2 octobre 2026
+ *     (« la lettre est bonne, on la garde comme elle est »).
+ *     Toute modification ultérieure passe par Stane, directement ici.
  *
  * Tous les textes ci-dessous sont construits UNIQUEMENT à partir
  * des faits fournis et validés par le créateur dans le document
