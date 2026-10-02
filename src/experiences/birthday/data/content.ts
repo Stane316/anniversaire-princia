@@ -1,0 +1,276 @@
+/**
+ * ============================================================
+ * CONTENU ÉDITORIAL — PRINCIA · Chapter 18
+ * ============================================================
+ * ⚠️  BROUILLON — VALIDATION DE STANE REQUISE (doc 00 §3.3)
+ *
+ * Tous les textes ci-dessous sont construits UNIQUEMENT à partir
+ * des faits fournis et validés par le créateur dans le document
+ * 00 — Project Brief :
+ *
+ *   - rencontre en classe de sixième ;
+ *   - nombreux échanges en quatrième et en troisième ;
+ *   - déménagement de Princia après la troisième, contact interrompu ;
+ *   - retrouvailles quand Stane était en Terminale ;
+ *   - même campus universitaire (Abomey-Calavi), établissements
+ *     différents — Princia : génie environnemental à l'EPAK ;
+ *   - bleu (ciel) comme couleur identitaire partagée ;
+ *   - blague : Lamborghini bleue réclamée en cadeau d'anniversaire ;
+ *   - plaisanterie documentée sur le bleu jusque dans les toilettes ;
+ *   - goûts : lecture, romans, séries policières/d'enquête,
+ *     lectures religieuses, informatique, importance des études.
+ *
+ * RÈGLES ÉDITORIALES RESPECTÉES :
+ *   - aucun souvenir précis, conversation, date, parole ou
+ *     sentiment inventé (doc 01 §20.2) ;
+ *   - amitié profonde, complice et affectueuse, SANS ambiguïté
+ *     romantique (doc 00 §3.1) ;
+ *   - les informations privées/confidentielles sont exclues (doc 00 §2.5) ;
+ *   - aucune pression sur les études ou les objectifs (doc 00 §2.2).
+ *
+ * STANE : relis chaque ligne. Tout ce qui te gêne — reformule-le
+ * ici même, ou demande une réécriture. L'intégration finale
+ * attend ta validation.
+ * ============================================================
+ */
+
+/** -- BL-01 : Entrée et invitation -- */
+export const welcomeContent = {
+  kicker: "Pour Princia",
+  title: "Quelque chose a été écrit pour toi",
+  lead: "Pas un livre ordinaire. Une bibliothèque bleue, rien qu'à toi, dont chaque chapitre raconte un morceau de notre histoire — et qui s'ouvre, à la fin, sur la suite : la tienne.",
+  cta: "Ouvrir ce livre",
+  footnote: "Une expérience unique, préparée pour tes dix-huit ans.",
+};
+
+/** -- BL-02 : Couverture -- */
+export const coverContent = {
+  eyebrow: "Une expérience préparée pour le 4 octobre 2026",
+  titleTop: "PRINCIA",
+  titleBottom: "Chapter 18",
+  // Signature prévue (doc 05 §02.3) — texte exact, validé par les documents.
+  signature: "Une nouvelle page s'ouvre. Et cette fois, c'est elle qui écrit la suite.",
+  cta: "Entrer dans la bibliothèque",
+  alternative: "Si tu préfères l'enquête, elle est par ici",
+};
+
+/** -- BL-03/04 : Blue Library & chapitres -- */
+export const libraryContent = {
+  kicker: "Blue Library",
+  title: "La bibliothèque de douze chapitres — en version courte",
+  intro:
+    "Ici, pas d'étagères interminables : cinq chapitres, un pour chaque grande page de notre histoire commune. Ouvre-les dans l'ordre, dans le désordre — cette bibliothèque t'appartient déjà.",
+  letterTeaser: "Et au bout du rayon : la lettre. Le chapitre qui n'en est pas vraiment un.",
+  caseTeaser: "Envie de jouer les détectives ? The 18th Case t'attend.",
+  backToLibrary: "Retour à la bibliothèque",
+};
+
+export interface BirthdayChapter {
+  id: string;
+  number: string;
+  kicker: string;
+  title: string;
+  paragraphs: string[];
+  aside?: string;
+  /** Dégradé de la couverture du livre (tokens bleus, doc 02 §08.1). */
+  gradient: { top: string; bottom: string };
+}
+
+export const birthdayChapters: BirthdayChapter[] = [
+  {
+    id: "premiere-page",
+    number: "01",
+    kicker: "Sixième",
+    title: "Première page",
+    paragraphs: [
+      "Tout commence en classe de sixième. Rien de spectaculaire : une rentrée, des bancs, de nouvelles têtes. Et puis une amitié qui s'installe sans bruit, comme une première phrase posée sans savoir qu'elle deviendra un livre entier.",
+      "Ce n'était pas encore la grande complicité de plus tard. Juste le début. Mais les débuts comptent toujours — surtout ceux qui tiennent.",
+    ],
+    aside: "Premier chapitre d'une très longue histoire.",
+    gradient: { top: "#5B9BEB", bottom: "#24559F" },
+  },
+  {
+    id: "annees-complicite",
+    number: "02",
+    kicker: "Quatrième · Troisième",
+    title: "Les années complicité",
+    paragraphs: [
+      "En quatrième et en troisième, on a vraiment appris à se connaître. C'est là que sont nées les grandes discussions — celles qui pouvaient passer de tout à rien et de rien à tout en quelques minutes.",
+      "C'est là aussi que s'est installée notre manière d'être : de l'humour, du sérieux quand il le faut, et cette façon de se comprendre sans avoir besoin de tout expliquer.",
+    ],
+    aside: "Les années fondations de l'amitié.",
+    gradient: { top: "#3978D4", bottom: "#174A91" },
+  },
+  {
+    id: "pages-tournees",
+    number: "03",
+    kicker: "Après la troisième",
+    title: "Les pages tournées",
+    paragraphs: [
+      "Après la troisième, tu as déménagé. Et la vie a fait ce qu'elle fait parfois : elle éloigne les gens sans prévenir. Les nouvelles se sont raréfiées, puis le silence s'est installé.",
+      "Mais certaines amitiés ne s'effacent pas. Elles se mettent en attente, comme un marque-page glissé dans un chapitre qu'on a toujours l'intention de reprendre.",
+    ],
+    aside: "Un intermède — pas une fin.",
+    gradient: { top: "#7EAFE8", bottom: "#2D65B8" },
+  },
+  {
+    id: "retrouvailles",
+    number: "04",
+    kicker: "Terminale · le campus",
+    title: "Les retrouvailles",
+    paragraphs: [
+      "Les retrouvailles sont arrivées quand j'étais en Terminale. Comme si de rien n'était, comme si le marque-page avait tenu bon pendant tout ce temps.",
+      "Et puis la surprise, plus tard : réaliser qu'on arpente le même campus d'Abomey-Calavi. Toi au génie environnemental, à l'EPAK ; moi pas loin. Deux établissements différents, un même chemin qui se recroise.",
+      "Cette fois, c'est reparti pour de bon.",
+    ],
+    aside: "La preuve que certaines histoires refusent de s'arrêter.",
+    gradient: { top: "#3978D4", bottom: "#15345B" },
+  },
+  {
+    id: "bleu-majeur",
+    number: "05",
+    kicker: "La couleur de tout ça",
+    title: "Bleu majeur",
+    paragraphs: [
+      "Impossible de parler de toi sans parler du bleu. Le bleu ciel, précisément. Une couleur qui te suit partout — jusqu'aux endroits où, entre nous, elle n'avait pas forcément besoin d'être. Tu sais de quoi je parle.",
+      "Un jour, tu as réclamé une Lamborghini bleue pour ton anniversaire. Le budget de cette année se situait, disons, légèrement en dessous du prix d'une Lamborghini. Alors ça a été une bibliothèque bleue à la place. On espère que l'effort de substitution sera apprécié à sa juste valeur.",
+      "Entre le bleu, les romans et les séries policières, il n'en fallait pas plus pour imaginer cette expérience : une bibliothèque qui en cache peut-être une, d'enquête…",
+    ],
+    aside: "Le bleu n'est pas qu'une couleur. C'est un état d'esprit.",
+    gradient: { top: "#8EC5FF", bottom: "#24559F" },
+  },
+];
+
+/** -- BL-05 : Lettre personnelle -- */
+export const letterContent = {
+  kicker: "La lettre",
+  title: "Pour tes dix-huit ans",
+  salutation: "Princia,",
+  paragraphs: [
+    "Certains cadeaux se choisissent en magasin. Celui-ci a mis beaucoup plus de temps à trouver sa forme — parce qu'une bibliothèque n'est pas le cadeau le plus habituel pour un dix-huitième anniversaire. Mais pour toi, c'était presque une évidence.",
+    "Dix-huit ans. Quand je pense à la classe de sixième où tout a commencé, puis aux années de quatrième et de troisième où on s'est raconté le monde sans compter, je mesure la chance que c'est : une amitié qui traverse le temps. Même les années de silence ne l'ont pas effacée — les retrouvailles étaient là pour le prouver, et ce campus qu'on partage aujourd'hui le confirme chaque jour.",
+    "Ta simplicité, ta détermination, ta manière d'être franche et douce à la fois : rien de tout ça n'a changé, et c'est heureusement la chose la moins négociable du monde. Tu avances avec les mêmes valeurs, le même humour, et cette couleur que tu revendiques jusque dans les lieux les plus inattendus — je n'en dirai pas plus.",
+    "Alors non, ce n'est pas une Lamborghini bleue. Mais c'est un endroit à toi. Un endroit qui raconte les chapitres déjà écrits ensemble, et surtout un endroit qui t'attend pour écrire les suivants : tes lectures, tes projets, tes victoires du quotidien — petites ou grandes.",
+    "Je te souhaite une année à ta hauteur : que tes études te portent sans jamais te peser, que tes rêves restent aussi grands que tu veux les faire, et que le bleu continue de te suivre partout où tu vas.",
+  ],
+  signatureLine: "Une nouvelle page s'ouvre. Et cette fois, c'est elle qui écrit la suite.",
+  closing: "Joyeux anniversaire, Princia.",
+  signature: "Stane",
+  backToLibrary: "Revenir à la bibliothèque",
+  continueTo: "Continuer l'expérience",
+};
+
+/** -- BL-06 : Fin du parcours principal -- */
+export const finaleContent = {
+  kicker: "Fin de ce chapitre",
+  title: "La suite t'appartient",
+  paragraphs: [
+    "Tu as exploré la bibliothèque — en entier ou à ta façon, c'était exactement l'idée. Ces pages restent ouvertes pour toi, pour y revenir quand tu veux.",
+    "Maintenant, deux chemins : l'enquête, si le détective en toi veut son heure de gloire… ou ton espace, qui continuera d'exister bien après le 4 octobre.",
+  ],
+  toDaily: "Découvrir ton espace",
+  toCase: "Jouer l'enquête",
+  toLetter: "Relire la lettre",
+  toLibrary: "Revoir les chapitres",
+};
+
+/** -- The 18th Case -- */
+export const caseContent = {
+  intro: {
+    stamp: "Dossier n° 18",
+    title: "The 18th Case",
+    paragraphs: [
+      "Une étrange affaire a été retrouvée entre les rayonnages de la Blue Library. Tout y tourne autour d'un seul et même chiffre : 18.",
+      "À toi d'en découvrir la vérité, indice après indice.",
+    ],
+    note: "Aucune obligation : la lettre et la bibliothèque te restent accessibles à tout moment.",
+    start: "Ouvrir le dossier",
+    back: "Retour à la bibliothèque",
+  },
+  conclusion: {
+    stamp: "Affaire classée",
+    title: "Enquête résolue",
+    paragraphs: [
+      "Tu as résolu l'affaire n° 18 sans difficulté majeure — le doute n'était plus permis depuis longtemps.",
+      "Aucun suspect n'est resté sur la touche, et la principale intéressée s'en sort magnifiquement bien. Comme toujours.",
+    ],
+    toLetter: "Lire la lettre, si ce n'est pas déjà fait",
+    toLibrary: "Retour à la bibliothèque",
+    toDaily: "Découvrir ton espace",
+  },
+  restart: "Recommencer l'enquête",
+};
+
+export type CaseRiddle =
+  | {
+      kind: "choice";
+      question: string;
+      options: { id: string; label: string }[];
+      correctOptionId: string;
+    }
+  | {
+      kind: "text";
+      question: string;
+      acceptedAnswers: string[];
+      hint: string;
+      placeholder: string;
+    };
+
+const lamChoices = [
+  { id: "tesla", label: "Une Tesla grise" },
+  { id: "twingo", label: "Une Twingo rouge" },
+  { id: "lambo-bleue", label: "Une Lamborghini bleue" },
+  { id: "tricycle", label: "Un tricycle bleu" },
+];
+
+export const caseSteps = [
+  {
+    id: "intro",
+    type: "intro" as const,
+  },
+  {
+    id: "clue-1",
+    type: "clue" as const,
+    stamp: "Indice 01",
+    title: "Le rêve sur quatre roues",
+    body: "Premier élément du dossier : les notes mentionnent un cadeau rêvé depuis longtemps. Il roule vite, il fait tourner les têtes… et il n'existe, semble-t-il, qu'en une seule couleur acceptable.",
+    cta: "À toi de trancher",
+    riddle: {
+      kind: "choice",
+      question: "Quelle voiture figure dans ce dossier ?",
+      options: lamChoices,
+      correctOptionId: "lambo-bleue",
+    } satisfies CaseRiddle,
+    wrongFeedback: "Raté. Mais un tricycle bleu aurait été plus raisonnable, c'est vrai.",
+    hint: "Elle commence par 'Lambo' et finit par 'rghini'.",
+    reveal: {
+      stamp: "Élément vérifié",
+      title: "La Lamborghini bleue",
+      body: "Exact. Le rêve est consigné noir sur blanc : une Lamborghini, bleue naturellement. Le budget, lui, maintient qu'il manque encore quelques pièces au dossier pour applaudir.",
+    },
+  },
+  {
+    id: "clue-2",
+    type: "clue" as const,
+    stamp: "Indice 02",
+    title: "La couleur omniprésente",
+    body: "Deuxième élément : le dossier rapporte une couleur qui s'est immiscée jusque dans les pièces les plus inattendues. On ne citera rien de précis. Mais certains lieux, apparemment, en disent bleu.",
+    cta: "Je sais où cela va",
+    riddle: {
+      kind: "text",
+      question: "De quelle couleur s'agit-il ?",
+      acceptedAnswers: ["bleu", "bleue", "bleu ciel", "bleuciel"],
+      hint: "Il commence par « bl » et il termine par « eu ».",
+      placeholder: "Écris ta réponse ici…",
+    } satisfies CaseRiddle,
+    wrongFeedback: "Ce n'est pas ça. Un indice supplémentaire est disponible, si tu veux.",
+    hint: "Il commence par « bl » et il termine par « eu ».",
+    reveal: {
+      stamp: "Élément vérifié",
+      title: "Le bleu, évidemment",
+      body: "Dossier refermé sur la couleur : bleu, partout, toujours. Même là où personne ne soupçonnait son rôle. Le mystère était profond — enfin, disons, domestique.",
+    },
+  },
+] as const;
+
+export type CaseStep = (typeof caseSteps)[number];
