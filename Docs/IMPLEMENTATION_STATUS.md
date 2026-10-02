@@ -72,7 +72,34 @@ Mis à jour après chaque implémentation. Date de référence : 2 octobre 2026.
 | 3.5 | Planner universitaire (tâches/échéances) | P1 | 3.3 | ✅ Fait | Badges in-app (AUJOURD'HUI / EN RETARD / J-N) ; pas de notification push |
 | 3.6 | Petites victoires + À découvrir (état vide honnête) | P1 | 3.3 | ✅ Fait | État vide « signées Stane » ; 3 liens externes **vérifiés actifs le 2 oct. 2026** |
 | 4.1–4.4 | Audits finaux (fonctionnel, non-régression, technique, confidentialité) | P0 | Toutes | ✅ Faits (2 oct. 2026, session 2) | Détail ci-dessous ; points réservés au réel : hors ligne sur téléphone (Stane), déploiement (Stane) |
-| 4.5–4.6 | Commit, synchronisation, instructions de livraison | P0 | Phase 4 | 🔧 En cours | Commit `4fa0ccc` poussé ; 4.6 = déploiement par Stane |
+| 4.5–4.6 | Commit, synchronisation, instructions de livraison | P0 | Phase 4 | 🔧 En cours | Commits poussés (`4fa0ccc`, `ba4d145`) ; 4.6 = déploiement par Stane |
+| 5.1 | Système fictionnel de la bibliothèque | P0 | Vague 1 validée | ✅ Fait (2 oct. 2026) | Cotes, règlement, carte de lectrice, tampons, notes de bibliothécaire |
+| 5.2 | Livre à pages tournantes (3D CSS + anime.js) | P0 | Vague 1 validée | ✅ Fait (2 oct. 2026) | `ReadingBook` ; reduced-motion = navigation instantanée |
+| 5.3 | Entrée immersive orchestrée | P0 | — | ⬜ Proposée, en attente de feu vert | Skippable, contenu jamais bloqué |
+| 5.4 | Volume sous scellé (dévoilé le 4 oct.) | P1 | Contenu Stane | ⬜ Proposée | Dépendance : texte de Stane |
+| 5.5 | The 18th Case enrichi | P1 | — | ⬜ Proposée | Toujours facultatif |
+| 5.6 | Micro-interactions de présence | P1 | — | ⬜ Proposée | |
+| 5.7 | Intégration contenus personnels de Stane | P1 | Contenu Stane | ⬜ Proposée | Dépendance : matière de Stane |
+
+## BASELINE DE STABILITÉ — après Vague 1 (5.1 + 5.2), 2 oct. 2026 (§04.2)
+
+- **Parcours validés :** entrée → couverture → bibliothèque → chapitre (livre) → lettre → enquête → finale → espace ; les 5 features quotidiennes.
+- **Tests :** 21/21 (énigmes, dates, validateurs, intégrité codex + garde-fou lettre validée).
+- **Typecheck :** `npx tsc -b` 0 erreur. **Build :** OK, 93 entrées pré-cachées (1,69 MiB).
+- **Smoke preview prod :** routes clés 200 ; bundle et CSS contiennent le nouveau système (vérifié par contenu servi).
+- **Commit :** voir historique de la branche de session (complet + poussé).
+- **Erreurs connues :** aucune. **Non bloquant ouvert :** contrôle visuel humain de la vague (flip/rendu) sur appareil.
+- **Ne pas modifier sans justification :** corps de la lettre (gelé par test), pattern hooks `loading|ready|error`, suppression = modale unique, données hors cache HTTP.
+
+### Matrice de non-régression exécutée pour la Vague 1 (§04.3)
+| Domaine | Résultat | Méthode |
+|---|---|---|
+| Démarrage / build / navigation | ✅ | preview + curl 200 (5 routes) + build rejoué |
+| Contenu (chapitres, lettre) | ✅ | routes chapitres 200 + test garde-fou de la lettre |
+| Interactions / données persistées | ✅ feature code intact (aucun fichier feature touché) | diff limité au parcours birthday |
+| Responsive | ✅ niveau code (grille livre mobile 1 colonne / desktop 2, leaf plein écran mobile) | œil humain : en attente |
+| Accessibilité | ✅ focus sur le titre à chaque chapitre, feuillet `aria-hidden`, boutons libellés | |
+| Motion non bloquant | ✅ contenu statique ; reduced-motion = navigation instantanée ; animations annulées au démontage | |
 
 ## AUDITS 4.1–4.4 — session du 2 octobre 2026 (soir)
 
