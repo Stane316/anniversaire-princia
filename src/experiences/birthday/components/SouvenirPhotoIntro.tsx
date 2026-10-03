@@ -26,10 +26,14 @@ import { useReducedMotion } from "../../../motion/useReducedMotion";
 
 /** Fichier attendu (public/souvenirs/) — extensions essayées dans
  *  l'ordre, le code ne présume pas de l'extension réelle. */
+/** Fichier confirmé (3 oct. 2026) : `public/souvenirs/souvenirs_behanzin.jpeg`
+ *  — extrait de `origin/main:souvenirs/souvenirs_behanzin.jpeg`, jamais
+ *  recadré ni retouché (66 Ko, 720×1280). L'extension réelle est tentée
+ *  en premier ; les autres servent si le fichier change de format. */
 const CANDIDATES = [
+  "/souvenirs/souvenirs_behanzin.jpeg",
   "/souvenirs/souvenirs_behanzin.webp",
   "/souvenirs/souvenirs_behanzin.jpg",
-  "/souvenirs/souvenirs_behanzin.jpeg",
   "/souvenirs/souvenirs_behanzin.png",
 ] as const;
 

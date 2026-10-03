@@ -5,6 +5,25 @@ Mis à jour après chaque implémentation. Date de référence : 2 octobre 2026.
 
 ---
 
+## 2026-10-03 (soir) — Reprise technique : photo, PWA, OG, contre-preuves enquête
+
+- **Photo d'ouverture livrée pour de vrai** : `public/souvenirs/souvenirs_behanzin.jpeg`
+  extraite non destructivement depuis `origin/main` (66 625 o, 720×1280, intacte) ;
+  vue à l'œil : Princia en tenue traditionnelle bleue devant la statue royale.
+  Cascade fichiers réordonnée (.jpeg d'abord), servie 200 sur la preview.
+- **PWA** : `globPatterns` élargi à `jpg/jpeg` — la photo d'ouverture est
+  précachée (disponible hors ligne) ; vérifié dans `dist/sw.js` du build.
+- **SEO/partage** : `robots noindex,nofollow` maintenu (confidentialité) +
+  OG minimaux (titre/description neutres, image = icône neutre, jamais de
+  photo personnelle).
+- **Enquête — contre-preuves** : `caseSteps` contient intégralement les 3
+  énigmes (questions/réponses/révélations) ; 2 nouveaux tests (CSS réel
+  injecté + IntersectionObserver simulé à la Chrome) démontrent
+  armement → masquage hors écran → révélation au scroll et des styles
+  calculés non masquants sur couverture/pv/faits/clôture.
+- **Tests** : 169/169 (20 fichiers), `tsc` propre, build OK, 8 routes × 200.
+
+
 ## PHASE 0 — AUDIT INITIAL (rapport)
 
 **Exécuté le :** 2 octobre 2026 — **Statut : validé**
