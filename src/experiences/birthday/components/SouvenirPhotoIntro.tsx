@@ -40,16 +40,28 @@ const CANDIDATES = [
 const ALT =
   "Photographie de Princia devant la statue du roi Béhanzin, en tenue traditionnelle.";
 
-/** Étapes de la révélation (durée avant passage à l'étape suivante). */
-const SEQUENCE: Array<{ status: RefineFrameStatus; dwell: number }> = [
-  { status: "queued", dwell: 650 },
-  { status: "generating", dwell: 1400 },
-  { status: "refining", dwell: 1400 },
-  { status: "complete", dwell: 1700 }, // pause de regard, photo nette
+/** Étapes de la révélation — durées EXPLICITES et CONFIGURABLES
+ *  (mission 3 oct. 2026, chantier B) :
+ *  - la photo floue/pixellisée doit réellement se voir (≈ 1 s) ;
+ *  - le dévoilement progressif dure ≈ 4 s en deux paliers lisibles ;
+ *  - la photo NETTE reste ensuite affichée — paramètre dédié
+ *    `HOLD_COMPLETE_MS`, indépendant de la révélation — avant le
+ *    fondu de sortie. */
+const REVEAL_STEPS: Array<{ status: RefineFrameStatus; dwell: number }> = [
+  { status: "queued", dwell: 950 }, // flou profond + mosaïque grossière
+  { status: "generating", dwell: 2000 }, // la photo se dévoile
+  { status: "refining", dwell: 2000 }, // mise au point progressive
 ];
 
+/** Photo nette : temps de regard minimal avant le fondu (exigence
+ *  « environ une seconde au minimum » → on laisse respirer 2,4 s). */
+const HOLD_COMPLETE_MS = 2400;
+
 /** Fondu de sortie une fois la pause terminée. */
-const FADE_MS = 620;
+const FADE_MS = 700;
+
+/** Reduced-motion : photo nette immédiate, même temps de regard. */
+const HOLD_REDUCED_MS = HOLD_COMPLETE_MS;
 
 const LABELS = {
   queued: "Le souvenir s'ouvre…",
@@ -120,22 +132,27 @@ function SouvenirPhotoIntroInner({ onDone }: { onDone: () => void }) {
   }, [finish]);
 
   // 2 — Séquence déclarée (réduite à sa plus simple expression en
-  //     reduced-motion : photo nette quasi immédiate, pause courte).
+  //     reduced-motion : photo nette immédiate, même temps de regard).
   useEffect(() => {
     if (phase !== "reveal" || !src) return;
     if (reducedMotion) {
       setStatus("complete");
-      timers.current.push(window.setTimeout(finish, 900));
+      timers.current.push(window.setTimeout(finish, HOLD_REDUCED_MS));
       return;
     }
     let at = 0;
-    for (const step of SEQUENCE) {
+    for (const step of REVEAL_STEPS) {
       timers.current.push(
         window.setTimeout(() => setStatus(step.status), at),
       );
       at += step.dwell;
     }
-    timers.current.push(window.setTimeout(finish, at));
+    // État complet : la révélation est finie — la pause de regard
+    // commence (paramètre distinct du temps de révélation).
+    timers.current.push(
+      window.setTimeout(() => setStatus("complete"), at),
+    );
+    timers.current.push(window.setTimeout(finish, at + HOLD_COMPLETE_MS));
   }, [phase, src, reducedMotion, finish]);
 
   if (phase === "gone") return null;

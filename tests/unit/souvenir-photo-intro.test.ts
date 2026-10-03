@@ -34,6 +34,16 @@ describe("RefineFrame (composant Stane) — moteur intact, style projet", () => 
     expect(src).toContain("aria-busy");
     expect(src).toContain("reduce");
   });
+
+  it("flou initial NETTEMENT perceptible (chantier B — cause racine corrigée)", () => {
+    // blur 4 px était invisible : paliers profonds 16 → 8 → 2.5 → 0.
+    expect(src).toContain("queued: { blur: 16");
+    expect(src).toContain("generating: { blur: 8");
+    expect(src).toContain("refining: { blur: 2.5");
+    // Le voile de flou n'est plus tué dès que le canvas est prêt.
+    expect(src).not.toContain("mosaic ? 0 : stage.blur");
+    expect(src).toContain("'--rf-blur': `${stage.blur}px`");
+  });
 });
 
 describe("Scène d'introduction de la photo (Béhanzin)", () => {
@@ -59,14 +69,21 @@ describe("Scène d'introduction de la photo (Béhanzin)", () => {
     expect(intro).toContain("index >= CANDIDATES.length");
   });
 
-  it("séquence déclarée et aboutïssant à complete", () => {
+  it("séquence déclarée, durées perceptibles, aboutissant à complete", () => {
     expect(intro).toContain('"queued"');
     expect(intro).toContain('"generating"');
     expect(intro).toContain('"refining"');
     expect(intro).toContain('"complete"');
-    expect(intro).toContain("SEQUENCE");
-    // Pause de regard APRÈS la mise au point, pas avant.
-    expect(intro).toContain("pause de regard");
+    expect(intro).toContain("REVEAL_STEPS");
+    // Palier initialement flou réellement visible (≈ 1 s minimum).
+    expect(intro).toContain("dwell: 950");
+    // Révélation progressive en deux paliers lisibles.
+    expect(intro).toContain("dwell: 2000");
+    // Pause de regard APRÈS la mise au point — paramètre DISTINCT
+    // de la révélation (mission 3 oct. 2026, chantier B §5.3-5.4).
+    expect(intro).toContain("HOLD_COMPLETE_MS = 2400");
+    // Le temps de regard est distinct du fondu de sortie.
+    expect(intro).toContain("FADE_MS = 700");
   });
 
   it("libellés en français, jamais de référence à une génération IA", () => {
@@ -87,9 +104,9 @@ describe("Scène d'introduction de la photo (Béhanzin)", () => {
     expect(intro).toContain("Math.min(1080");
   });
 
-  it("reduced-motion : photo nette quasi immédiate, sortie courte", () => {
+  it("reduced-motion : photo nette immédiate, même temps de regard", () => {
     expect(intro).toContain('setStatus("complete")');
-    expect(intro).toContain("900");
+    expect(intro).toContain("HOLD_REDUCED_MS");
     expect(intro).toContain("useReducedMotion");
   });
 
@@ -111,10 +128,16 @@ describe("Scène d'introduction de la photo (Béhanzin)", () => {
     expect(page).toContain("radius={165}");
   });
 
-  it("jouée une fois par session, pas à chaque visite", () => {
-    expect(page).toContain("souvenirs-intro-v1");
-    expect(page).toContain("sessionStorage");
-    expect(page).toContain("INTRO_SEEN_KEY");
+  it("REJOUÉE à chaque entrée et à chaque rechargement (mission 3 oct. 2026 §5.5)", () => {
+    // Exigence explicite : aucun état « déjà vue » ne doit survivre —
+    // on vérifie l'USAGE (aucune lecture/écriture de stockage, aucune
+    // clé), pas la simple mention du mot dans un commentaire.
+    expect(page).not.toMatch(/sessionStorage\.(get|set|remove)Item/);
+    expect(page).not.toMatch(/localStorage\.(get|set|remove)Item/);
+    expect(page).not.toMatch(/["'`]souvenirs-intro-v\d/);
+    expect(page).not.toContain("INTRO_SEEN_KEY =");
+    // L'introduction est à l'état visible au montage initial.
+    expect(page).toContain("useState<boolean>(true)");
   });
 
   it("scène immersive pleine écran, sortie en fondu orchestré", () => {

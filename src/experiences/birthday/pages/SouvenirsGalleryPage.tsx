@@ -14,23 +14,15 @@ import { Icon } from "../../../components/ui/Icon";
 import { SouvenirPhotoIntro } from "../components/SouvenirPhotoIntro";
 import { souvenirPhotos, souvenirsContent } from "../data/souvenirs";
 
-/** L'introduction photographique ne se rejoue pas à chaque visite :
- *  la scène est un marque-page, pas une porte. (mission 3 oct. 2026) */
-const INTRO_SEEN_KEY = "souvenirs-intro-v1";
-
 export function SouvenirsGalleryPage() {
-  const [showIntro, setShowIntro] = useState<boolean>(
-    () => window.sessionStorage.getItem(INTRO_SEEN_KEY) !== "1",
-  );
+  /** L'introduction photographique se REJOUE à chaque entrée dans
+   *  Souvenirs et à chaque rechargement (exigence explicite de la
+   *  mission du 3 oct. 2026 — aucun sessionStorage/localStorage/état
+   *  global ne doit mémoriser « déjà vue »). Remonter la page = la
+   *  scène repart de son état initial (chargement → flou → net). */
+  const [showIntro, setShowIntro] = useState<boolean>(true);
 
-  const closeIntro = () => {
-    try {
-      window.sessionStorage.setItem(INTRO_SEEN_KEY, "1");
-    } catch {
-      /* navigation privée stricte : simple non-persistance */
-    }
-    setShowIntro(false);
-  };
+  const closeIntro = () => setShowIntro(false);
 
   return (
     // GlowCursor EST la scène plein écran : sa traînée suit le pointeur
