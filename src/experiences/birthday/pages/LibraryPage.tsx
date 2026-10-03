@@ -8,7 +8,7 @@
  */
 import { Link } from "react-router-dom";
 import { BirthdayLayout } from "../BirthdayLayout";
-import { birthdayChapters, libraryContent, libraryCodex } from "../data/content";
+import { birthdayChapters, libraryContent, libraryCodex, sealedVolume } from "../data/content";
 import { Icon } from "../../../components/ui/Icon";
 import { RulesBoard } from "../../../components/library/RulesBoard";
 import { ReaderCard } from "../../../components/library/ReaderCard";
@@ -105,6 +105,32 @@ export function LibraryPage() {
                   size={84}
                   rotate={-11}
                 />
+              </div>
+            </Link>
+          </li>
+
+          {/* 5.4 — Le volume sous scellé : visible, mystérieux, jamais un verrou sur la lettre. */}
+          <li
+            className="stagger-item"
+            style={{ "--stagger-index": 4 + birthdayChapters.length } as React.CSSProperties}
+          >
+            <Link
+              to="/birthday/bibliotheque/chapitre/volume-scelle"
+              className="book-card book-card--sealed"
+              aria-label={`Volume sous scellé — ${sealedVolume.sealed.title}`}
+            >
+              <div className="book-cover">
+                <div className="cluster cluster--between">
+                  <span className="book-cover__number">VOLUME S</span>
+                  <span className="book-card__seal-dot" aria-hidden="true">
+                    S
+                  </span>
+                </div>
+                <div>
+                  <p className="book-cover__kicker">{sealedVolume.kicker}</p>
+                  <h2 className="book-cover__title">{sealedVolume.sealed.title}</h2>
+                  <p className="book-cover__cote">{sealedVolume.cote}</p>
+                </div>
               </div>
             </Link>
           </li>
