@@ -48,11 +48,28 @@ describe("Salut d'accueil — présence garantie", () => {
     expect(blur).toContain("return <p className={`blur-text ${className}`}>{text}</p>");
   });
 
-  it("la classe du salut utilise un token de police existant", () => {
+  it("la classe du salut utilise l'écriture manuscrite (Kalam), token existant", () => {
     const css = readFileSync(GLOBALS, "utf8");
     const block = css.match(/\.welcome-greeting\s*\{[^}]+\}/);
     expect(block).not.toBeNull();
-    expect(block![0]).toContain("var(--font-serif)");
+    expect(block![0]).toContain("var(--font-hand)");
     expect(block![0]).not.toContain("--font-display");
+    // Le token doit réellement exister dans le design system.
+    const tokens = readFileSync(
+      resolve(__dirname, "../../src/styles/tokens.css"),
+      "utf8",
+    );
+    expect(tokens).toContain("--font-hand");
+    expect(tokens).toContain("Kalam");
+  });
+
+  it("Kalam est chargée par les imports fontsource (300/400/700)", () => {
+    const main = readFileSync(
+      resolve(__dirname, "../../src/main.tsx"),
+      "utf8",
+    );
+    expect(main).toContain("@fontsource/kalam/300.css");
+    expect(main).toContain("@fontsource/kalam/400.css");
+    expect(main).toContain("@fontsource/kalam/700.css");
   });
 });

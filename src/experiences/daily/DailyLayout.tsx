@@ -24,8 +24,15 @@ const NAV_ITEMS: { to: string; label: string; icon: IconName; end?: boolean }[] 
   { to: "/app/decouvrir", label: "Découvrir", icon: "compass" },
 ];
 
-/** Les quatre sections cadeaux, dans ses couleurs (bleu majeur). */
+/** Les sections cadeaux, dans ses couleurs (bleu majeur). */
 const GIFT_ITEMS: BubbleMenuItem[] = [
+  {
+    label: "l'invitation",
+    href: "/birthday/accueil",
+    ariaLabel: "L'invitation — l'enveloppe et la carte d'accueil",
+    rotation: 6,
+    hoverStyles: { bgColor: "#dbeafe", textColor: "#0b1e3a" },
+  },
   {
     label: "souvenirs",
     href: "/souvenirs",

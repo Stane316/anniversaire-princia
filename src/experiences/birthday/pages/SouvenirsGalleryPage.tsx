@@ -8,12 +8,38 @@
  */
 import { Link } from "react-router-dom";
 import InfiniteSpiral from "../../../components/effects/InfiniteSpiral";
+import GlowCursor from "../../../components/effects/GlowCursor";
 import { Icon } from "../../../components/ui/Icon";
 import { souvenirPhotos, souvenirsContent } from "../data/souvenirs";
 
 export function SouvenirsGalleryPage() {
   return (
-    <div className="souvenirs-fullpage">
+    // GlowCursor EST la scène plein écran : sa traînée suit le pointeur
+    // (souris comme doigt, pendant le défilement de la spirale) sur le
+    // fond nuit — c'est l'endroit où la lumière bleue respire le mieux.
+    // Le canvas est en pointer-events:none : le drag de la spirale
+    // reste intact, et reduced-motion n'active jamais le WebGL.
+    <GlowCursor
+      className="souvenirs-fullpage"
+      color="#8EC5FF"
+      secondaryColor="#2D65B8"
+      trailLength={40}
+      trailWidth={10}
+      trailTaper={0.82}
+      followSpeed={0.17}
+      glowIntensity={2.1}
+      glowSpread={1.2}
+      hotspot={0.58}
+      brightness={1.25}
+      opacity={0.9}
+      pulseSpeed={0.8}
+      noiseStrength={0.03}
+      idleFade
+      idleTimeout={2600}
+      fadeDuration={1400}
+      blendMode="screen"
+      aria-label="Souvenirs — la galerie en spirale"
+    >
       <InfiniteSpiral
         items={souvenirPhotos}
         animationMode="all"
@@ -49,6 +75,6 @@ export function SouvenirsGalleryPage() {
           <li key={photo.src}>{photo.alt}</li>
         ))}
       </ol>
-    </div>
+    </GlowCursor>
   );
 }
