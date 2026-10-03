@@ -80,6 +80,7 @@ const KEYS = {
   caseProgress: "princia.chapter18.caseProgress",
   caseDossier: "princia.chapter18.caseDossier",
   seenIntro: "princia.chapter18.seenIntro",
+  installDismissed: "princia.chapter18.installDismissed",
 } as const;
 
 /** localStorage protégé : jamais d'exception si indisponible (doc 03 §9.3). */
@@ -96,6 +97,13 @@ const safeStorage = {
       window.localStorage.setItem(key, value);
     } catch {
       /* stockage indisponible : l'expérience continue sans mémorisation */
+    }
+  },
+  remove(key: string): void {
+    try {
+      window.localStorage.removeItem(key);
+    } catch {
+      /* stockage indisponible */
     }
   },
 };
@@ -115,6 +123,16 @@ export const visitMemory = {
   },
   markIntroSeen(): void {
     safeStorage.set(KEYS.seenIntro, "yes");
+  },
+  /** Invitation d'installation PWA (doc 03 §11.6) : ne pas relancer à chaque visite. */
+  hasDismissedInstallPrompt(): boolean {
+    return safeStorage.get(KEYS.installDismissed) === "yes";
+  },
+  dismissInstallPrompt(): void {
+    safeStorage.set(KEYS.installDismissed, "yes");
+  },
+  resetInstallPrompt(): void {
+    safeStorage.remove(KEYS.installDismissed);
   },
 };
 

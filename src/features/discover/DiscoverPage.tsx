@@ -11,6 +11,7 @@
  * - les liens externes sont identifiables et ne prétendent pas
  *   avoir été vérifiés récemment (doc 01 §12.3).
  */
+import { useEffect, useState } from "react";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { Icon } from "../../components/ui/Icon";
 
@@ -50,6 +51,23 @@ const CODE_RESOURCES: Resource[] = [
 ];
 
 export function DiscoverPage() {
+  const [isOnline, setIsOnline] = useState<boolean>(() =>
+    typeof navigator !== "undefined" && typeof navigator.onLine === "boolean"
+      ? navigator.onLine
+      : true,
+  );
+
+  useEffect(() => {
+    const onOnline = () => setIsOnline(true);
+    const onOffline = () => setIsOnline(false);
+    window.addEventListener("online", onOnline);
+    window.addEventListener("offline", onOffline);
+    return () => {
+      window.removeEventListener("online", onOnline);
+      window.removeEventListener("offline", onOffline);
+    };
+  }, []);
+
   return (
     <section className="container section container--editorial page-enter">
       <header className="stack" style={{ marginBottom: "var(--space-8)" }}>
@@ -60,6 +78,21 @@ export function DiscoverPage() {
           rythme. Tout reste consultable quand tu veux — rien à valider, rien à finir.
         </p>
       </header>
+
+      {!isOnline && (
+        <p
+          className="alert alert--info"
+          role="status"
+          style={{ marginBottom: "var(--space-6)" }}
+        >
+          <Icon name="alert" size={18} />
+          <span>
+            Mode hors ligne actif : cette page et tes espaces personnels restent
+            consultables, mais l'ouverture des sites externes du coin informatique
+            nécessitera le retour de la connexion.
+          </span>
+        </p>
+      )}
 
       <section aria-labelledby="discover-stane" style={{ marginBottom: "var(--space-10)" }}>
         <h2 id="discover-stane" className="h3" style={{ marginBottom: "var(--space-4)" }}>
