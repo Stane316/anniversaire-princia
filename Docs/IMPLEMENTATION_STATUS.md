@@ -233,3 +233,17 @@ Erreur identique pour les trois :
 - `globPatterns` élargi à `webp` → les photos rejoignent le précouche PWA (hors-ligne).
 - Smoke : les 21 assets répondent 200 ; routes 200 ; bundle référence le fonds.
 - Baseline après lot : **39/39 tests (7 fichiers)**, tsc 0 erreur, build OK, 114 entrées de précouche.
+
+---
+
+## LOT 3 (3 oct. 2026) — animation d'entrée + menu cadeaux + souvenirs plein écran
+
+| Demande Stane | Livré |
+|---|---|
+| Animation « Joyeux anniversaire, Princia. » sur l'invitation | ✅ BlurText (source React Bits fournie, intégrée telle quelle ; dépendance `motion@14` installée avec son accord) — délai volonté de ~1 s après l'ouverture de l'enveloppe, mots apparaissant du haut ; reduced-motion : texte statique immédiat |
+| Bouton menu dans le header de son espace + liste déroulante | ✅ BubbleMenu (source fournie, intégrée ; dépendance `gsap@3.15` ; Tailwind→CSS projet) — bulle « cadeaux » + bascule, items : souvenirs / la lettre / bibliothèque / l'enquête ; navigation react-router (pas de rechargement), Échap ferme, reduced-motion instantané |
+| « Souvenir » = spirale à l'intégralité de l'écran | ✅ Route `/souvenirs` : scène 100dvh, chips verre (retour à l'espace + titre), inventaire sr-only identique |
+
+- Baseline après lot : **39/39 tests (7 fichiers)**, tsc 0 erreur, build OK (114 pré-caches) ; smoke : `/souvenirs`, `/app`, `/birthday`, `/bibliotheque` → 200 ; marqueurs « Joyeux anniversaire, Princia », `bubble-menu` et fonds souvenirs vérifiés dans le bundle servi.
+- Dépendances ajoutées **sur instruction explicite** de Stane (listées dans les blocs d'intégration fournis) : `motion`, `gsap`. Aucune autre dépendance ajoutée.
+- Ancien lien « Souvenirs » de l'en-tête remplacé par le menu cadeaux (même destination couverte, en plus riche).

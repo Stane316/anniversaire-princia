@@ -3,10 +3,18 @@
  * - navigation constante et reconnaissable : barre en bas sur mobile,
  *   pilule centrée sur desktop (mêmes libellés, mêmes destinations) ;
  * - aucun accès ne conditionne l'autre : chaque section est indépendante.
+ *
+ * Menu cadeaux (demande Stane, 3 oct. 2026) : un gros bouton dans
+ * l'en-tête (BubbleMenu, composant fourni par Stane) ouvre la liste
+ * déroulante vers ses sections dédiées — souvenirs (plein écran),
+ * lettre, bibliothèque, enquête. Bouton toujours visible, jamais
+ * bloquant ; Échap ferme.
  */
 import { NavLink, Link, Outlet } from "react-router-dom";
 import { Icon } from "../../components/ui/Icon";
 import type { IconName } from "../../components/ui/Icon";
+import BubbleMenu from "../../components/menu/BubbleMenu";
+import type { BubbleMenuItem } from "../../components/menu/BubbleMenu";
 
 const NAV_ITEMS: { to: string; label: string; icon: IconName; end?: boolean }[] = [
   { to: "/app", label: "Accueil", icon: "home", end: true },
@@ -14,6 +22,38 @@ const NAV_ITEMS: { to: string; label: string; icon: IconName; end?: boolean }[] 
   { to: "/app/carnet", label: "Carnet", icon: "calendar" },
   { to: "/app/victoires", label: "Victoires", icon: "star" },
   { to: "/app/decouvrir", label: "Découvrir", icon: "compass" },
+];
+
+/** Les quatre sections cadeaux, dans ses couleurs (bleu majeur). */
+const GIFT_ITEMS: BubbleMenuItem[] = [
+  {
+    label: "souvenirs",
+    href: "/souvenirs",
+    ariaLabel: "Souvenirs — la galerie en spirale, en plein écran",
+    rotation: -6,
+    hoverStyles: { bgColor: "#8ec5ff", textColor: "#0b1e3a" },
+  },
+  {
+    label: "la lettre",
+    href: "/birthday/lettre",
+    ariaLabel: "La lettre d'anniversaire",
+    rotation: 6,
+    hoverStyles: { bgColor: "#2d65b8", textColor: "#ffffff" },
+  },
+  {
+    label: "bibliothèque",
+    href: "/birthday/bibliotheque",
+    ariaLabel: "La Blue Library et ses chapitres",
+    rotation: -6,
+    hoverStyles: { bgColor: "#5b9beb", textColor: "#0b1e3a" },
+  },
+  {
+    label: "l'enquête",
+    href: "/birthday/dossier",
+    ariaLabel: "The 18th Case — le mini-dossier d'enquête",
+    rotation: 6,
+    hoverStyles: { bgColor: "#0f2444", textColor: "#8ec5ff" },
+  },
 ];
 
 export function DailyLayout() {
@@ -24,10 +64,6 @@ export function DailyLayout() {
           <Link to="/app" className="brand-mark">
             <Icon name="book" size={20} />
             Chapter 18
-          </Link>
-          <Link to="/birthday/bibliotheque" className="btn btn--text">
-            <Icon name="library" size={16} />
-            Souvenirs
           </Link>
         </div>
       </header>
@@ -53,6 +89,22 @@ export function DailyLayout() {
           ))}
         </ul>
       </nav>
+
+      <BubbleMenu
+        logo={
+          <span>
+            <Icon name="sparkles" size={15} aria-hidden="true" />
+            cadeaux
+          </span>
+        }
+        items={GIFT_ITEMS}
+        menuAriaLabel="Ouvrir le menu des sections cadeaux (souvenirs, lettre, bibliothèque, enquête)"
+        menuBg="#f6faff"
+        menuContentColor="#15345b"
+        animationEase="back.out(1.5)"
+        animationDuration={0.45}
+        staggerDelay={0.1}
+      />
     </div>
   );
 }
