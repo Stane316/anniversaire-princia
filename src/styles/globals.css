@@ -1928,3 +1928,98 @@ body[data-daypart="night"] {
     transform: none;
   }
 }
+
+/* ---------- Falling Rays (décor) ---------- */
+.falling-rays {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transform: skewY(0deg);
+}
+.falling-rays__ray {
+  position: absolute;
+  top: -60%;
+  width: 2px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--ray-color, rgba(106, 165, 238, 0.5)) 55%,
+    transparent 100%
+  );
+  filter: blur(0.6px);
+  transform: rotate(var(--ray-slant, -14deg));
+  animation-name: fray-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes fray-fall {
+  0% {
+    transform: translateY(-10vh) rotate(var(--ray-slant, -14deg));
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(180vh) rotate(var(--ray-slant, -14deg));
+    opacity: 0;
+  }
+}
+.falling-rays--static .falling-rays__ray {
+  animation: none;
+  top: -20%;
+  opacity: 0.18;
+}
+
+/* ---------- Univers The 18th Case : scène cinématographique ---------- */
+.case-scene {
+  position: relative;
+  min-height: 100%;
+  padding: var(--space-10) 0 var(--space-14);
+  background:
+    radial-gradient(120% 90% at 18% -10%, rgba(45, 101, 184, 0.65) 0%, transparent 55%),
+    linear-gradient(178deg, #15345b 0%, #0f2444 58%, #0b1e3a 100%);
+  overflow: clip;
+}
+.case-scene .case-reference {
+  color: rgba(234, 243, 255, 0.62);
+}
+.case-scene .case-counter {
+  color: #bfd9ff;
+}
+.case-scene .h1,
+.case-scene .h2 {
+  color: #f2f8ff;
+  text-wrap: balance;
+}
+.case-scene .case-stamp {
+  color: #cfe4ff;
+  border-color: rgba(142, 197, 255, 0.8);
+  background: rgba(11, 30, 58, 0.35);
+}
+.case-scene .case-progress__dot {
+  border-color: rgba(142, 197, 255, 0.9);
+}
+.case-scene .case-progress__dot--done {
+  background: #8ec5ff;
+  border-color: #8ec5ff;
+}
+.case-scene .case-progress__dot--current {
+  background: #f5c66b;
+  border-color: #f5c66b;
+  box-shadow: 0 0 0 3px rgba(245, 198, 107, 0.25);
+}
+.case-scene__inner {
+  position: relative;
+  z-index: 1;
+}
+/* Couverture du dossier : pathos de scène */
+.case-file--cover {
+  border-color: rgba(142, 197, 255, 0.45);
+  box-shadow: 0 24px 60px rgba(5, 15, 33, 0.55), var(--shadow-card);
+}
