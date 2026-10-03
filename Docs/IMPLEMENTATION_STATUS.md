@@ -407,3 +407,26 @@ Tests existants adaptés (case-dossier) — **jamais masqués** : l'assertion ob
 
 ### Baseline après lot
 tsc 0 erreur ; build OK (114 entrées de pré-couche ≈ 3,43 Mo, `_redirects` inclus) ; **88/88 tests (13 fichiers)** ; preview 4180 : `/`, `/enquete`, ancienne route, `/app`, bibliothèque, lettre, souvenirs → 200 ; modules v2 → 200.
+
+---
+
+## Lot « accueil, écriture et lumière » (3 oct. 2026 — retours Stane post-v2)
+
+### 1. Bug « la lettre ne s'affiche plus ensuite » — causes et réparations
+- **Cause structurelle** : après la première visite, `EntryGate` redirige `/` → `/app` et **aucun lien ne ramenait à l'accueil enveloppe** → impossible de la revoir. Réparation : route dédiée **`/birthday/accueil`** (WelcomePage, sans condition) + entrée « **l'invitation** » en tête du menu cadeaux (BubbleMenu).
+- **Cause d'invisibilité potentielle** : le voile `opacity: 0` pendant la phase `opening` reposait entièrement sur le bon déroulement de la timeline animejs. Réparation : **garde absolue `setTimeout(safeFinish, 2500)`** (durée timeline ≈ 1 670 ms) + `try/catch` déjà présent — la lettre bascule en « open » dans tous les scénarios.
+- **Gabarit** : carte 640 px → `min(880px, 94vw)`, marges internes fluides `clamp(2rem, 5.5vw, 4rem)`, intérieur en grille à écarts fluides (plus rien d'entassé/collé), titre borné sur petit écran.
+
+### 2. Écriture manuscrite (Kalam) — réellement intégrée
+- `@fontsource/kalam` installé (300/400/700), imports dans `main.tsx`, token `--font-hand` dans `tokens.css`.
+- Appliquée : salut BlurText de l'accueil, salutation + **corps de la lettre intime** (`letter-sheet .prose > p`, interligne 1.85, corps fluide 1.06→1.2 rem), lettre manuscrite du verdict (titre, paragraphes, signature).
+- Bug token corrigé en amont : `--font-display` (inexistant) → `--font-serif` sur la lettrine et le salut.
+
+### 3. GlowCursor « jamais vu » — diagnostic et extension
+- **Diagnostic** : intégré ✔ (`ogl` installé, canvas monté, pointermove écouté) mais _discret par construction_ : verdict uniquement (tout en bas de `/enquete`), blend `screen` sur fond sombre, et surtout il s'**effaçait 0,7 s après l'arrêt du pointeur** (fondu 0,9 s) → quasi invisible au premier regard.
+- **Renforcement verdict** : trace 12 px, opacité 0.95, luminosité 1.35, glow 2.3, repos **2,4 s** + fondu **1,3 s**.
+- **Extension** : GlowCursor enveloppe désormais toute la scène **`/souvenirs`** (fond nuit #0b1e3a — terrain idéal) ; verrou CSS `.glow-cursor.souvenirs-fullpage { height: 100dvh }` pour que le plein écran prime. Drag de la spirale préservé (canvas `pointer-events: none`, réduit-motion intact).
+- Doc créée : **`Docs/COMPOSANTS-EXTERNES.md`** — tableau composant ↔ dépendance ↔ commande exacte (règle permanente Stane).
+
+### Baseline après lot
+tsc 0 erreur ; **101/101 tests (14 fichiers)** — nouveau fichier `welcome-envelope.test.ts` (11 gardes) et `greeting.test.ts` adapté à Kalam ; build OK (132 entrées de pré-couche ≈ 4,13 Mo, les 3 graisses Kalam incluses) ; preview 4180 : `/`, `/birthday/accueil`, `/souvenirs`, `/enquete`, `/app`, lettre, bibliothèque → 200. Push en fin de lot (règle Stane du 3 oct. 2026).

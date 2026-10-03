@@ -13,6 +13,9 @@ import "@fontsource/inter/700.css";
 import "@fontsource/dm-serif-display/400.css";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
+import "@fontsource/kalam/300.css";
+import "@fontsource/kalam/400.css";
+import "@fontsource/kalam/700.css";
 
 import "./styles/globals.css";
 import { App } from "./app/App";

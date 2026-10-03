@@ -49,23 +49,27 @@ export function CaseVerdict({
     >
       <EmberField className="dossier-verdict__embers" />
 
+      {/* Réglages renforcés (retour Stane : traînée jamais aperçue) :
+          trace plus large et plus lumineuse, et surtout elle reste
+          visible bien plus longtemps au repos (2,4 s + 1,3 s de fondu)
+          au lieu de s'effacer presque aussitôt (0,7 s + 0,9 s). */}
       <GlowCursor
         color="#8EC5FF"
         secondaryColor="#3978D4"
-        trailLength={40}
-        trailWidth={9}
+        trailLength={44}
+        trailWidth={12}
         trailTaper={0.8}
         followSpeed={0.16}
-        glowIntensity={1.9}
-        glowSpread={1.2}
-        hotspot={0.55}
-        brightness={1.15}
-        opacity={0.85}
+        glowIntensity={2.3}
+        glowSpread={1.25}
+        hotspot={0.6}
+        brightness={1.35}
+        opacity={0.95}
         pulseSpeed={0.9}
         noiseStrength={0.03}
         idleFade
-        idleTimeout={700}
-        fadeDuration={900}
+        idleTimeout={2400}
+        fadeDuration={1300}
         blendMode="screen"
       >
       <Reveal className="dossier-verdict__head">

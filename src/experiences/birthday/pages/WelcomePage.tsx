@@ -91,6 +91,9 @@ export function WelcomePage() {
     const safeFinish = () => {
       if (!cancelled) finish();
     };
+    // Garantie absolue : même si la timeline n'aboutit jamais
+    // (promesse non résolue, cible disparue…), la lettre s'affiche.
+    const guard = window.setTimeout(safeFinish, 2500);
     try {
       const timeline = createTimeline({
         defaults: { ease: "outCubic" },
@@ -108,6 +111,7 @@ export function WelcomePage() {
     }
     return () => {
       cancelled = true;
+      window.clearTimeout(guard);
       timelineRef.current?.cancel();
       timelineRef.current = null;
     };
@@ -194,6 +198,10 @@ export function WelcomePage() {
         {/* Invitation : présente dès l'ouverture pour être animée —
             et lisible quoi qu'il arrive. */}
         {phase !== "sealed" && (
+          // Pendant l'ouverture, la carte est voilée jusqu'à son tour
+          // dans la timeline — MAIS la garde de 2,5 s garantit le
+          // basculement en « open » : la lettre ne peut plus jamais
+          // rester invisible.
           <div
             ref={inviteRef}
             className="invitation-card"

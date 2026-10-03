@@ -40,6 +40,7 @@
   --font-serif: "DM Serif Display", Georgia, "Times New Roman", serif;
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace;
+  --font-hand: "Kalam", "Segoe Script", "Bradley Hand", cursive;
 
   --text-display: clamp(2.8rem, 7vw, 5.5rem);
   --text-h1: clamp(2.25rem, 5vw, 4rem);

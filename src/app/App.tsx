@@ -80,6 +80,10 @@ export function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<EntryGate />} />
+          {/* L'accueil à l'enveloppe reste joignable pour toujours,
+              même après la première visite (la redirection « / » →
+              « /app » ne doit jamais rendre l'invitation perdue). */}
+          <Route path="/birthday/accueil" element={<WelcomePage />} />
           <Route path="/birthday" element={<CoverPage />} />
           <Route path="/birthday/bibliotheque" element={<LibraryPage />} />
           <Route path="/birthday/bibliotheque/chapitre/volume-scelle" element={<SealedVolumePage />} />
