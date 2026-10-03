@@ -3183,7 +3183,13 @@ body[data-daypart="night"] {
   position: relative;
   z-index: 1;
   display: grid;
+  /* Une piste bornée garde tous les chapitres sur l'axe du conteneur. */
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(4.5rem, 12vw, 9rem);
+  min-width: 0;
+}
+.dossier-scene__inner > * {
+  min-width: 0;
 }
 
 
@@ -3291,8 +3297,10 @@ body[data-daypart="night"] {
    dans la couche V2 ci-dessous, après fusion des anciennes règles. */
 .dossier-cover__main {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-5);
   justify-items: start;
+  min-width: 0;
 }
 .dossier-cover__bureau {
   font-family: var(--font-mono);
@@ -3316,7 +3324,10 @@ body[data-daypart="night"] {
 .dossier-cover__title {
   margin: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-2);
+  min-width: 0;
+  max-width: 100%;
 }
 .dossier-cover__title-lead {
   font-family: var(--font-serif);
@@ -3362,8 +3373,10 @@ body[data-daypart="night"] {
 }
 .dossier-idcard__rows {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
   margin: 0;
+  min-width: 0;
 }
 .dossier-idcard__row dt {
   font-family: var(--font-mono);
@@ -3410,11 +3423,13 @@ body[data-daypart="night"] {
 }
 .dossier-report__grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-8);
+  min-width: 0;
 }
 @media (min-width: 900px) {
   .dossier-report__grid {
-    grid-template-columns: 0.9fr 1.1fr;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   }
   .dossier-report__side {
     position: sticky;
@@ -3422,8 +3437,14 @@ body[data-daypart="night"] {
     align-self: start;
   }
 }
+.dossier-report__grid > *,
+.dossier-report__side,
+.dossier-report__body {
+  min-width: 0;
+}
 .dossier-report__side {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
   justify-items: start;
   align-content: start;
@@ -3482,7 +3503,9 @@ body[data-daypart="night"] {
   margin-top: var(--space-6);
   padding: var(--space-5);
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
+  min-width: 0;
   justify-items: start;
   background: var(--color-surface-blue);
   border: 1px dashed var(--color-primary);
@@ -3510,9 +3533,11 @@ body[data-daypart="night"] {
 /* ---------- Pièce III : pièces à conviction ---------- */
 .dossier-evidence__head {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
   justify-items: start;
   margin-bottom: var(--space-6);
+  min-width: 0;
 }
 .dossier-evidence__stats {
   font-family: var(--font-mono);
@@ -3549,18 +3574,25 @@ body[data-daypart="night"] {
   position: relative;
   z-index: 1;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-8);
   max-width: 640px;
   margin-inline: auto;
+  min-width: 0;
+}
+.dossier-exhibits > *,
+.dossier-exhibit {
+  min-width: 0;
 }
 .dossier-exhibit {
   position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   background: linear-gradient(175deg, #ffffff 0%, #eef4fd 100%);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
   padding: var(--space-6);
-  display: grid;
   gap: var(--space-4);
   transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
   transition: transform 260ms ease-out, box-shadow 260ms ease-out;
@@ -3654,8 +3686,10 @@ body[data-daypart="night"] {
 
 .dossier-solved {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
   padding: var(--space-4);
+  min-width: 0;
   background: var(--color-success-bg);
   border: 1px dashed var(--color-success);
   border-radius: var(--radius-sm);
@@ -3695,8 +3729,10 @@ body[data-daypart="night"] {
 .dossier-verdict {
   position: relative;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-6);
   justify-items: center;
+  min-width: 0;
   text-align: center;
   padding: var(--space-8) var(--space-5) var(--space-10);
   border-radius: var(--radius-lg);
@@ -3716,6 +3752,7 @@ body[data-daypart="night"] {
 .dossier-verdict > *:not(.ember-field) {
   position: relative;
   z-index: 1;
+  min-width: 0;
 }
 .dossier-verdict__jury {
   font-family: var(--font-mono);
@@ -3729,8 +3766,10 @@ body[data-daypart="night"] {
 }
 .dossier-verdict__slam {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
   justify-items: center;
+  min-width: 0;
 }
 .dossier-verdict__slam .exlibris {
   opacity: 0;
@@ -3777,7 +3816,8 @@ body[data-daypart="night"] {
    manuscrite installée) */
 .dossier-letter {
   position: relative;
-  max-width: 580px;
+  max-width: min(580px, 100%);
+  min-width: 0;
   text-align: left;
   background: linear-gradient(172deg, #fdfbf6 0%, #f3ecdd 100%);
   color: #2c2a26;
@@ -3850,9 +3890,11 @@ body[data-daypart="night"] {
 /* Le verdict garde sa mise en page à l'intérieur du conteneur. */
 .dossier-verdict .glow-cursor__content {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-6);
   justify-items: center;
   text-align: center;
+  min-width: 0;
 }
 
 /* ============================================================
@@ -3999,6 +4041,7 @@ body[data-daypart="night"] {
   position: relative;
   z-index: 1;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-8);
   align-items: center;
   /* Le parent .container reste l'unique propriétaire de la mesure. */
@@ -4069,6 +4112,7 @@ body[data-daypart="night"] {
   font-size: clamp(0.86rem, 1.4vw, 0.98rem);
   line-height: 1.85;
   color: var(--color-text);
+  overflow-wrap: anywhere;
 }
 .dossier-pv__typed {
   white-space: pre-wrap;
@@ -4090,7 +4134,9 @@ body[data-daypart="night"] {
 /* ---------- Chapitre III : les sept faits (focus scroll) ---------- */
 .dossier-facts {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-6);
+  min-width: 0;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -4098,9 +4144,11 @@ body[data-daypart="night"] {
 }
 .dossier-facts__head {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
   justify-items: start;
   max-width: 62ch;
+  min-width: 0;
 }
 .dossier-facts__intro {
   font-size: var(--text-body-lg);
@@ -4109,7 +4157,9 @@ body[data-daypart="night"] {
 .dossier-facts__stage {
   position: relative;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-6);
+  min-width: 0;
 }
 .dossier-facts__thread {
   position: absolute;
@@ -4132,7 +4182,9 @@ body[data-daypart="night"] {
   margin: 0;
   padding: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(2.5rem, 8vh, 5.5rem);
+  min-width: 0;
   position: relative;
   z-index: 1;
 }
@@ -4146,7 +4198,9 @@ body[data-daypart="night"] {
   filter: blur(calc((1 - var(--fact-a, 1)) * 3px));
   transform: translateY(calc((1 - var(--fact-a, 1)) * 16px)) scale(calc(0.985 + 0.015 * var(--fact-a, 1)));
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   justify-items: center;
+  min-width: 0;
   min-height: 34vh;
   align-content: center;
 }
@@ -4171,13 +4225,15 @@ body[data-daypart="night"] {
 .dossier-factfocus__card {
   position: relative;
   width: min(700px, 100%);
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   background: linear-gradient(175deg, #ffffff 0%, #eef4fd 100%);
   border: 1px solid var(--color-border-strong);
   border-left: 4px solid var(--color-primary);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
   padding: clamp(var(--space-5), 3vw, var(--space-8)) clamp(var(--space-5), 4vw, var(--space-10));
-  display: grid;
   gap: var(--space-4);
 }
 .dossier-factfocus:nth-child(odd) .dossier-factfocus__card {
@@ -4233,10 +4289,19 @@ body[data-daypart="night"] {
 /* ---------- Chapitre VI : affaire classée ---------- */
 .dossier-closure {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-5);
   justify-items: center;
+  min-width: 0;
   text-align: center;
   padding-block: var(--space-8);
+}
+.dossier-closure > *,
+.dossier-closure .case-filemeta {
+  min-width: 0;
+}
+.dossier-closure .case-filemeta {
+  grid-template-columns: minmax(0, 1fr);
 }
 .dossier-closure__body {
   max-width: 62ch;
