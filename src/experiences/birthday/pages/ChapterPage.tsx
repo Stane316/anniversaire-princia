@@ -26,11 +26,11 @@ export function ChapterPage() {
       {/* Même mer d'encre que la bibliothèque : le livre flotte dessus. */}
       <div className="scene-backdrop" aria-hidden="true">
         <GradientWaves
-          horizonColor="#EAF3FF"
-          waveColor="#7FB2F2"
-          crestColor="#FFFFFF"
+          horizonColor="#F3F8FF"
+          waveColor="#3E7BD9"
+          crestColor="#DBEAFE"
           speed={0.3}
-          amplitude={2.2}
+          amplitude={2.6}
           waveScale={0.55}
           waveRatio={0.9}
           swell={30}
@@ -38,13 +38,15 @@ export function ChapterPage() {
           tilt={1.08}
           zoom={1.05}
           height={5.0}
-          fogDepth={22}
+          fogDepth={26}
           detail="low"
           brightness={1}
-          opacity={0.5}
+          opacity={0.85}
           grain={false}
           mouseInteraction
           parallaxStrength={0.32}
+          targetFps={30}
+          resolutionScale={0.5}
         />
       </div>
       <ReadingBook chapters={birthdayChapters} currentIndex={index} />

@@ -1286,6 +1286,12 @@ a {
   background: linear-gradient(160deg, #f7faff 0%, #e9f2fe 100%);
   position: relative;
   overflow: hidden;
+  /* L'espace est réellement distribué : la méta s'étire dans toute la
+     page au lieu de rester campée en haut à gauche (3 oct. 2026). */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(0.9rem, 2.4vw, 1.5rem);
 }
 .reading-book__page--meta .exlibris {
   position: absolute;
@@ -1381,15 +1387,16 @@ a {
   color: var(--color-primary);
 }
 .reading-book__page--meta .kicker {
-  margin-top: var(--space-3);
+  margin-top: 0;
 }
 .reading-book__title {
   font-family: var(--font-serif);
-  font-size: 2rem;
-  line-height: 1.15;
-  margin-top: var(--space-2);
+  font-size: clamp(1.7rem, 4.2vw, 2.35rem);
+  line-height: 1.12;
+  margin-top: 0;
   outline: none;
   text-wrap: balance;
+  max-width: 22ch;
 }
 .reading-book__aside {
   margin-top: var(--space-4);
@@ -1400,7 +1407,7 @@ a {
   padding-left: var(--space-3);
 }
 .reading-book__page--meta .margin-note {
-  margin-top: var(--space-6);
+  margin-top: 0;
   max-width: none;
 }
 
@@ -1410,15 +1417,17 @@ a {
   margin: 0 0 var(--space-4);
 }
 .reading-book__prose {
-  flex: 1;
+  max-width: 62ch;
+  margin-inline: auto;
+  width: 100%;
 }
 
 .reading-book__nav {
+  margin-top: auto;
+  padding-top: var(--space-6);
   display: flex;
   justify-content: space-between;
-  align-items: stretch;
   gap: var(--space-3);
-  margin-top: var(--space-6);
 }
 .reading-book__nav-label {
   display: block;
@@ -2092,16 +2101,18 @@ body[data-daypart="night"] {
 .library-hero {
   position: relative;
   padding: var(--space-14) 0 var(--space-12);
+  /* Voile translucide : la mer d'encre (GradientWaves) passe sous le
+     héros au lieu d'être masquée par un dégradé opaque (3 oct. 2026). */
   background:
-    radial-gradient(90% 70% at 85% 0%, rgba(142, 197, 255, 0.3), transparent 60%),
-    linear-gradient(180deg, #eaf3ff 0%, #f6faff 70%, transparent 100%);
+    radial-gradient(90% 70% at 85% 0%, rgba(142, 197, 255, 0.22), transparent 60%),
+    linear-gradient(180deg, rgba(234, 243, 255, 0.68) 0%, rgba(246, 250, 255, 0.52) 70%, rgba(247, 250, 255, 0.15) 100%);
   overflow: clip;
 }
 .library-hero__ghost {
   position: absolute;
   top: var(--space-3);
   right: -0.06em;
-  font-family: var(--font-display);
+  font-family: var(--font-serif);
   font-size: clamp(8rem, 26vw, 20rem);
   line-height: 1;
   color: transparent;
@@ -2757,9 +2768,12 @@ body[data-daypart="night"] {
 .dossier-scene {
   position: relative;
   overflow: hidden;
+  /* Voile translucide : le fond WebThreads (fils d'encre) respire au
+     travers — c'était son masquage par un voile OPAQUE qui rendait le
+     background invisible (3 oct. 2026). Lisibilité préservée. */
   background:
-    radial-gradient(1100px 520px at 85% -8%, rgba(142, 197, 255, 0.24), transparent 65%),
-    linear-gradient(180deg, #eef5ff 0%, var(--color-background) 34%, #f2f7ff 100%);
+    radial-gradient(1100px 520px at 85% -8%, rgba(142, 197, 255, 0.18), transparent 65%),
+    linear-gradient(180deg, rgba(238, 245, 255, 0.62) 0%, rgba(247, 250, 255, 0.5) 34%, rgba(242, 247, 255, 0.62) 100%);
   padding-block: var(--space-8);
 }
 .dossier-scene__inner {
@@ -2767,6 +2781,18 @@ body[data-daypart="night"] {
   z-index: 1;
   display: grid;
   gap: clamp(4.5rem, 12vw, 9rem);
+}
+
+/* Rendu différé des chapitres lourds : le navigateur saute la mise en
+   page/peinture des sections éloignées du viewport (perf 3 oct. 2026),
+   la taille estimée évite tout saut de scroll. */
+.dossier-scene__inner > section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 860px;
+}
+.dossier-cover {
+  /* Le héros, lui, est toujours rendu (premier écran). */
+  content-visibility: visible;
 }
 
 /* ---------- Bandeau défilant ---------- */

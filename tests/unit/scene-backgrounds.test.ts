@@ -31,8 +31,11 @@ describe("WebThreads (background enquête) — gardes", () => {
     expect(comp).toContain("window.addEventListener('pointermove', onPointerMove, { passive: true })");
   });
 
-  it("DPR plafonné à 1.5, pause hors écran, reduced-motion sans canvas", () => {
-    expect(comp).toContain("Math.min(window.devicePixelRatio || 1, 1.5)");
+  it("GPU plafonné : DPR 1, résolution réduite, 30 fps, pause hors écran", () => {
+    expect(comp).toContain("dpr: 1");
+    expect(comp).toContain("resolutionScale");
+    expect(comp).toContain("fpsRef.current");
+    expect(comp).toContain("frameInterval");
     expect(comp).toContain("IntersectionObserver");
     expect(comp).toContain("visibilitychange");
     expect(comp).toContain("if (reducedMotion) return null");
@@ -44,14 +47,17 @@ describe("WebThreads (background enquête) — gardes", () => {
     expect(comp).toContain("WebGL indisponible");
   });
 
-  it("intégré à la section enquête en encre bleue (lightMode)", () => {
+  it("intégré à la section enquête en encre bleue (lightMode), plafonné", () => {
     const page = read("src/experiences/birthday/pages/CasePage.tsx");
     expect(page).toContain("<WebThreads");
     expect(page).toContain("lightMode");
     expect(page).toContain('backgroundColor="#EEF5FF"');
-    expect(page).toContain('color1="#174A91"');
-    expect(page).toContain('color2="#3E7BD9"');
-    expect(page).toContain('color3="#8EC5FF"');
+    expect(page).toContain('color1="#1E5BB4"');
+    expect(page).toContain('color2="#5B9BEB"');
+    expect(page).toContain('color3="#C9E1FF"');
+    expect(page).toContain("targetFps={30}");
+    expect(page).toContain("resolutionScale={0.55}");
+    expect(page).toContain("opacity={0.9}");
     // Jamais les couleurs de la démo.
     expect(page).not.toContain("#5227FF");
     expect(page).not.toContain("#FF9FFC");
@@ -64,13 +70,15 @@ describe("GradientWaves (background bibliothèque) — gardes", () => {
   it("dépend de ogl, raymarch conservé, détail raisonnable", () => {
     expect(comp).toContain("from 'ogl'");
     expect(comp).toContain("raymarch");
-    expect(comp).toContain("if (detail === 'low') return 40.0");
+    expect(comp).toContain("if (detail === 'low') return 32.0");
   });
 
-  it("jamais interactif, DPR ≤ 1.5, reduced-motion sans canvas", () => {
+  it("jamais interactif, DPR 1, résolution réduite, reduced-motion sans canvas", () => {
     expect(comp).toContain("canvas.style.pointerEvents = 'none'");
     expect(comp).toContain("window.addEventListener('pointermove', onPointerMove, { passive: true })");
-    expect(comp).toContain("Math.min(window.devicePixelRatio || 1, 1.5)");
+    expect(comp).toContain("dpr: 1");
+    expect(comp).toContain("resolutionScale");
+    expect(comp).toContain("frameInterval");
     expect(comp).toContain("if (reducedMotion) return null");
     expect(comp).toContain("if (reducedMotion) return;");
   });
@@ -82,10 +90,12 @@ describe("GradientWaves (background bibliothèque) — gardes", () => {
     ]) {
       const src = read(page);
       expect(src).toContain("<GradientWaves");
-      expect(src).toContain('horizonColor="#EAF3FF"');
-      expect(src).toContain('waveColor="#7FB2F2"');
-      expect(src).toContain('crestColor="#FFFFFF"');
+      expect(src).toContain('horizonColor="#F3F8FF"');
+      expect(src).toContain('waveColor="#3E7BD9"');
+      expect(src).toContain('crestColor="#DBEAFE"');
       expect(src).toContain('detail="low"');
+      expect(src).toContain("targetFps={30}");
+      expect(src).toContain("resolutionScale={0.5}");
       expect(src).not.toContain("#5227FF");
       expect(src).not.toContain("#FF9FFC");
     }
@@ -126,9 +136,14 @@ describe("Section enquête allégée", () => {
     expect(gone).toBe(true);
   });
 
-  it("la traînée du verdict reste présente, plafonnée en DPR", () => {
+  it("la traînée du verdict reste présente, en plan viewport 30 fps", () => {
+    // Le canvas ne couvre plus toute la section (~3000 px) mais le
+    // viewport seul : ~6× moins de surface GPU à tracé identique,
+    // plus le sommeil complet hors écran et à l'inactivité.
     expect(verdict).toContain("<GlowCursor");
-    expect(verdict).toContain("maxDevicePixelRatio={1.5}");
+    expect(verdict).toContain("maxDevicePixelRatio={1}");
+    expect(verdict).toContain("viewportCanvas");
+    expect(verdict).toContain("targetFps={30}");
   });
 });
 

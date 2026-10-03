@@ -50,6 +50,9 @@ export function CaseFacts() {
     if (!section || !list) return;
 
     const itemEls = Array.from(list.querySelectorAll<HTMLElement>(".dossier-factfocus"));
+    // Mémo des dernières valeurs : n'écrire la variable CSS que si le
+    // changement est perceptible (évite les recalcs de style vides).
+    const lastValues = new Array<number>(itemEls.length).fill(-1);
     let pathLength = 0;
     try {
       pathLength = path ? path.getTotalLength() : 0;
@@ -72,7 +75,10 @@ export function CaseFacts() {
         const center = (i + 0.5) / items.length;
         const d = Math.abs(p - center);
         const a = smoothstep(1 - d / WINDOW_WIDTH);
-        itemEls[i].style.setProperty("--fact-a", a.toFixed(3));
+        if (Math.abs(a - lastValues[i]) > 0.004) {
+          lastValues[i] = a;
+          itemEls[i].style.setProperty("--fact-a", a.toFixed(3));
+        }
       }
 
       if (path && pathLength > 0 && orbRef.current) {

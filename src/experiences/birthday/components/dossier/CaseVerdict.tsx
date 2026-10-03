@@ -68,7 +68,9 @@ export function CaseVerdict({
         idleTimeout={2400}
         fadeDuration={1300}
         blendMode="screen"
-        maxDevicePixelRatio={1.5}
+        maxDevicePixelRatio={1}
+        viewportCanvas
+        targetFps={30}
       >
       <Reveal className="dossier-verdict__head">
         <p className="dossier-verdict__jury">{verdict.juryLine}</p>

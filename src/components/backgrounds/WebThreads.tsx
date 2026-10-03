@@ -48,6 +48,13 @@ export interface WebThreadsProps {
   mouseStrength?: number;
   backgroundColor?: string;
   lightMode?: boolean;
+  /** Plafond de rendu (images/seconde) — 30 suffit pour un décor
+   *  d'arrière-plan lent ; le reste partait directement au GPU. */
+  targetFps?: number;
+  /** Résolution interne relative à la taille affichée (0–1] — le
+   *  canvas est flous de nature : l'agrandissement CSS est invisible.
+   *  0.5 ≈ 4× moins de pixels à calculer par frame. */
+  resolutionScale?: number;
   className?: string;
 }
 
@@ -213,9 +220,13 @@ const WebThreads: React.FC<WebThreadsProps> = ({
   mouseStrength = 0.3,
   backgroundColor = '#FFFFFF',
   lightMode = false,
+  targetFps = 60,
+  resolutionScale = 1,
   className = ''
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const fpsRef = useRef<number>(60);
+  const resolutionScaleRef = useRef<number>(typeof resolutionScale === 'number' ? resolutionScale : 1);
   const mouseRef = useRef<{ enabled: boolean; strength: number }>({ enabled: true, strength: 0.3 });
   const reducedMotion = useReducedMotion();
 
@@ -231,7 +242,7 @@ const WebThreads: React.FC<WebThreadsProps> = ({
         alpha: true,
         premultipliedAlpha: true,
         antialias: false,
-        dpr: Math.min(window.devicePixelRatio || 1, 1.5)
+        dpr: 1
       });
     } catch (error) {
       // WebGL indisponible : le fond CSS de la page suffit.
@@ -288,8 +299,9 @@ const WebThreads: React.FC<WebThreadsProps> = ({
 
     const setSize = () => {
       const rect = container.getBoundingClientRect();
-      const w = Math.max(1, Math.floor(rect.width));
-      const h = Math.max(1, Math.floor(rect.height));
+      const scale = Math.min(1, Math.max(0.2, resolutionScaleRef.current));
+      const w = Math.max(1, Math.floor(rect.width * scale));
+      const h = Math.max(1, Math.floor(rect.height * scale));
       renderer.setSize(w, h);
       const res = (program.uniforms['iResolution'] as { value: Float32Array }).value;
       res[0] = gl.drawingBufferWidth;
@@ -329,7 +341,16 @@ const WebThreads: React.FC<WebThreadsProps> = ({
     let isPageVisible = !document.hidden;
     const t0 = performance.now();
 
+    let lastDraw = 0;
     const loop = (t: number) => {
+      // Plafond de rendu : le décor se rafraîchit moins souvent, la
+      // page garde son budget GPU (perf 3 oct. 2026).
+      const frameInterval = 1000 / Math.max(fpsRef.current, 1);
+      if (t - lastDraw < frameInterval - 0.75) {
+        raf = requestAnimationFrame(loop);
+        return;
+      }
+      lastDraw = t;
       (program.uniforms['iTime'] as { value: number }).value = (t - t0) * 0.001;
       currentMouse[0] += 0.05 * (targetMouse[0] - currentMouse[0]);
       currentMouse[1] += 0.05 * (targetMouse[1] - currentMouse[1]);
@@ -393,6 +414,8 @@ const WebThreads: React.FC<WebThreadsProps> = ({
     const ctx = ctxMap.get(container);
     if (!ctx) return;
     const { program } = ctx;
+    fpsRef.current = targetFps;
+    resolutionScaleRef.current = resolutionScale;
     const u = program.uniforms as Record<string, { value: any }>;
 
     u['uSpeed'].value = speed;
@@ -458,7 +481,9 @@ const WebThreads: React.FC<WebThreadsProps> = ({
     mouseInteraction,
     mouseStrength,
     backgroundColor,
-    lightMode
+    lightMode,
+    targetFps,
+    resolutionScale,
   ]);
 
   if (reducedMotion) return null;

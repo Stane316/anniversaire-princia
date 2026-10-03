@@ -454,3 +454,33 @@ tsc 0 erreur ; **101/101 tests (14 fichiers)** — nouveau fichier `welcome-enve
 
 ### Baseline après lot
 tsc 0 erreur ; **122/122 tests (15 fichiers)** — `dossier-scene` réécrit (mécanique identique, implé impérative), + `scene-backgrounds` (fonds, verdict allégé, FoldText, livre) ; build OK (132 entrées ≈ 4,2 Mo) ; preview 4180 : 7 routes × 200, modules WebThreads/GradientWaves/FoldText servis.
+
+---
+
+## Lot « performance GPU » (3 oct. 2026 — GPU à 100 %, backgrounds invisibles)
+
+### 1. Diagnostic (observations statiques — pas de navigateur dans le sandbox)
+Code lu ligne à ligne ; les chiffres sont de l'arithmétique de surfaces
+× itérations shader, pas des chronos navigateur :
+- **GlowCursor du verdict** : canvas = toute la hauteur de la section (~3000 px) → ~13 Mpx avec un shader à 63 itérations/pixel, rendu 60×/s en continu → le plomb.
+- **WebThreads** : 2880×1620 (DPR 1.5) en continu.
+- **Backgrounds invisibles** : les voiles CSS de `.dossier-scene` et `.library-hero` étaient des gradients **opaques** peints par-dessus les fonds WebGL → masquage total.
+- `FoldText` : `will-change` permanent par pièce → couches GPU résiduelles.
+- Token fantôme `--font-display` encore utilisé par le ghost « CH. 18 » du héros bibliothèque.
+
+### 2. Réparations (interaction et contenu préservés)
+- **GlowCursor** : nouveau mode `viewportCanvas` — le plan lumineux est fixé à la **taille du viewport** (les coordonnées du pointeur vivent déjà dans le viewport : même traînée, même endroit, ~6× moins de surface) ; la trace n'existe que quand la section hôte est visible (IO) ; **sommeil complet** hors écran et après inactivité (réveil au mouvement) ; `targetFps={30}`, `maxDevicePixelRatio={1}`. Verdict : trace 12 px conservée.
+- **WebThreads/GradientWaves** : `dpr: 1` (les fonds n'ont pas besoin de sous-pixel), `resolutionScale` 0.55/0.5 interne (canvas réduit puis agrandi par CSS — invisible sur un décor flou de nature) ≈ **4× moins de pixels par frame** ; `targetFps={30}` ; pause hors écran conservée ; `GradientWaves low` : 40 → 32 étapes de raymarch.
+- **Voiles translucides** : `.dossier-scene` et `.library-hero` passent en rgba~0.5-0.68 → **les backgrounds deviennent visibles** tout en protégeant la lisibilité ; réglages couleurs renforcés (encre plus marquée, vagues plus contrastées).
+- **FoldText** : `will-change` retiré du CSS interne (adaptation documentée) ; `GSAP` conserve force3D + clearProps.
+- **Enquête** : `content-visibility: auto` sur les chapitres lourds (rendu différé hors écran, taille estimée = aucun saut de scroll).
+- **Faits** : la variable `--fact-a` n'est écrite que si le changement > 0,004 (recalcs de style vides supprimés).
+- **Bibliothèque** : page méta du livre en flex `space-between` (l'espace est distribué — fini le campé en haut à gauche) ; prose en colonne 62 ch centrée ; nav poussée en bas ; titre restauré (serif, focus-outline conservé), balance sur 22 ch.
+
+### 3. Bilan d'engagements
+- Aucun effet supprimé (sauf le canvas de braises déjà retiré au lot précédent) ; aucun contenu sacrifié (message > effet, règle respectée).
+- Reduced-motion : tout WebGL reste jamais monté ; états statiques complets.
+- Pas de mesure navigateur disponible dans le sandbox : les gains sont des **estimations statiques de charge GPU** (÷4 à ÷6 sur les surfaces dessinées par frame), la validation visuelle revient à Stane ; si le PC rame encore, curseurs restants documentés dans `Docs/COMPOSANTS-EXTERNES.md` (baisser `resolutionScale`, désactiver un fond).
+
+### Baseline après lot
+tsc 0 erreur ; **122/122 tests (15 fichiers)** — critères des fonds mis à jour vers les nouvelles garanties (jamais masqué un échec: anciens réglages remplacés par les nouveaux) ; build OK (132 entrées ≈ 4,2 Mo) ; preview 4180 : 8 routes × 200, moteur GlowCursor optimisé servi.

@@ -105,25 +105,27 @@ export function CasePage() {
           <WebThreads
             lightMode
             backgroundColor="#EEF5FF"
-            color1="#174A91"
-            color2="#3E7BD9"
-            color3="#8EC5FF"
+            color1="#1E5BB4"
+            color2="#5B9BEB"
+            color3="#C9E1FF"
             speed={0.14}
-            threadCount={5}
+            threadCount={6}
             frequency={4.2}
-            spread={0.24}
+            spread={0.3}
             taper={0.9}
             position={0.42}
             fanMode="center"
-            glow={0.02}
+            glow={0.026}
             falloff={0.62}
-            thickness={1.15}
-            brightness={0.6}
-            opacity={0.5}
+            thickness={1.3}
+            brightness={0.72}
+            opacity={0.9}
             mirror
             grain={false}
             mouseInteraction
             mouseStrength={0.22}
+            targetFps={30}
+            resolutionScale={0.55}
             className="scene-backdrop__canvas"
           />
         </div>

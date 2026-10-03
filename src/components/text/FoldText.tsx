@@ -9,6 +9,11 @@
  *    chapitre se déplie panneau par panneau à l'ouverture) ;
  *  - rejetés volontairement : loop/hover (usage lecteur) — les
  *    triggers mount/scroll suffisent ;
+ *  - adapation performance (3 oct. 2026) : `will-change: transform,
+ *    opacity` PERMANENT retiré du CSS interne — chaque pièce créait
+ *    une couche GPU résiduelle même au repos ; GSAP applique déjà
+ *    transforms/force3D pendant l'animation et nettoie à la fin
+ *    (clearProps: willChange) — logique et rendu inchangés ;
  *  - prefers-reduced-motion déjà pris en charge par la source
  *    (durées réduites + media query interne) ✔ ;
  *  - accessibilité déjà présente : version sr-only, décor aria-hidden ✔.
@@ -123,7 +128,6 @@ const FOLD_TEXT_STYLES = `.fold-text {
   line-height: inherit;
   transform-style: preserve-3d;
   backface-visibility: hidden;
-  will-change: transform, opacity;
 }
 
 .fold-text-piece::after {

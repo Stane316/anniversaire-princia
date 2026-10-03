@@ -19,6 +19,13 @@
 | `GradientWaves` (`src/components/backgrounds/GradientWaves.tsx`) | Fond de la **bibliothèque** et du **livre des chapitres** : vagues bleu pastel | `ogl` | `npm install ogl` |
 | `FoldText` (`src/components/text/FoldText.tsx`) | Nom de chaque **chapitre** déplié panneau par panneau à l'ouverture | `gsap` | `npm install gsap` |
 
+### Plafonds de performance (3 oct. 2026 — GPU à 100 % signalé)
+
+Réglages intégrés dans les composants WebGL (aucune commande à taper) :
+`GlowCursor` (verdict) : plan **viewport** au lieu de la section entière (~6× moins de surface), `maxDevicePixelRatio={1}`, `targetFps={30}`, sommeil complet hors écran et à l'inactivité.
+`WebThreads` / `GradientWaves` : `dpr: 1`, `resolutionScale` 0.55/0.5 (≈ 4× moins de pixels, l'agrandissement CSS est invisible sur un décor flou), `targetFps={30}`, pause hors écran ; `GradientWaves detail="low"` passe de 40 à 32 étapes de raymarch.
+`FoldText` : `will-change` permanent retiré (couches GPU résiduelles), GSAP gère déjà la mise en mémoire pendant l'animation.
+
 ## Composants artistiques sans dépendance externe
 
 Ces pièces sont en CSS/React natif (aucun paquet à installer) :

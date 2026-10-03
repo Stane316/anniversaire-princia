@@ -39,6 +39,18 @@ export interface GlowCursorProps extends Omit<HTMLAttributes<HTMLDivElement>, 'c
   fadeDuration?: number;
   blendMode?: BlendMode;
   maxDevicePixelRatio?: number;
+  /**
+   * Optimisation performance (3 oct. 2026) : le canvas devient un
+   * plan FIXED de la taille du VIEWPORT au lieu de couvrir toute la
+   * section hôte — une traînée suit le pointeur, qui vit déjà en
+   * coordonnées viewport : à contenu strictement identique, la
+   * surface GPU est divisée par ~6 sur les sections longues.
+   * La boucle est en outre suspendue dès que la section hôte sort
+   * de l'écran (IntersectionObserver).
+   */
+  viewportCanvas?: boolean;
+  /** Plafond de rendu (images/seconde) — 60 = comportement d'origine. */
+  targetFps?: number;
   enabled?: boolean;
   children?: ReactNode;
 }
@@ -62,6 +74,8 @@ interface GlowCursorConfig {
   fadeDuration: number;
   blendMode: BlendMode;
   maxDevicePixelRatio: number;
+  viewportCanvas: boolean;
+  targetFps: number;
   enabled: boolean;
 }
 
@@ -207,6 +221,8 @@ const GlowCursor = ({
   fadeDuration = 900,
   blendMode = 'screen',
   maxDevicePixelRatio = 1.5,
+  viewportCanvas = false,
+  targetFps = 60,
   enabled = true,
   children,
   className = '',
@@ -237,6 +253,8 @@ const GlowCursor = ({
     idleTimeout,
     fadeDuration,
     maxDevicePixelRatio,
+    viewportCanvas,
+    targetFps,
     blendMode,
     enabled
   };
@@ -263,6 +281,14 @@ const GlowCursor = ({
     const initialConfig = propsRef.current;
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
+    if (initialConfig.viewportCanvas) {
+      // Plan fixe taille viewport : la surface à éclairer ne dépend
+      // plus de la hauteur de la section hôte (perf 3 oct. 2026).
+      canvas.style.position = 'fixed';
+      canvas.style.inset = '0';
+      canvas.style.zIndex = '0';
+      canvas.style.mixBlendMode = initialConfig.blendMode;
+    }
 
     const pointData = Array(MAX_POINTS * 2).fill(0);
     const points = Array.from({ length: MAX_POINTS }, () => ({ x: 0, y: 0 }));
@@ -304,12 +330,23 @@ const GlowCursor = ({
     let fade = 0;
     let lastInputTime = performance.now();
     let lastFrameTime = performance.now();
+    let lastDraw = 0;
     let raf = 0;
+    let suspended = false;
+    let hostVisible = true;
     let destroyed = false;
 
+    /** Réveille la boucle si elle s'était endormie (perf 3 oct. 2026). */
+    const wake = () => {
+      if (!suspended || destroyed) return;
+      suspended = false;
+      if (raf === 0) raf = requestAnimationFrame(render);
+    };
+
     const resize = () => {
-      width = Math.max(container.clientWidth, 1);
-      height = Math.max(container.clientHeight, 1);
+      const viewport = propsRef.current.viewportCanvas;
+      width = Math.max(viewport ? window.innerWidth : container.clientWidth, 1);
+      height = Math.max(viewport ? window.innerHeight : container.clientHeight, 1);
       renderer.setSize(width, height);
       program.uniforms['uResolution'].value = [width, height];
     };
@@ -328,14 +365,24 @@ const GlowCursor = ({
     };
 
     const updatePointer = (event: PointerEvent) => {
-      const rect = container.getBoundingClientRect();
-      const x = clamp(event.clientX - rect.left, 0, rect.width);
-      const y = clamp(rect.height - (event.clientY - rect.top), 0, rect.height);
+      const viewport = propsRef.current.viewportCanvas;
+      if (viewport && !hostVisible) return; // Trace liée à sa section.
+      let x: number;
+      let y: number;
+      if (viewport) {
+        x = clamp(event.clientX, 0, window.innerWidth);
+        y = clamp(window.innerHeight - event.clientY, 0, window.innerHeight);
+      } else {
+        const rect = container.getBoundingClientRect();
+        x = clamp(event.clientX - rect.left, 0, rect.width);
+        y = clamp(rect.height - (event.clientY - rect.top), 0, rect.height);
+      }
       if (!initialized) initializeTrail(x, y);
       target.x = x;
       target.y = y;
       pointerInside = true;
       lastInputTime = performance.now();
+      wake(); // réveil de la boucle endormie (sommeil = zéro coût).
     };
 
     const onPointerLeave = () => {
@@ -346,6 +393,24 @@ const GlowCursor = ({
     const render = (now: number) => {
       if (destroyed) return;
       const config = propsRef.current;
+      raf = requestAnimationFrame(render);
+
+      // Plafond d'images par seconde : une traînée lumineuse n'a pas
+      // besoin de 60 fps — le surplus part directement au GPU (perf).
+      const frameInterval = 1000 / Math.max(config.targetFps, 1);
+      if (now - lastDraw < frameInterval - 0.5) return;
+      lastDraw = now;
+
+      // Sommeil complet dès que la traînée est éteinte : zéro coût au
+      // repos, réveil au prochain mouvement de pointeur.
+      const idleLimit = config.idleTimeout + config.fadeDuration + 250;
+      if (initialized && fade < 0.003 && now - lastInputTime > idleLimit) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+        suspended = true;
+        return;
+      }
+
       const delta = Math.min((now - lastFrameTime) / 16.667, 3);
       lastFrameTime = now;
 
@@ -392,14 +457,34 @@ const GlowCursor = ({
       program.uniforms['uFade'].value = fade;
 
       renderer.render({ scene: mesh });
-      if (!destroyed) raf = requestAnimationFrame(render);
     };
 
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(container);
-    container.addEventListener('pointermove', updatePointer);
-    container.addEventListener('pointerenter', updatePointer);
-    container.addEventListener('pointerleave', onPointerLeave);
+    window.addEventListener('resize', resize);
+    const viewportMode = propsRef.current.viewportCanvas;
+    if (viewportMode) {
+      // Le pointeur vit dans le viewport : écoute fenêtre passive.
+      window.addEventListener('pointermove', updatePointer, { passive: true });
+      document.addEventListener('pointerleave', onPointerLeave);
+    } else {
+      container.addEventListener('pointermove', updatePointer);
+      container.addEventListener('pointerenter', updatePointer);
+      container.addEventListener('pointerleave', onPointerLeave);
+    }
+    // Section hôte hors écran (mode viewport) : la boucle dort.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        hostVisible = entry.isIntersecting;
+        if (entry.isIntersecting) wake();
+        else {
+          pointerInside = false;
+          lastInputTime = performance.now();
+        }
+      },
+      { threshold: 0 },
+    );
+    io.observe(container);
     resize();
     raf = requestAnimationFrame(render);
 
@@ -407,13 +492,20 @@ const GlowCursor = ({
       destroyed = true;
       cancelAnimationFrame(raf);
       resizeObserver.disconnect();
-      container.removeEventListener('pointermove', updatePointer);
-      container.removeEventListener('pointerenter', updatePointer);
-      container.removeEventListener('pointerleave', onPointerLeave);
+      io.disconnect();
+      window.removeEventListener('resize', resize);
+      if (viewportMode) {
+        window.removeEventListener('pointermove', updatePointer);
+        document.removeEventListener('pointerleave', onPointerLeave);
+      } else {
+        container.removeEventListener('pointermove', updatePointer);
+        container.removeEventListener('pointerenter', updatePointer);
+        container.removeEventListener('pointerleave', onPointerLeave);
+      }
       mesh.geometry.remove();
       program.remove();
     };
-  }, [maxDevicePixelRatio, reducedMotion]);
+  }, [maxDevicePixelRatio, viewportCanvas, reducedMotion]);
 
   return (
     <div ref={containerRef} className={`glow-cursor${className ? ` ${className}` : ''}`} style={style} {...rest}>
