@@ -51,7 +51,7 @@ describe("PV en bloc + récompense de frappe", () => {
   });
 });
 
-describe("Sept faits — focus piloté par le scroll (AN-10 reconstruit)", () => {
+describe("Sept faits — focus piloté par le scroll (AN-10, FLUIDE)", () => {
   const facts = comp("CaseFacts.tsx");
   const hook = read("src/motion/useScrollProgress.ts");
 
@@ -62,21 +62,45 @@ describe("Sept faits — focus piloté par le scroll (AN-10 reconstruit)", () =>
   it("calcule une activation smoothstep par fait avec fenêtre", () => {
     expect(facts).toContain("smoothstep(1 - d / WINDOW_WIDTH)");
     expect(facts).toContain("(i + 0.5) / items.length");
-    expect(hook).toContain("smoothstep");
-    expect(hook).toContain("{ passive: true }");
-    // Seuil de mise à jour (jamais de re-render à chaque pixel).
-    expect(hook).toContain("0.001");
+  });
+
+  it("pilotage IMPÉRATIF : plus aucun re-render React pendant le scroll", () => {
+    // La cause majeure de latence (audit du 3 oct. 2026) : un setState
+    // par frame faisait re-rendre les 7 cartes en continu. Désormais les
+    // seules --fact-a sont écrites dans un rAF amorti.
+    expect(facts).not.toContain("useState");
+    expect(facts).toContain('setProperty("--fact-a"');
+    expect(facts).toContain("requestAnimationFrame(update)");
+    expect(facts).toContain("{ passive: true }");
+  });
+
+  it("le tampon est toujours monté (opacité CSS), plus de remontage en vol", () => {
+    expect(facts).toContain("dossier-factfocus__stamp");
+    expect(css).toMatch(/\.dossier-factfocus__stamp\s*\{[^}]*var\(--fact-a/);
+    // Ni transition ni will-change permanent sur les cartes : double
+    // animation par frame supprimée.
+    const block = css.match(/\.dossier-factfocus\s*\{[^}]+\}/);
+    expect(block).not.toBeNull();
+    expect(block![0]).not.toContain("transition:");
+    expect(block![0]).not.toContain("will-change:");
   });
 
   it("l'orbe d'encre suit le chemin SVG via getPointAtLength", () => {
-    expect(facts).toContain("getPointAtLength(total * p)");
+    expect(facts).toContain("getPointAtLength(pathLength * p)");
   });
 
-  it("reduced-motion : activation forcée à 1 et CSS statique", () => {
-    expect(facts).toContain("if (reduced) return 1");
+  it("reduced-motion : tout activé (--fact-a: 1), orbe masquée", () => {
+    expect(facts).toContain('prefers-reduced-motion: reduce');
     expect(css).toMatch(
       /@media \(prefers-reduced-motion: reduce\) \{\s*\.dossier-factfocus \{\s*opacity: 1;/,
     );
+    expect(css).toMatch(/\.dossier-facts__orb\s*\{[^}]*display:\s*none/);
+  });
+
+  it("le hook historique reste disponible (API inchangée)", () => {
+    expect(hook).toContain("smoothstep");
+    expect(hook).toContain("{ passive: true }");
+    expect(hook).toContain("0.001");
   });
 
   it("le chapitre est déclaré au data-chapter III", () => {
@@ -98,7 +122,13 @@ describe("Nav de lecture + grain", () => {
   it("le grain est décoratif, bleu, coupé en reduced-motion", () => {
     expect(grain).toContain("if (reduced) return null");
     expect(grain).toContain('aria-hidden="true"');
-    expect(css).toMatch(/\.grain-layer\s*\{[^}]*feTurbulence|\.grain-layer[^}]*animation/);
+    expect(css).toMatch(/\.grain-layer\s*\{[^}]*feTurbulence/);
+  });
+
+  it("le grain est STATIQUE : plus aucune animation (repaint permanent supprimé)", () => {
+    const block = css.match(/\.grain-layer\s*\{[^}]+\}/);
+    expect(block).not.toBeNull();
+    expect(block![0]).not.toContain("animation:");
   });
 });
 

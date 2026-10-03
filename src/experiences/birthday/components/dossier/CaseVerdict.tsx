@@ -9,7 +9,6 @@
 import { useEffect } from "react";
 import { caseDossier } from "../../data/content";
 import { useInView } from "../../../../motion/useInView";
-import { EmberField } from "../../../../components/effects/EmberField";
 import GlowCursor from "../../../../components/effects/GlowCursor";
 import { Reveal } from "../../../../components/effects/Reveal";
 import { ExLibrisStamp } from "../../../../components/library/ExLibrisStamp";
@@ -47,8 +46,6 @@ export function CaseVerdict({
       aria-label={verdict.title}
       data-chapter={caseDossier.chapters[4].label}
     >
-      <EmberField className="dossier-verdict__embers" />
-
       {/* Réglages renforcés (retour Stane : traînée jamais aperçue) :
           trace plus large et plus lumineuse, et surtout elle reste
           visible bien plus longtemps au repos (2,4 s + 1,3 s de fondu)
@@ -71,6 +68,7 @@ export function CaseVerdict({
         idleTimeout={2400}
         fadeDuration={1300}
         blendMode="screen"
+        maxDevicePixelRatio={1.5}
       >
       <Reveal className="dossier-verdict__head">
         <p className="dossier-verdict__jury">{verdict.juryLine}</p>

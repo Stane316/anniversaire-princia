@@ -1264,10 +1264,11 @@ a {
 .reading-book {
   position: relative;
   perspective: 1600px;
-  max-width: 980px;
+  max-width: min(1020px, 100%);
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
+  gap: clamp(0.9rem, 3vw, 1.5rem);
   isolation: isolate;
 }
 
@@ -1275,8 +1276,10 @@ a {
   background: linear-gradient(165deg, #ffffff 0%, #f6faff 100%);
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-card);
-  padding: var(--space-7) var(--space-6);
-  min-height: 420px;
+  /* Respiration fluide : jamais collé aux bords, même au plus
+     petit format — l'espace s'adapte réellement à l'écran. */
+  padding: clamp(1.4rem, 4.5vw, 2.75rem) clamp(1.3rem, 5vw, 3rem);
+  min-height: min(420px, 62vh);
 }
 .reading-book__page--meta {
   border-radius: var(--radius-lg) var(--radius-sm) var(--radius-sm) var(--radius-lg);
@@ -1321,9 +1324,29 @@ a {
 .reading-book::before {
   display: none;
 }
+@media (max-width: 779px) {
+  .reading-book__page--text::after {
+    display: none;
+  }
+  .reading-book__page--meta,
+  .reading-book__page--text {
+    border-radius: var(--radius-lg);
+  }
+  .reading-book__page--meta {
+    min-height: 0;
+  }
+  .reading-book__page--meta .margin-note {
+    margin-top: var(--space-4);
+  }
+  .reading-book__page--meta .exlibris {
+    right: var(--space-4);
+    bottom: var(--space-4);
+  }
+}
 @media (min-width: 780px) {
   .reading-book {
     grid-template-columns: 0.92fr 1.08fr;
+    gap: 0;
   }
   .reading-book::before {
     display: block;
@@ -1427,6 +1450,7 @@ a {
 }
 .book-leaf--active {
   display: block;
+  will-change: transform;
 }
 @media (min-width: 780px) {
   .book-leaf {
@@ -3488,6 +3512,23 @@ body[data-daypart="night"] {
 }
 
 /* ---------- Grain global du dossier (AN-05, bleu) ---------- */
+/* Fond d'espace fourni par les composants Stane (WebThreads,
+   GradientWaves) : calque fixe derrière TOUT le contenu (z -1),
+   jamais interactif, plein viewport — la taille du canvas reste
+   raisonnable quelle que soit la longueur de la page. */
+.scene-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.scene-backdrop > .web-threads,
+.scene-backdrop > .gradient-waves {
+  position: absolute;
+  inset: 0;
+}
+
 .grain-layer {
   position: absolute;
   inset: 0;
@@ -3496,7 +3537,9 @@ body[data-daypart="night"] {
   opacity: 0.05;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.09, 0 0 0 0 0.29, 0 0 0 0 0.57, 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
   background-size: 160px 160px;
-  animation: grain-shift 1.2s steps(4) infinite;
+  /* Texture STATIQUE : aucune animation — l'ancienne boucle
+     grain-shift forçait un repaint permanent de toute la scène
+     (cause majeure de la latence signalée le 3 oct. 2026). */
 }
 @keyframes grain-shift {
   0% { background-position: 0 0; }
@@ -3665,16 +3708,28 @@ body[data-daypart="night"] {
   z-index: 1;
 }
 .dossier-factfocus {
-  /* Activation calculée par le scroll : 1 = net au centre. */
+  /* Activation calculée par le scroll (écrite en impératif via
+     --fact-a, zéro re-render) : 1 = net au centre. Aucune transition
+     ni will-change permanent : la variable glisse déjà à 60 fps —
+     superposer une transition forçait une double animation par frame
+     (latence constatée le 3 oct. 2026). */
   opacity: calc(0.22 + 0.78 * var(--fact-a, 1));
   filter: blur(calc((1 - var(--fact-a, 1)) * 3px));
   transform: translateY(calc((1 - var(--fact-a, 1)) * 16px)) scale(calc(0.985 + 0.015 * var(--fact-a, 1)));
-  transition: opacity 160ms linear, filter 160ms linear, transform 160ms linear;
-  will-change: opacity, filter, transform;
   display: grid;
   justify-items: center;
   min-height: 34vh;
   align-content: center;
+}
+/* Le tampon « CONSTATÉ » suit l'activation en CSS pur — plus jamais
+   monté/démonté en plein vol (thrash DOM supprimé). */
+.dossier-factfocus__stamp {
+  opacity: calc(clamp(0, (var(--fact-a, 1) - 0.62) * 5, 1));
+}
+@media (prefers-reduced-motion: reduce) {
+  .dossier-facts__orb {
+    display: none;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .dossier-factfocus {

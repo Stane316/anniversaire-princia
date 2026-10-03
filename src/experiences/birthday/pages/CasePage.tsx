@@ -35,8 +35,8 @@ import { CaseFacts } from "../components/dossier/CaseFacts";
 import { CaseEvidence } from "../components/dossier/CaseEvidence";
 import { CaseVerdict } from "../components/dossier/CaseVerdict";
 import { CaseClosure } from "../components/dossier/CaseClosure";
-import { FallingRays } from "../../../components/effects/FallingRays";
 import { GrainLayer } from "../../../components/effects/GrainLayer";
+import WebThreads from "../../../components/backgrounds/WebThreads";
 
 const CLUE_IDS = caseSteps
   .filter((step) => step.type === "clue")
@@ -95,10 +95,41 @@ export function CasePage() {
       back={{ to: "/birthday/bibliotheque", label: "Retour à la bibliothèque" }}
     >
       <div className="dossier-scene">
-        {/* Atmosphère du dossier : grain léger + rayons descendants
-            (solution native — paquet shadcn inaccessible, cf. registre). */}
+        {/* Fond d'espace (composant Stane — WebThreads) : le « fil de
+            l'enquête » tissé à l'encre bleue sur la page (lightMode —
+            la paperasse du dossier reste claire et lisible). GPU pur,
+            mis en pause hors écran, DPR ≤ 1.5 — remplace les deux
+            effets CPU lourds (grain animé + rayons) qui bloquaient la
+            fluidité de la section (audit du 3 oct. 2026). */}
+        <div className="scene-backdrop" aria-hidden="true">
+          <WebThreads
+            lightMode
+            backgroundColor="#EEF5FF"
+            color1="#174A91"
+            color2="#3E7BD9"
+            color3="#8EC5FF"
+            speed={0.14}
+            threadCount={5}
+            frequency={4.2}
+            spread={0.24}
+            taper={0.9}
+            position={0.42}
+            fanMode="center"
+            glow={0.02}
+            falloff={0.62}
+            thickness={1.15}
+            brightness={0.6}
+            opacity={0.5}
+            mirror
+            grain={false}
+            mouseInteraction
+            mouseStrength={0.22}
+            className="scene-backdrop__canvas"
+          />
+        </div>
+        {/* Texture photographique du dossier : grain statique (plus
+            aucune animation — voir audit). */}
         <GrainLayer />
-        <FallingRays rayCount={12} color="rgba(57, 120, 212, 0.16)" />
         <DossierHeader />
         {/* Conteneur pleine mesure (1200 px, token --measure-app) :
             la colonne de 720 px était la cause du ressenti « étroit ». */}

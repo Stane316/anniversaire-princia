@@ -18,6 +18,7 @@ import type { BirthdayChapter } from "../../experiences/birthday/data/content";
 import { Icon } from "../ui/Icon";
 import { MarginNote } from "../library/MarginNote";
 import { ExLibrisStamp } from "../library/ExLibrisStamp";
+import FoldText from "../text/FoldText";
 import { useReducedMotion } from "../../motion/useReducedMotion";
 
 interface FlipState {
@@ -67,7 +68,10 @@ export function ReadingBook({
       return;
     }
     const target = chapters[targetIndex];
-    rootRef.current?.scrollIntoView({ block: "start", behavior: "smooth" });
+    // Recadrage INSTANTANÉ (jamais « smooth » en même temps que le
+    // feuillet : scroll natif + rotation 3D simultanés faisaient
+    // saccader le geste — audit fluidité du 3 oct. 2026).
+    rootRef.current?.scrollIntoView({ block: "start", behavior: "auto" });
     const direction = targetIndex > currentIndex ? "forward" : "backward";
     // Faces selon le sens : posée, la page affiche toujours le bon folio.
     setFlip({
@@ -95,7 +99,7 @@ export function ReadingBook({
 
     const first = animate(leaf, {
       rotateY: [from, mid],
-      duration: 340,
+      duration: 290,
       ease: "inSine",
       onComplete: () => {
         if (cancelled) return;
@@ -103,7 +107,7 @@ export function ReadingBook({
         // Le contenu a changé sous le feuillet : on le repose en douceur.
         const second = animate(leaf, {
           rotateY: [mid, to],
-          duration: 340,
+          duration: 310,
           ease: "outSine",
           onComplete: () => {
             if (!cancelled) setFlip(null);
@@ -133,7 +137,23 @@ export function ReadingBook({
           </p>
           <p className="kicker kicker--mono">{chapter.kicker}</p>
           <h1 id="chapter-heading" ref={headingRef} tabIndex={-1} className="reading-book__title">
-            {chapter.title}
+            {/* Nom du chapitre déplié panneau par panneau (composant
+                Stane — FoldText) ; rejoué à chaque chapitre ouvert. */}
+            <FoldText
+              key={chapter.id}
+              text={chapter.title}
+              splitBy="word"
+              hinge="left"
+              trigger="mount"
+              duration={0.7}
+              stagger={0.1}
+              ease="power3.out"
+              perspective={760}
+              creaseShading={0.5}
+              fontSize="1em"
+              fontWeight="inherit"
+              color="inherit"
+            />
           </h1>
           {chapter.aside ? <p className="reading-book__aside">{chapter.aside}</p> : null}
           <MarginNote label="La bibliothécaire, en marge">{chapter.marginNote}</MarginNote>

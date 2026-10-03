@@ -26,6 +26,7 @@ import { MarginNote } from "../../../components/library/MarginNote";
 import { ParticleName } from "../../../components/effects/ParticleName";
 import { SouvenirsSection } from "../components/SouvenirsSection";
 import { Icon } from "../../../components/ui/Icon";
+import GradientWaves from "../../../components/backgrounds/GradientWaves";
 
 export function LibraryPage() {
   const [openVolumeId, setOpenVolumeId] = useState<string | null>(null);
@@ -57,6 +58,32 @@ export function LibraryPage() {
 
   return (
     <BirthdayLayout back={{ to: "/birthday", label: "Retour à la couverture" }}>
+      {/* Fond d'espace (composant Stane — GradientWaves) : la mer
+          d'encre bleue de la bibliothèque, vagues pastel lumineuses
+          sous les rayonnages. GPU pur, pause hors écran, DPR ≤ 1.5. */}
+      <div className="scene-backdrop" aria-hidden="true">
+        <GradientWaves
+          horizonColor="#EAF3FF"
+          waveColor="#7FB2F2"
+          crestColor="#FFFFFF"
+          speed={0.3}
+          amplitude={2.2}
+          waveScale={0.55}
+          waveRatio={0.9}
+          swell={30}
+          turbulence={16}
+          tilt={1.08}
+          zoom={1.05}
+          height={5.0}
+          fogDepth={22}
+          detail="low"
+          brightness={1}
+          opacity={0.5}
+          grain={false}
+          mouseInteraction
+          parallaxStrength={0.32}
+        />
+      </div>
       <div className="library-landing">
         {/* ====================================================
             Héro — le nom signé en particules (décor pur)

@@ -430,3 +430,27 @@ tsc 0 erreur ; build OK (114 entrées de pré-couche ≈ 3,43 Mo, `_redirects` i
 
 ### Baseline après lot
 tsc 0 erreur ; **101/101 tests (14 fichiers)** — nouveau fichier `welcome-envelope.test.ts` (11 gardes) et `greeting.test.ts` adapté à Kalam ; build OK (132 entrées de pré-couche ≈ 4,13 Mo, les 3 graisses Kalam incluses) ; preview 4180 : `/`, `/birthday/accueil`, `/souvenirs`, `/enquete`, `/app`, lettre, bibliothèque → 200. Push en fin de lot (règle Stane du 3 oct. 2026).
+
+---
+
+## Lot « fonds d'espaces + enquête v3 » (3 oct. 2026 — composants Stane : FoldText, WebThreads, GradientWaves)
+
+### 1. Audit section enquête — causes de la latence et de l'affichage cassé
+- **Calque grain animé en boucle** (`grain-shift` 1,2 s infini, pleine scène de ~10 000 px) → repaint permanent de toute la page. **Supprimé** : texture statique conservée (mécanisme AN-05 sans mouvement).
+- **12 rayons `FallingRays` animés à l'échelle de la scène entière** (hauteurs 48–84 % de la page) → composite en continu. **Remplacés** par le fond WebThreads (GPU, pause IO).
+- **`CaseFacts` : setState React par frame de scroll** (`useScrollProgress` seuil 0,001) → 7 cartes re-rendues 60×/s, orbe SVG recalculée + tampon remonté/démonté en vol → scroll saccadé, texte « éparpillé ». **Réécrit impératif** : les seules `--fact-a` + la position de l'orbe sont écrites via rAF amorti, zéro re-render ; tampon toujours monté (opacité `calc()` CSS) ; transitions/will-change permanents retirés ; mécanique AN-10 (remap 10→92 %, centres, smoothstep, getPointAtLength) strictement conservée.
+- **Superposition WebGL + canvas de braises au verdict** → braises (`EmberField`) **retirées** (composant supprimé, documenté) ; GlowCursor conservé (effet signature), plafonné `maxDevicePixelRatio={1.5}`.
+- **Aucune régression de contenu** : couverture, PV typewriter, sept faits, pièces A-01..A-03, verdict + lettre, clôture, nav de lecture, chapitrage I..VI — tous présents et testés.
+
+### 2. Fonds d'espaces (un par espace, bleus PRINCIA)
+- **Enquête → WebThreads** (composant Stane, `ogl`) en `lightMode` : fils tissés à l'encre bleue (#174A91 → #3E7BD9, cœur #8EC5FF) sur page claire #EEF5FF — la paperasse du dossier reste lisible ; interaction souris douce.
+- **Bibliothèque + livre des chapitres → GradientWaves** (`ogl`) : vagues bleu pastel (horizon #EAF3FF, vague #7FB2F2, crête blanche), `detail="low"`.
+- Adaptations communes documentées : calque `.scene-backdrop` fixe `z-index:-1` pointer-events:none ; écoute du pointeur déplacée sur `window` (passive) ; **DPR ≤ 1.5** ; reduced-motion → canvas jamais monté (fond CSS conservé) ; repli silencieux sans WebGL.
+
+### 3. Bibliothèque : chapitres respirants + FoldText + feuillet fluide
+- `ReadingBook` : marges internes fluides `clamp(1.4rem, 4.5vw, 2.75rem) × clamp(1.3rem, 5vw, 3rem)`, écart inter-pages fluide sur mobile, dates/notes compactées, tranche masquée < 780 px.
+- **FoldText** (composant Stane, `gsap`) sur le **nom de chaque chapitre** (H1 du livre) : rejoué à chaque chapitre (`key={chapter.id}`), split par mots, charnière gauche, police serif du design system.
+- Feuillet : `will-change: transform` pendant la rotation, suppression du `scrollIntoView` smooth concurrent du geste (recadrage instantané), durées resserrées 290/310 ms.
+
+### Baseline après lot
+tsc 0 erreur ; **122/122 tests (15 fichiers)** — `dossier-scene` réécrit (mécanique identique, implé impérative), + `scene-backgrounds` (fonds, verdict allégé, FoldText, livre) ; build OK (132 entrées ≈ 4,2 Mo) ; preview 4180 : 7 routes × 200, modules WebThreads/GradientWaves/FoldText servis.
