@@ -438,3 +438,141 @@ export const sealedVolume = {
     "Classé parmi les « preuves d'attention ». Si Maomao était passée par là, ce geste serait déjà répertorié : attention déguisée en banalité. Elle ne s'y trompe jamais.",
   gradient: { top: "#2D65B8", bottom: "#0F2444" },
 } as const;
+
+/** ============================================================
+ * RECONSTRUCTION THE 18TH CASE (mission du 3 oct. 2026)
+ * Référence de réalisation : « Dossier 18 Jenny » (mécanismes
+ * étudiés via dépôt + site live ; identité, textes et contenus
+ * RECRÉÉS pour Princia — aucun texte personnel de Jenny réutilisé,
+ * aucun animal en emblème, identité bleue du design system).
+ * Tous les faits ci-dessous sont validés (docs 00–05, briefs Stane).
+ * ============================================================ */
+
+export const caseDossier = {
+  cover: {
+    bureau: "Grande Salle Bleue — Division des affaires extraordinaires",
+    stamp: "Confidentiel",
+    openLine: "Dossier ouvert le 4 octobre — ne pas classer",
+    reference: "Réf. ENQ-18/10-04",
+    titleLead: "The 18th Case — l'affaire",
+    titleName: "Princia.",
+    lead: "Dix-huit ans. Une Lamborghini bleue réclamée, et toujours due. Cinq volumes et une lettre déjà versés au fonds. Enquête ouverte aujourd'hui par la Grande Salle Bleue — pour établir, preuves à l'appui, ce que le marque-page savait depuis la classe de sixième : cette amitié-là tient en collection entière.",
+    ctaOpen: "Ouvrir le dossier",
+    ctaLetter: "La lettre, si tu l'as manquée",
+    identification: {
+      label: "Fiche d'identification",
+      rows: [
+        { label: "Sujet", value: "Princia" },
+        { label: "Âge au moment des faits", value: "18 ans, tout juste" },
+        {
+          label: "Statut",
+          value: "Lectrice émérite — étudiante en génie environnemental (EPAK)",
+        },
+        { label: "Signes particuliers", value: "Franche. Directe. Simple. Douce." },
+        {
+          label: "Ambition déclarée",
+          value: "≈ 16/20 à fin d'année — en construction, jamais un contrat",
+        },
+        { label: "Allégeance", value: "Bleu ciel — toutes nuances revendiquées" },
+        { label: "Dernière localisation", value: "Le campus — 4 octobre" },
+      ],
+      footLine: "Allégeance chromatique confirmée sur plusieurs pièces — enquête en cours.",
+    },
+    sealText: "DIX-HUIT ANS • 4 OCTOBRE • AFFAIRE PRINCIA • ",
+    marquee: [
+      "Dix-huit ans",
+      "4 octobre",
+      "Affaire Princia",
+      "Le bleu y est obligatoire",
+      "Les carnets ont été relus — deux fois",
+      "Suspense sans jump scare, promis",
+      "Réf. ENQ-18/10-04",
+    ],
+  },
+
+  report: {
+    piece: "Pièce II",
+    tag: "Procès-verbal",
+    title: "Rapport préliminaire",
+    intro:
+      "L'enquête a été ouverte le jour de ses dix-huit ans. Les faits sont graves, répétés, et toute tentative de les minimiser sera elle-même versée au dossier. Récapitulons.",
+    stamp: "PV N°010 — certifié conforme",
+    facts: [
+      "Le sujet a atteint, hier encore, la majorité documentaire : dix-huit chapitres ouverts d'un seul coup.",
+      "L'amitié en cause remonte à la classe de sixième. Elle a traversé la quatrième, la troisième, des années de silence discret, puis des retrouvailles sur le même campus. Aucun témoin sérieux ne s'en est étonné.",
+      "Le sujet réclame depuis longtemps une Lamborghini bleue pour son anniversaire. La référence est enregistrée. La couleur aussi. Le budget suit de loin.",
+      "Le sujet consomme enquêtes, romances et récits d'apothicaires ; tout indice finit toujours par être observé, classé, tranché. Convenance avérée avec la méthode de ce dossier.",
+      "Une ambition académique a été déclarée au bureau : autour de 16/20 en fin d'année, pour se défendre d'exister partout où elle postulera. Le service classe cette pièce parmi les projets en construction — jamais parmi les contrats à résultat.",
+      "Le sujet entend gagner sa vie peu à peu, par ses propres moyens. Le dossier salut l'élan — aucune estimation de revenus n'a été versée.",
+      "Le sujet surveille l'état de ses proches — nuits blanches, petites maladies — avec une régularité suspecte d'attention. Versé comme circonstance aggravante de gentillesse.",
+    ],
+    conclusion:
+      "Conclusion provisoire : l'affaire mérite des pièces. Examine autant que tu veux — ce dossier ne juge jamais, il constate à l'encre bleue.",
+    cta: "Examiner les pièces à conviction",
+  },
+
+  evidence: {
+    piece: "Pièce III",
+    tag: "Inventaire scellé",
+    title: "Pièces à conviction",
+    stats: { lodged: "05", missing: "00", note: "Aucune preuve d'amour disparue — scandale de rigueur" },
+    interrogation: {
+      choiceCta: "Trancher",
+      textCta: "Verser la réponse",
+      solvedStamp: "Résolu",
+      wrongLine: "Le greffe reste polie mais ça ne correspond pas. Réessaie — ou passe celle-ci, le dossier ne bloque pas sa propre héroïne.",
+      skipCta: "Passer celle-ci",
+      hintCta: "Un petit indice ?",
+      placeholder: "Ta réponse…",
+    },
+    prose: [
+      {
+        id: "piece-4",
+        code: "Pièce A-04",
+        status: "Pièce littéraire",
+        title: "Les Carnets",
+        description:
+          "Retrouvés sur la table de lecture du sujet : un palais rempli de fioles, de poisons élégants et de personnes qui observent mieux que tout le monde. Le sujet a un faible pour ceux qui déduisent ; les romances s'y cachent parfois — sans bruit.",
+        mention: "Traces de romance soigneusement dissimulées. Le dossier fait semblant de ne pas les avoir vues.",
+      },
+      {
+        id: "piece-5",
+        code: "Pièce A-05",
+        status: "Reconstitution",
+        title: "Les nuits de frisson",
+        description:
+          "Scène récurrente constatée : écran allumé, heure qui n'existe pas, le sujet enchaîne enquêtes serrées et films d'horreur sans ciller. Ce dossier reprend le goût du suspense — jamais les cri-sauts.",
+        mention: "Les cris entendus n'ont jamais provenu du sujet. Aucun jump scare n'a été versé.",
+      },
+    ],
+    sealed: {
+      code: "Pièce A-06",
+      title: "Sous scellés",
+      description:
+        "Cette pièce attend dans la bibliothèque, au fonds des volumes qui s'ouvrent le jour J. Certains contenus méritent d'attendre — c'est écrit au dos de la scène.",
+      cta: "Voir le volume sous scellé",
+    },
+  },
+
+  verdict: {
+    juryLine: "Le jury — composé de toutes les encres qui signent — a délibéré",
+    title: "Le verdict",
+    stamp: "RÉSOLUE",
+    stampLine: "d'être précieuse. C'est irréfutable.",
+    sentence:
+      "L'accusée est relaxée de tout doute : elle est exactement ce que sa bibliothèque disait d'elle. Dossier classé au rayon des certitudes — sous-cote bleue, évidemment.",
+    messageTitle: "Pièce jointe — à garder",
+    messageParagraphs: [
+      "Princia, tu as tout examiné — alors une dernière pièce, la plus simple : je suis content qu'on se soit connus en sixième. Les années de silence ne l'ont pas effacé ; le campus le prouve tous les jours.",
+      "Tes projets — la mention, la moyenne que tu vises, l'indépendance que tu construis petit à petit — ne sont pas des dettes, pas un contrat à honorer pour exister. Ce sont des ambitions en mouvement. Les petites victoires construisent les grandes, et un jour moins bon n'effacera jamais ça.",
+      "Pour les cours, les soirs de doute, et tout ce qui demande juste à être dit : tu peux compter sur moi. Ce service-là n'a pas de date de péremption.",
+    ],
+    signature: "— signé à l'encre bleue, Stane",
+    sealedHint: "Une toute dernière pièce t'attend au jour J, dans la bibliothèque. Tu sais laquelle.",
+    ctaLetter: "Relire la lettre",
+    ctaLibrary: "Retour à la bibliothèque",
+    ctaDaily: "Retrouver ton espace",
+    restart: "Re-examiner le dossier",
+    completeNote: "Les trois interrogatoires sont signés — dossier complet.",
+  },
+} as const;

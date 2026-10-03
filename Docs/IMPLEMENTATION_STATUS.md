@@ -247,3 +247,61 @@ Erreur identique pour les trois :
 - Baseline après lot : **39/39 tests (7 fichiers)**, tsc 0 erreur, build OK (114 pré-caches) ; smoke : `/souvenirs`, `/app`, `/birthday`, `/bibliotheque` → 200 ; marqueurs « Joyeux anniversaire, Princia », `bubble-menu` et fonds souvenirs vérifiés dans le bundle servi.
 - Dépendances ajoutées **sur instruction explicite** de Stane (listées dans les blocs d'intégration fournis) : `motion`, `gsap`. Aucune autre dépendance ajoutée.
 - Ancien lien « Souvenirs » de l'en-tête remplacé par le menu cadeaux (même destination couverte, en plus riche).
+
+---
+
+## RECONSTRUCTION « THE 18TH CASE » (3 oct. 2026) — mission reconstruction depuis la référence « Dossier 18 Jenny »
+
+### Sources de référence réellement utilisées
+| Source | Statut |
+|---|---|
+| Dépôt `Stane316/Dossier_18_Jenny` | ✅ cloné en lecture seule (`--depth 1`), lu : Cover, Report, Evidence, Verdict, hooks — mécanismes extraits |
+| Site live `dossier-jenny18ans.netlify.app` | ✅ fetché : structure landing confirmée (couverture, PV, pièces A-01..A-06, appel à témoins) |
+| Document d'audit joint `RAPPORT-audit-dossier-jenny.md` | ❌ **annoncé mais jamais présent sur le disque** (uploads vide, recherche exhaustive) — non utilisé |
+| Scripts JS « à fournir » annoncés | ❌ jamais fournis — les hooks ont été reconstruits depuis le dépôt de référence |
+
+### Table de correspondance (fonction comprise → décision PRINCIA)
+| Élément de référence (Jenny) | Fonction comprise | Décision | Forme PRINCIA |
+|---|---|---|---|
+| Couverture : titre géant + fiche d'identification + référence | Ancrer l'univers dossier, donner les faits d'identité | **Adapter** | Couverture bleue, fiche d'identification Princia (faits validés), réf. ENQ-18/10-04 conservée (notre propre code existant) |
+| Bandeau marquee répété | Rythme « dossier officiel », mentions récurrentes | **Adapter** | Marquee bleu, mentions Princia (4 octobre, bleu obligatoire, carnets relus…) |
+| Sceau de cire SVG + texte circulaire tournant | Sceau d'authenticité, signature visuelle | **Adapter** | SealDisc : cercle à texte tournant encre bleue (« Dix-huit ans • 4 octobre • Affaire Princia ») ; pas de cire rouge |
+| Emblème chat (héro, empreintes, fil d'Ariane félin) | Fil conducteur symbolique du dossier | **Remplacer** | Sceau de dossier + ex-libris flottant + fil d'encre bleue — aucun animal |
+| Photo héro masquée à droite | Présence incarnée du sujet | **Remplacer** | Fiche d'identification administrative (photo volontairement absente : progression déjà riche en souvenirs ailleurs) |
+| Report : typewriter séquentiel + colonne sticky | Déroulé « procès-verbal », lecture active | **Adapter** | CaseReport : 7 constats factuels validés Princia, machine à écrire à l'entrée à l'écran, caret, conclusion différée |
+| Stats « pièces versées / disparues » | Cadence d'inventaire, humour de rigueur | **Adapter** | « Interrogatoires signés 0X/03 — pièces versées 05 — disparues 00 » (état FONCTIONNEL réel) |
+| Evidence : fil rouge SVG au scroll + nœuds | Relier les pièces, guider le scroll | **Adapter** | BlueThread : fil d'encre bleue stroke-dashoffset au scroll + nœuds-épingles |
+| ExhibitCard : tilt léger, tape, mention « — », barcode | Matérialité « pièce sous dossier » | **Adapter** | Tilt 4,5° (pointer uniquement), tape « à manipuler avec gants », mention d'archiviste, code-barres décoratif |
+| Pièces illustrées par photos A-01..A-05 | Preuve par l'image | **Adapter** | A-01..A-03 = énigmes existantes (Lamborghini bleue, bleu ciel, Abomey-Calavi) ; A-04 = Carnets littéraires ; A-05 = nuits de frisson — texte, aucune photo inventée |
+| Pièce A-06 « sous scellés » | Suspense final, promesse de suite | **Adapter** | Lien vers le volume sous scellé de la Blue Library (rien de dupliqué) |
+| Énigmes = structure du site | Jeu de piste central | **Adapter (déclassé)** | Les énigmes deviennent un SOUS-ENSEMBLE (3 interrogatoires inline) ; chacune passable ; le verdict reste atteignable sans résoudre |
+| Feedback d'erreur léger | Échec sans punition | **Adapter** | Saisie conservée, indice sur demande, « passer celle-ci » explicite |
+| Verdict : stamp « Coupable » qui claque + secousse | Climax émotionnel | **Adapter** | Slam « RÉSOLUE » — jamais punitif |
+| Lettre manuscrite finale | Sincérité après le jeu | **Adapter** | Pièce jointe en serif italique : amitié de sixième, ambitions en construction (« pas un contrat »), « tu peux compter sur moi » — non romantique |
+| Braises ambre (canvas) | Texture émotionnelle du climax | **Adapter** | EmberField : 34 particules bleues, canvas actif seulement à l'écran |
+| Papillon flottant | Respiration du verdict | **Remplacer** | Ex-libris flottant (aucun animal) |
+| Purge des traces / actions violentes envers le dossier | Théâtralité de fin | **Remplacer** | « Re-examiner le dossier » — réinitialisation douce |
+| Gate privé email/mot de passe, Supabase (témoignages, participation, archive multi-contributeurs) | Backend communautaire | **Ne pas reproduire** | Hors périmètre PWA 100% locale ; doublon avec l'espace Stane/js13k |
+| Appel à témoins (contenus externes) | Social | **Ne pas reproduire** | Princia n'a pas de réseau de témoins documenté — aucun témoignage inventé |
+| Police manuscrite (Reenie Beanie) | Effet lettre | **À clarifier (résolu par choix)** | Police non installée dans le design system → serif italique du système ; hypothèse prise et documentée |
+| Textes personnels de Jenny | Contenu | **Supprimer** | Aucun texte de la référence réutilisé ; tout est réécrit |
+
+### Hypothèses prises (registre des informations manquantes)
+| Manque | Question précise si besoin | Décision par défaut adoptée |
+|---|---|---|
+| Police manuscrite de la référence pas dans le design system | Souhaites-tu qu'on installe une cursive (Ex. via fontsource) ? | non : serif italique système, cohérent avec la lettre existante |
+| Procédé du geste riz : gardé dans cette page ? | Le geste cuisine-riz reste-t-il uniquement dans le volume sous scellé ? | oui : pas de riz dans le verdict (le sceau A-06 renvoie au volume) |
+| Photos dans les pièces | Certaines pièces gagneraient-elles une photo souvenirs/ ? | non : texte seul ; les photos vivent dans la Salle des souvenirs (pas de doublon d'usage) |
+| Prénom/mot de passe gate Jenny | — | non reproduit (hors périmètre, déjà statué) |
+
+### Livré
+- `src/motion/` : `useInView`, `useTypewriter`, `useTilt` (reconstruits depuis les mécanismes de référence, docstrings d'origine citées) ; `src/components/effects/` : `Reveal`, `Marquee`, `EmberField` (braises bleues), `BlueThread` ; `src/components/library/SealDisc`.
+- `caseDossier` ajouté dans `data/content.ts` ; `caseSteps`/`caseContent` **inchangés** (moteur d'énigmes et tests préservés).
+- `caseDossierMemory` (solved + completed, clé nouvelle) avec **migration** de l'ancienne clé numérique (≥2→clue-1, ≥4→+clue-2, ≥6→+clue-3, ≥8→completed) et repli sur JSON corrompu.
+- `components/dossier/` : `CaseCover`, `CaseReport`, `CaseEvidence`, `CaseVerdict` ; `CasePage.tsx` réécrite : scroll continu couverture → rapport → pièces → verdict, persistance légère, aucune impasse.
+- CSS `.dossier-*` (marquee, sceau, fiche, typewriter+caret, exhibits+tilt+tape+barcode, fil, scellé sombre b̲l̲e̲u̲, slam+shake, braises, lettre serif) ; reduced-motion couvert partout.
+- Test `tests/unit/case-dossier.test.ts` : intégrité des données, non-punitivité/pas-de-promesse/pas-de-romance dans le verdict, mémoire+migration+corruption.
+- **Sécurité** : `vitest 2.x → 5.0.3` (correctif de la chaîne vulnérable @vitest/mocker) → `npm audit` = **0 vulnérabilité** ; aucune autre dépendance ajoutée ; aucun secret repéré dans le dépôt de référence cité.
+
+### Baseline après lot
+**51/51 tests (8 fichiers)**, tsc 0 erreur, build OK (114 pré-caches ≈3,36 Mo), preview 4180 : `/birthday/enquete` → 200. Zone non vérifiable ici (annoncée honnêtement) : rendu visuel exact sur appareil réel de Stane.

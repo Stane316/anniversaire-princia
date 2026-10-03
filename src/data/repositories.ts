@@ -78,6 +78,7 @@ export const winRepository = {
 const KEYS = {
   visitedDailySpace: "princia.chapter18.visitedDailySpace",
   caseProgress: "princia.chapter18.caseProgress",
+  caseDossier: "princia.chapter18.caseDossier",
   seenIntro: "princia.chapter18.seenIntro",
 } as const;
 
@@ -118,7 +119,8 @@ export const visitMemory = {
 };
 
 /** Persistance légère de la progression de l'enquête (doc 01 §6.10) :
- *  une actualisation ne doit pas produire d'état incohérent. */
+ *  une actualisation ne doit pas produire d'état incohérent.
+ *  Clé héritée de l'ancien moteur à étapes (conservée pour migration). */
 export const caseProgressMemory = {
   load(): number {
     const raw = safeStorage.get(KEYS.caseProgress);
@@ -127,5 +129,44 @@ export const caseProgressMemory = {
   },
   save(stepIndex: number): void {
     safeStorage.set(KEYS.caseProgress, String(stepIndex));
+  },
+};
+
+/** État du dossier reconstruit (mission « The 18th Case », oct. 2026) :
+ *  indices résolus + verdict vu. Une actualisation le restitue tel quel. */
+export type CaseDossierState = {
+  solved: ReadonlyArray<string>;
+  completed: boolean;
+};
+
+export const caseDossierMemory = {
+  load(): CaseDossierState {
+    const raw = safeStorage.get(KEYS.caseDossier);
+    if (raw !== null) {
+      try {
+        const parsed = JSON.parse(raw) as Partial<CaseDossierState>;
+        if (Array.isArray(parsed.solved)) {
+          const solved = parsed.solved.filter(
+            (s): s is string => typeof s === "string",
+          );
+          return { solved, completed: parsed.completed === true };
+        }
+        /* Structure inattendue → on retombe sur la migration héritée. */
+      } catch {
+        /* JSON illisible → on retombe sur la migration héritée. */
+      }
+    }
+    // Migration depuis l'ancien moteur à étapes : les seuils 2/4/6
+    // correspondaient aux trois indices résolus dans l'ordre.
+    const legacy = caseProgressMemory.load();
+    const solved: string[] = [];
+    if (legacy >= 2) solved.push("clue-1");
+    if (legacy >= 4) solved.push("clue-2");
+    if (legacy >= 6) solved.push("clue-3");
+    if (legacy >= 8) return { solved: ["clue-1", "clue-2", "clue-3"], completed: true };
+    return { solved, completed: false };
+  },
+  save(state: CaseDossierState): void {
+    safeStorage.set(KEYS.caseDossier, JSON.stringify(state));
   },
 };
