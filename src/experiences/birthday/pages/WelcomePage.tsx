@@ -15,7 +15,7 @@
  *   le DOM dès la phase d'ouverture (voile visuel, pas barrière) ;
  * - timeline annulée si le composant se démonte en plein vol.
  */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Component, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { animate, createTimeline, type JSAnimation, type Timeline } from "animejs";
 import { BirthdayLayout } from "../BirthdayLayout";
@@ -27,6 +27,27 @@ import BlurText from "../../../components/text/BlurText";
 import { Icon } from "../../../components/ui/Icon";
 
 type IntroPhase = "sealed" | "opening" | "open";
+
+/** Le salut BlurText est décoratif : si son moteur d'animation
+ *  venait à lever une erreur quelconque, le message doit TOUJOURS
+ *  rester visible (contenu > effet — doc 00 §6.2, doc 03 §12.1).
+ *  Les équivalents statiques réutilisent la même classe. */
+class GreetingBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch(error: unknown) {
+    // Traçage honnête : l'erreur reste visible en console, jamais masquée.
+    console.error("BlurText a échoué — repli statique affiché.", error);
+  }
+  render() {
+    if (this.state.failed) {
+      return <p className="blur-text welcome-greeting">Joyeux anniversaire, Princia.</p>;
+    }
+    return this.props.children;
+  }
+}
 
 export function WelcomePage() {
   const reducedMotion = useReducedMotion();
@@ -207,14 +228,16 @@ export function WelcomePage() {
             <ExLibrisStamp text="EX · LIBRIS" subline="PRC-18" size={84} rotate={-9} ink="rgba(57, 120, 212, 0.5)" />
             <div className="stack-lg invitation-card__inner">
               {phase === "open" && greetingReady && (
-                <BlurText
-                  text="Joyeux anniversaire, Princia."
-                  animateBy="words"
-                  direction="top"
-                  delay={190}
-                  stepDuration={0.5}
-                  className="welcome-greeting"
-                />
+                <GreetingBoundary>
+                  <BlurText
+                    text="Joyeux anniversaire, Princia."
+                    animateBy="words"
+                    direction="top"
+                    delay={190}
+                    stepDuration={0.5}
+                    className="welcome-greeting"
+                  />
+                </GreetingBoundary>
               )}
               <p className="kicker">{welcomeContent.kicker}</p>
               <h1 ref={headingRef} tabIndex={-1} className="display invitation-card__title">

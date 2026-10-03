@@ -305,3 +305,33 @@ Erreur identique pour les trois :
 
 ### Baseline après lot
 **51/51 tests (8 fichiers)**, tsc 0 erreur, build OK (114 pré-caches ≈3,36 Mo), preview 4180 : `/birthday/enquete` → 200. Zone non vérifiable ici (annoncée honnêtement) : rendu visuel exact sur appareil réel de Stane.
+
+---
+
+## LOT 5 (3 oct. 2026, PM) — correction BlurText + GlowCursor + Falling Rays
+
+### A. BlurText invisible au lancement — CAUSE RACINE trouvée et corrigée
+- **Diagnostic** : `motion@14` (dépendance du composant BlurText, lot 3) était déclarée dans package.json et résolue dans le lockfile… mais **physiquement absente de node_modules** (lock npm désynchronisé après le merge d'historiques). Conséquence : `import 'motion/react'` ne résolvait pas → le module BlurText (et donc le salut) ne se montait nulle part. Compagnon de défaillance : `gsap` (BubbleMenu), même cause.
+- **Correction** : réinstallation complète → `npm ls` confirme motion 14.0.0 + gsap 3.15.0 + ogl 1.0.11 + animejs 4.5.0 ; Vite pré-bundle `motion_react.js` → 200 ; le bundle de production contient le texte « Joyeux anniversaire, Princia. ».
+- **Bugs secondaires corrigés au passage** : `.welcome-greeting` référençait `--font-display` (token INEXISTANT du design system → dégradé CSS) → `--font-serif` ; garde ajoutée : `GreetingBoundary` (ErrorBoundary) — si le moteur d'animation venait à échouer un jour, le message s'affiche en statique avec la même typographie. Test de non-régression `tests/unit/greeting.test.ts` (5 gardes : message exact, montage dès la phase open pour tout visiteur mémorisé ou non, repli statique, reduced-motion, token réel).
+- **Rappel du comportement attendu** (inchangé, voulu au lot 3) : première visite → enveloppe à briser, salut ~1 s après l'ouverture ; visites suivantes → ouverture directe, salut immédiat (+1 s). L'entrée `/` bascule vers `/app` une fois l'espace quotidien visité (doc 01 §7.4) : le salut vit sur l'accueil anniversaire, pas sur l'espace.
+
+### B. Audit « Dossier 18 Jenny » annoncé re-joint
+- Le système de pièces jointes indique `RAPPORT-audit-dossier-jenny.md` enregistré dans `/home/user/uploads/` — **le répertoire n'existe pas sur le disque** (deuxième occurrence consécutive, vérifié par find). L'audit reste indisponible ; les analyses de la reconstruction reposent donc toujours sur le dépôt cloné en lecture seule et le site live. Aucune conclusion modifiée à ce stade ; je croiserai dès que le fichier arrivera réellement.
+
+### C. GlowCursor (source fournie) — intégré
+| Registre | Détail |
+|---|---|
+| Dépendance | `ogl@1.0.11` (listée dans le bloc fourni) — audit 0 vulnérabilité |
+| Source | `src/components/effects/GlowCursor.tsx` — shaders et moteur de traînée INCHANGÉS ; adaptations documentées : Tailwind→classes projet `.glow-cursor*`, accès uniforms par crochets (règle `noPropertyAccessFromIndexSignature` du tsconfig), gardes projet obligatoires (reduced-motion : canvas jamais monté ; try/catch WebGL→contenu seul + console.error), helpers purs hexToRgb/clamp exportés pour les tests |
+| Placement | **Section verdict du dossier** (`/birthday/enquete`) — seule zone sombre où le blend `screen` reste visible ; couleurs PRINCIA #8EC5FF→#3978D4, opacity 0.85, hotspot 0.55, pulse 0.9 |
+| Cohabitation | GlassCursor (global, verre) reste actif : l'effet GlowCursor est borné à son conteneur (canvas pointer-events:none), aucune interception d'événement ajoutée |
+| Non-placements justifiés | couverture claire (screen laverait le texte) et spiral souvenirs (déjà dense) |
+
+### D. Falling Rays — 3e tentative d'installation, mêmes barrières
+- Commande exacte ré-exécutée : `npx shadcn@latest add @reactbits-starter/falling-rays-tw` → **même erreur réseau** : « Request to https://ui.shadcn.com/r/registries.json failed, reason: Client network socket disconnected before secure TLS connection was established ». Toujours pas de `REACTBITS_LICENSE_KEY` dans l'environnement. Aucun fichier shadcn créé.
+- L'exemple d'usage fourni est `<m />` (balise incomplète, aucune configuration exploitable).
+- En application de la mission d'origine, l'équivalent natif existant (`FallingRays`, 0 dépendance) est **remis en service** : scène du dossier reconstruite (`/birthday/enquete`, 12 rayons, encre bleue, reduced-motion figée). Son unique consommateur avait disparu lors de la reconstruction — l'effet retrouve une place réelle plutôt qu'un install aveugle.
+
+### Baseline après lot
+tsc 0 erreur ; build OK (114 pré-caches ≈3,4 Mo) ; **64/64 tests (10 fichiers)** ; npm audit 0 vulnérabilité ; smoke preview 4180 : GlowCursor, WelcomePage, motion/ogl pré-bundlés → 200.

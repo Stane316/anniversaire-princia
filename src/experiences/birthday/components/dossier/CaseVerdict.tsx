@@ -11,9 +11,15 @@ import { Link } from "react-router-dom";
 import { caseDossier } from "../../data/content";
 import { useInView } from "../../../../motion/useInView";
 import { EmberField } from "../../../../components/effects/EmberField";
+import GlowCursor from "../../../../components/effects/GlowCursor";
 import { Reveal } from "../../../../components/effects/Reveal";
 import { ExLibrisStamp } from "../../../../components/library/ExLibrisStamp";
 import { Icon } from "../../../../components/ui/Icon";
+
+/** Traînée lumineuse du verdict (source GlowCursor fournie par Stane) :
+ *  réglages PRINCIA — bleu ciel → bleu profond, blend screen sur le
+ *  fond sombre de la scène (seule zone assez foncée pour rester
+ *  visible ; ailleurs l'effet blanchirait sur le papier clair). */
 
 export function CaseVerdict({
   completed,
@@ -45,6 +51,25 @@ export function CaseVerdict({
     >
       <EmberField className="dossier-verdict__embers" />
 
+      <GlowCursor
+        color="#8EC5FF"
+        secondaryColor="#3978D4"
+        trailLength={40}
+        trailWidth={9}
+        trailTaper={0.8}
+        followSpeed={0.16}
+        glowIntensity={1.9}
+        glowSpread={1.2}
+        hotspot={0.55}
+        brightness={1.15}
+        opacity={0.85}
+        pulseSpeed={0.9}
+        noiseStrength={0.03}
+        idleFade
+        idleTimeout={700}
+        fadeDuration={900}
+        blendMode="screen"
+      >
       <Reveal className="dossier-verdict__head">
         <p className="dossier-verdict__jury">{verdict.juryLine}</p>
         <h2 className="h2">{verdict.title}</h2>
@@ -115,6 +140,7 @@ export function CaseVerdict({
           Verdict consulté et archivé.
         </p>
       )}
+      </GlowCursor>
     </section>
   );
 }

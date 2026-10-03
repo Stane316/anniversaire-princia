@@ -32,6 +32,7 @@ import { CaseCover } from "../components/dossier/CaseCover";
 import { CaseReport } from "../components/dossier/CaseReport";
 import { CaseEvidence } from "../components/dossier/CaseEvidence";
 import { CaseVerdict } from "../components/dossier/CaseVerdict";
+import { FallingRays } from "../../../components/effects/FallingRays";
 
 const CLUE_IDS = caseSteps
   .filter((step) => step.type === "clue")
@@ -90,6 +91,9 @@ export function CasePage() {
       back={{ to: "/birthday/bibliotheque", label: "Retour à la bibliothèque" }}
     >
       <div className="dossier-scene">
+        {/* Rayons descendants demandés (solution native : le paquet
+            shadcn React Bits reste inaccessible — cf. registre). */}
+        <FallingRays rayCount={12} color="rgba(57, 120, 212, 0.16)" />
         <div className="dossier-scene__inner container container--readable">
           <CaseCover />
           <CaseReport />
