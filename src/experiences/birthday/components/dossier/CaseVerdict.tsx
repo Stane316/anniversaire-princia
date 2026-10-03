@@ -7,7 +7,6 @@
  * pièce jointe précise simplement l'état du dossier.
  */
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { caseDossier } from "../../data/content";
 import { useInView } from "../../../../motion/useInView";
 import { EmberField } from "../../../../components/effects/EmberField";
@@ -26,13 +25,11 @@ export function CaseVerdict({
   solvedCount,
   totalClues,
   onComplete,
-  onRestart,
 }: {
   completed: boolean;
   solvedCount: number;
   totalClues: number;
   onComplete: () => void;
-  onRestart: () => void;
 }) {
   const verdict = caseDossier.verdict;
   const { ref: stampRef, inView: slam } = useInView<HTMLDivElement>(0.45);
@@ -48,6 +45,7 @@ export function CaseVerdict({
       className="dossier-verdict"
       id="verdict"
       aria-label={verdict.title}
+      data-chapter={caseDossier.chapters[4].label}
     >
       <EmberField className="dossier-verdict__embers" />
 
@@ -117,23 +115,9 @@ export function CaseVerdict({
       </Reveal>
 
       <Reveal delay={320}>
-        <div className="cluster dossier-verdict__ctas">
-          <Link to="/birthday/lettre" className="btn btn--primary">
-            <Icon name="letter" size={16} />
-            {verdict.ctaLetter}
-          </Link>
-          <Link to="/birthday/bibliotheque" className="btn btn--secondary">
-            <Icon name="library" size={16} />
-            {verdict.ctaLibrary}
-          </Link>
-          <Link to="/app" className="btn btn--secondary">
-            <Icon name="home" size={16} />
-            {verdict.ctaDaily}
-          </Link>
-          <button type="button" className="btn btn--text" onClick={onRestart}>
-            {verdict.restart}
-          </button>
-        </div>
+        <p className="dossier-verdict__to-cleanse text-muted">
+          Le classement suit juste après — c'est ici que le dossier décide de sa destinée.
+        </p>
       </Reveal>
       {completed && (
         <p className="sr-only" role="status">

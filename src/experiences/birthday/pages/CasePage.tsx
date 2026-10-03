@@ -28,11 +28,15 @@ import { useCallback, useMemo, useState } from "react";
 import { BirthdayLayout } from "../BirthdayLayout";
 import { caseSteps } from "../data/content";
 import { caseDossierMemory } from "../../../data/repositories";
+import { DossierHeader } from "../components/dossier/DossierHeader";
 import { CaseCover } from "../components/dossier/CaseCover";
 import { CaseReport } from "../components/dossier/CaseReport";
+import { CaseFacts } from "../components/dossier/CaseFacts";
 import { CaseEvidence } from "../components/dossier/CaseEvidence";
 import { CaseVerdict } from "../components/dossier/CaseVerdict";
+import { CaseClosure } from "../components/dossier/CaseClosure";
 import { FallingRays } from "../../../components/effects/FallingRays";
+import { GrainLayer } from "../../../components/effects/GrainLayer";
 
 const CLUE_IDS = caseSteps
   .filter((step) => step.type === "clue")
@@ -91,18 +95,27 @@ export function CasePage() {
       back={{ to: "/birthday/bibliotheque", label: "Retour à la bibliothèque" }}
     >
       <div className="dossier-scene">
-        {/* Rayons descendants demandés (solution native : le paquet
-            shadcn React Bits reste inaccessible — cf. registre). */}
+        {/* Atmosphère du dossier : grain léger + rayons descendants
+            (solution native — paquet shadcn inaccessible, cf. registre). */}
+        <GrainLayer />
         <FallingRays rayCount={12} color="rgba(57, 120, 212, 0.16)" />
-        <div className="dossier-scene__inner container container--readable">
+        <DossierHeader />
+        {/* Conteneur pleine mesure (1200 px, token --measure-app) :
+            la colonne de 720 px était la cause du ressenti « étroit ». */}
+        <div className="dossier-scene__inner container">
           <CaseCover />
           <CaseReport />
+          <CaseFacts />
           <CaseEvidence solved={solved} onSolve={handleSolve} />
           <CaseVerdict
             completed={completed}
             solvedCount={solvedCount}
             totalClues={CLUE_IDS.length}
             onComplete={handleComplete}
+          />
+          <CaseClosure
+            solvedCount={solvedCount}
+            totalClues={CLUE_IDS.length}
             onRestart={handleRestart}
           />
         </div>

@@ -224,7 +224,7 @@ export function CaseEvidence({
   const evidence = caseDossier.evidence;
   const solvedCount = CLUES.filter((clue) => solved.has(clue.id)).length;
   return (
-    <section className="dossier-evidence" id="pieces" aria-label={evidence.title}>
+    <section className="dossier-evidence" id="pieces" aria-label={evidence.title} data-chapter={caseDossier.chapters[3].label}>
       <Reveal className="dossier-evidence__head">
         <p className="dossier-piece">{evidence.piece}</p>
         <span className="dossier-stamp">{evidence.tag}</span>

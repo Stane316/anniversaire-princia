@@ -449,6 +449,15 @@ export const sealedVolume = {
  * ============================================================ */
 
 export const caseDossier = {
+  /** Chapitrage officiel du dossier (6 chapitres, data-chapter). */
+  chapters: [
+    { num: "I", label: "I — Couverture" },
+    { num: "II", label: "II — Rapport préliminaire" },
+    { num: "III", label: "III — Les sept faits" },
+    { num: "IV", label: "IV — Pièces à conviction" },
+    { num: "V", label: "V — Verdict" },
+    { num: "VI", label: "VI — Affaire classée" },
+  ],
   cover: {
     bureau: "Grande Salle Bleue — Division des affaires extraordinaires",
     stamp: "Confidentiel",
@@ -495,20 +504,70 @@ export const caseDossier = {
     tag: "Procès-verbal",
     title: "Rapport préliminaire",
     intro:
-      "L'enquête a été ouverte le jour de ses dix-huit ans. Les faits sont graves, répétés, et toute tentative de les minimiser sera elle-même versée au dossier. Récapitulons.",
+      "Ouverture du procès-verbal ENQ-18/10-04. La lecture de ce rapport doit être effectuée en continu, sans rire — enfin, presque.",
     stamp: "PV N°010 — certifié conforme",
-    facts: [
-      "Le sujet a atteint, hier encore, la majorité documentaire : dix-huit chapitres ouverts d'un seul coup.",
-      "L'amitié en cause remonte à la classe de sixième. Elle a traversé la quatrième, la troisième, des années de silence discret, puis des retrouvailles sur le même campus. Aucun témoin sérieux ne s'en est étonné.",
-      "Le sujet réclame depuis longtemps une Lamborghini bleue pour son anniversaire. La référence est enregistrée. La couleur aussi. Le budget suit de loin.",
-      "Le sujet consomme enquêtes, romances et récits d'apothicaires ; tout indice finit toujours par être observé, classé, tranché. Convenance avérée avec la méthode de ce dossier.",
-      "Une ambition académique a été déclarée au bureau : autour de 16/20 en fin d'année, pour se défendre d'exister partout où elle postulera. Le service classe cette pièce parmi les projets en construction — jamais parmi les contrats à résultat.",
-      "Le sujet entend gagner sa vie peu à peu, par ses propres moyens. Le dossier salut l'élan — aucune estimation de revenus n'a été versée.",
-      "Le sujet surveille l'état de ses proches — nuits blanches, petites maladies — avec une régularité suspecte d'attention. Versé comme circonstance aggravante de gentillesse.",
+    paragraphs: [
+      "Prévenu : le dossier affirme cent choses vraies et aucune ne plaide en faveur de la discrétion du sujet. Une enquête devient nécessaire quand une personne atteint dix-huit ans en restant exactement elle-même — sans ciller, avec tout un plan de vie déjà esquissé au stylo bleu.",
+      "Les faits, constatés ci-après au nombre de sept (F-01 à F-07), ont été recueillis au fil de plusieurs années d'amitié, de lectures communes et de discussions franches. Chacun a été vérifié deux fois par le service des archives, qui n'en est pas à sa première collecte. L'examen des pièces à conviction suit immédiatement après.",
+      "Consignation immédiate : la responsabilité de l'enthousiasme engendré par ce dossier ne saurait rejeter sur l'institution. Le jury vous laisse poursuivre sans distraction plus longtemps que nécessaire.",
     ],
     conclusion:
-      "Conclusion provisoire : l'affaire mérite des pièces. Examine autant que tu veux — ce dossier ne juge jamais, il constate à l'encre bleue.",
-    cta: "Examiner les pièces à conviction",
+      "Conclusion préliminaire : les sept faits suffisent pour constituer une affaire. Examine-les un par un — ce dossier ne juge jamais, il constate à l'encre bleue.",
+    cta: "Poursuivre lecture des sept faits",
+  },
+
+  factsChapter: {
+    piece: "Pièce III",
+    tag: "Interrogatoires des faits",
+    title: "Les sept faits",
+    intro:
+      "Sept faits, sept pièces versées. Le dossier les présente un par un, comme il se doit : à l'encre, sans détour et sans césure dans le respect qui est dû au sujet. Fais défiler — chaque fait prend la parole à son tour.",
+    items: [
+      {
+        code: "F-01",
+        title: "Une fascination pour les mystères",
+        text: "Le dossier révèle une passion particulière pour « Les Carnets de l'Apothicaire ». Entre secrets, énigmes, observations et indices dissimulés, l'univers de Maomao et de Jinshi semble avoir trouvé une place de choix dans ses centres d'intérêt.",
+        indice: "Lecture surveillée : tout indice finit toujours par être noté quelque part.",
+      },
+      {
+        code: "F-02",
+        title: "Une ambition universitaire définie",
+        text: "L'objectif est précis : atteindre au minimum 16/20 de moyenne. Devenir major de promotion serait une belle distinction supplémentaire, mais l'ambition ne se limite pas à décrocher la première place : elle veut avant tout atteindre son propre niveau d'exigence.",
+        indice: "Ambition consignée comme projet — jamais comme contrat.",
+      },
+      {
+        code: "F-03",
+        title: "L'indépendance comme objectif personnel",
+        text: "Princia veut progressivement construire son indépendance financière et apprendre à compter davantage sur ses propres capacités. Ce projet demande du temps, des efforts et de la persévérance, mais il fait partie de ce qu'elle souhaite accomplir.",
+        indice: "Aucune estimation de revenus n'a été versée — le dossier salue l'élan.",
+      },
+      {
+        code: "F-04",
+        title: "Une motivation qui dépasse les résultats",
+        text: "Derrière ses ambitions se trouve également un souhait important : rendre son père fier. Ses efforts universitaires et son désir d'avancer ont aussi une dimension personnelle et familiale.",
+        indice: "Versé avec précaution : cette pièce-là se manipule avec douceur.",
+      },
+      {
+        code: "F-05",
+        title: "Une attention à ceux qu'elle aime",
+        text: "Elle peut s'inquiéter profondément pour les personnes auxquelles elle tient. Même lorsqu'elle ne le montre pas toujours de la manière la plus évidente, leur bien-être compte pour elle.",
+        indice: "Nuits blanches signalées — du côté des proches, jamais les siennes.",
+      },
+      {
+        code: "F-06",
+        title: "Une détermination qui résiste",
+        text: "Princia est battante et prête à traverser des périodes difficiles pour construire l'avenir qu'elle souhaite. Lorsqu'un objectif compte réellement pour elle, elle ne s'attend pas à ce que le chemin soit facile : elle est prête à faire les efforts nécessaires pour avancer.",
+        indice: "Le service n'a jamais enregistré d'abandon de sa part sur un objectif sérieux.",
+      },
+      {
+        code: "F-07",
+        title: "Un caractère franc, un cœur attentif",
+        text: "Elle peut se montrer franche, ferme, voire prendre un ton sévère lorsqu'elle s'inquiète pour quelqu'un ou estime qu'une situation l'exige. Cette fermeté ne résume pas sa personnalité : elle sait aussi être sympathique, attentionnée et présente pour les personnes qui comptent pour elle.",
+        indice: "Les témoins anonymes confirment les deux versions — toutes deux vraies.",
+      },
+    ],
+    outro:
+      "Sept faits, zéro objection recevable. Le dossier passe maintenant aux pièces matérielles.",
   },
 
   evidence: {
@@ -552,6 +611,23 @@ export const caseDossier = {
         "Cette pièce attend dans la bibliothèque, au fonds des volumes qui s'ouvrent le jour J. Certains contenus méritent d'attendre — c'est écrit au dos de la scène.",
       cta: "Voir le volume sous scellé",
     },
+  },
+
+  closure: {
+    piece: "Pièce VI",
+    tag: "Classement",
+    title: "Affaire classée",
+    stamp: "AFFAIRE CLASSÉE",
+    paragraphs: [
+      "Le dossier ENQ-18/10-04 est clos. Verdict prononcé, faits consignés, pièces inventoriées : tout concorde vers la même conclusion, et l'institution n'a plus qu'une formalité à accomplir.",
+      "Recommandation d'archivage définitive : ranger l'affaire au rayon des certitudes — sous-cote bleue, évidemment — et la rouvrir chaque année, au mois d'octobre, pour constater qu'elle n'a rien perdu de sa valeur.",
+    ],
+    mentions: [
+      "Faits établis : 07/07 — aucune objection recevable.",
+      "Pièces versées : 05 — pièces disparues : 00.",
+      "Pièce A-06 : reste sous scellés jusqu'au jour J, fonds de bibliothèque.",
+    ],
+    note: "Cette clôture est provisoire par principe : une personne qui a dix-huit ans continue de produire des faits. Le dossier se rouvrira de lui-même.",
   },
 
   verdict: {

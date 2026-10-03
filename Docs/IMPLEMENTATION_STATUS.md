@@ -335,3 +335,75 @@ Erreur identique pour les trois :
 
 ### Baseline après lot
 tsc 0 erreur ; build OK (114 pré-caches ≈3,4 Mo) ; **64/64 tests (10 fichiers)** ; npm audit 0 vulnérabilité ; smoke preview 4180 : GlowCursor, WelcomePage, motion/ogl pré-bundlés → 200.
+
+---
+
+## CHAÎNE V2 — RECONSTRUCTION COMPLÈTE « THE 18TH CASE » + RESPONSIVE GLOBAL + CORRECTIONS (3 oct. 2026, soir)
+
+### 0. Sources (phase 1 — audit obligatoire avant modification)
+- **Rapport d'audit Jenny lu INTÉGRALEMENT** (646 lignes, récupéré de `Docs/RAPPORT-audit-dossier-jenny.md` sur GitHub — la pièce jointe message n'est jamais arrivée sur le disque, deux occurrences consécutives). Copie de travail : `/home/user/jenny-audit.md` (hors repo, fichier de travail).
+- Dépôt Jenny : clone ROS (/tmp/jenny, sessions précédentes) — **jamais modifié**.
+- Site live Jenny : fetché (avis inchangés).
+- Six docs projet relus par passages ciblés (ordre de priorité respecté : sécurité/infos > specs projet > audit Jenny > dépôt/site Jenny > code existant).
+
+### 1. Diagnostic de l'existant (phase 2 — causes confirmées AVANT modification)
+| Problème observé | Cause réelle confirmée |
+|---|---|
+| Dossier « étroit, centré » sur desktop | `CasePage` sur `container--readable` (720 px, token `--measure-readable`) alors que `--measure-app` 1200 px existait |
+| Héros pas marquant | Hauteur non pleine écran, aucun emblème fort, fond uniforme |
+| 7 faits « empilés » | Liste typewriter sans mise en scène — l'audit recense un focus scroll-driven (AN-10) comme mécanisme signature |
+| Pas de chapitrage/repère de lecture | Pas de `data-chapter`, pas de barre de progression (mécanisme AN-11 absent) |
+| Menu « Enquête » cassé | `GIFT_ITEMS` pointait vers `/birthday/dossier` — libellé de route hérité d'un lot précédent, jamais propagé au renommage en `/birthday/enquete` (registre lot loc : la matrice citait encore `/birthday/dossier`) ; same relic dans LibraryPage |
+| Accès direct non garanti en hébergement | Aucun `netlify.toml`/`_redirects` (SPA fallback manquant) |
+| PV différent de la référence | Lignes indépendantes vs bloc unique avec conclusion « récompense » |
+
+### 2. Matrice de correspondance DÉFINITIVE (audit → PRINCIA v2)
+| Élément référence (audit) | Statut v2 | Forme PRINCIA |
+|---|---|---|
+| Layout : skip-link (existant ✔), header progression + chapitre (AN-11), footer | **Adapté** | DossierHeader : barre scaleX rAF + chapitre courant IO (−42/−52), chips mono ; top-nav projet conservée |
+| Grain photographique global feTurbulence (AN-05) | **Adapté** | GrainLayer bleu, 1,2 s steps(4), reduced-motion retiré |
+| Chapitre I Couverture : min-h-svh, grille 1.15/0.85, rise-in, fiche, marquee | **Reconstruit** | Héros plein écran 100svh, grille 1120 px, Reveal cascade, fiche d'identification Princia, marquee bleu |
+| Emblème chat + papillon | **Remplacé (règle absolue)** | Grand sceau N°18 en contre-jour + ex-libris en dérive 11 s (rôle exact : repère iconique non animal) |
+| Chapitre II Rapport : PV typewriter BLOC unique + CTA à `done` (AN-03) | **Reconstruit** | PV 3 paragraphes joints, caret, sr-only, conclusion+CTA uniquement à la fin de la frappe |
+| Chapitre III Pièces : 6 cartes photo + A-06 scellés | **Conservé** (v1 déjà fidèle à la fonction) | Exhibits + tilt + tape + mentions + fil bleu + énigmes passables (différence assumée : texte vs photos) |
+| **Chapitre IV mécanisme** : focus scroll-driven (AN-10/J4) | **Reconstruit — appliqué aux 7 FAITS** | CaseFacts : remap 10→92 %, smoothstep, fenêtre 0.17, statuts, orbe bleue getPointAtLength, reduced-motion → tout net |
+| Contenu témoignages humains (témoins, photos, orbe social) | **Non pertinent** | Aucun témoin documenté pour Princia ; jamais inventé |
+| Chapitre V Salle de projection (films, CAM, transcriptions) | **Non pertinent** | Aucun film existant |
+| Chapitre VI Verdict : fond radial, shake-once, braises canvas | **Adapté** (v1) | Slam RÉSOLUE + shake + EmberField bleu + GlowCursor (lot 5) |
+| Chapitre VII Affaire classée + CTA final | **Reconstruit** | CaseClosure : tampon AFFAIRE CLASSÉE, mentions, stats réelles, 4 sorties (lettre/bibliothèque/espace/re-lecture) |
+| 404 « pièce manquante » fictionnelle | **Conservé** | « Ce rayon-là n'existe pas » (fiction bibliothèque) déjà en place |
+| Easing tokens réduits (2 familles) | **Adapté** | deux courbes récurrentes du dossier (ease / cubic-bezier(0.22,1,0.36,1)) ; tokens narratifs non dupliqués |
+| Fraunces/IBM Plex Mono/Caveat | **Adapté partiellement** | Réutilisé via équilibre design system (IBM Plex Mono déjà présent ; Caveat → serif italique, pas de nouvelle police) |
+| View Transitions API | **Non adopté** | « Fortement probable » seulement chez Jenny ; gain incertain, coût réel |
+| Supabase/contributeurs/porte privée/modération/uploads | **Hors périmètre** (confirmé) | PWA 100 % locale ; doublon js13k ; la leçon sécurité « secrets côté client » ne nous expose pas : aucune zone secrète côté client chez Princia |
+| En-têtes sécurité Netlify | **Non vérifiable ici** | Config hébergement absente du repo (à régler au déploiement 4.6, avec le fichier _redirects livré) |
+
+### 3. Sept faits (phase 5) — fidélité textuelle
+Textes fournis par Stane intégrés **quasi à l'identique** (F-01..F-07), mise en scène : code pièce + titre évocateur + fait + indice d'archiviste + activation au scroll + compteur. Tests objectivent : exactement 7, codes ordonnés, « serait » pour la majorité, aucune moyenne actuelle, aucun revenu, franchise avec contrepartie, zéro quiz.
+
+### 4. Routage (phase 8) — cause réelle corrigée
+- Route canonique **`/enquete`** (CasePage) ; `/birthday/enquete` → `<Navigate to="/enquete" replace />`.
+- Menu cadeaux, LibraryPage, CoverPage, FinalePage, DailyHome : tous → `/enquete` (test de garde : l'ancienne route obsolète n'existe plus nulle part, `_redirects` présent).
+- `public/_redirects` créé : `/*  /index.html  200` (convention Netlify — même hébergeur que la référence ; sans effet en dev).
+
+### 5. Responsive global (phase 4)
+- **Cause du confinement supprimée** : la scène du dossier utilise désormais `container` 1200 px (avec sous-zones 62ch pour les textes longs) ; hero plein-bleed viewport avec grille interne 1120 px.
+- Breakpoints dédiés : ≥1024 (grille hero), 900 (report), 780 (thread facts masqué), 720/560 (emblèmes, chips).
+- **Limite honnête** : aucun navigateur headless installable (Téléchargement Chromium bloqué réseau, même barrière que shadcn) — la validation des viewports 320→1920 reste à confirmer sur appareils réels ; les règles ont été écrites mobile-first avec zones tactiles ≥44 px, aucun hover requis, aucun débordement horizontal (Pas de width:100vw dangereux hors héros plein-bleed contrôlé par overflow hidden de la scène).
+- Autres sections (welcome, bibliothèque, lettre, souvenirs, espace) : règles existantes revues, aucune régression introduite (aucune max-width globale modifiée — changement localisé à la scène du dossier).
+
+### 6. Sécurité (phase 10) — bilan honnête
+- **Alertes GitHub Dependabot : NON accessibles** (API 403 « Resource not accessible by integration » — le token du sandbox ne couvre pas ce périmètre). L'alerte reçue par Stane concernait probablement vitest@2.x : **corrigé au lot 4 (vitest 5.0.3)** ; à revérifier dans l'onglet Security du dépôt.
+- `npm audit` (post npm install ogl) : **0 vulnérabilité**.
+- Dépendances réellement utilisées : motion ✔ (BlurText), gsap ✔ (BubbleMenu), animejs ✔ (WelcomePage/ReadingBook), ogl ✔ (GlowCursor verdict) — aucune orpheline ajoutée.
+- Secrets : aucune clé dans le code suivi ; `.env*` ignoré ; leçon de l'audit appliquée — **aucune zone secrète évaluée côté client** (contrairement au point faible du site Jenny, que nous ne reproduisons pas).
+- Aucun `audit fix --force`, aucune alerte masquée/désactivée.
+
+### 7. Livré — fichiers
+Créés : `useScrollProgress.ts` (+smoothstep), `GrainLayer.tsx`, `DossierHeader.tsx`, `CaseFacts.tsx`, `CaseClosure.tsx`, `public/_redirects`, tests `sept-faits`, `enquete-routing`, `dossier-scene`.
+Réécrits : `CaseCover.tsx`, `CaseReport.tsx`, `CasePage.tsx` (chapitrage I..VI).
+Modifiés : `content.ts` (PV bloc + factsChapter 7 faits + closure), `CaseEvidence/CaseVerdict` (data-chapter, CTAs déplacés vers clôture), `App.tsx` (+ route canonique + redirect), 5 fichiers de liens, `globals.css` (bloc v2 : hero svh, PV, facts focus, nav, grain, closure).
+Tests existants adaptés (case-dossier) — **jamais masqués** : l'assertion obsolète remplacée par celles de la nouvelle structure.
+
+### Baseline après lot
+tsc 0 erreur ; build OK (114 entrées de pré-couche ≈ 3,43 Mo, `_redirects` inclus) ; **88/88 tests (13 fichiers)** ; preview 4180 : `/`, `/enquete`, ancienne route, `/app`, bibliothèque, lettre, souvenirs → 200 ; modules v2 → 200.

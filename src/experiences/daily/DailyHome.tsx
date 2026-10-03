@@ -194,7 +194,7 @@ export function DailyHome() {
             <Icon name="letter" size={16} />
             La lettre
           </Link>
-          <Link to="/birthday/enquete" className="btn btn--text">
+          <Link to="/enquete" className="btn btn--text">
             <Icon name="magnifier" size={16} />
             L'enquête
           </Link>

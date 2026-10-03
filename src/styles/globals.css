@@ -3397,3 +3397,346 @@ body[data-daypart="night"] {
   justify-items: center;
   text-align: center;
 }
+
+/* ============================================================
+   THE 18TH CASE V2 — chapitrage complet (audit Jenny croisé)
+   Pleine mesure (--measure-app 1200 px), héros min-h-svh, PV
+   bloc, sept faits focus-scroll, nav de lecture, grain, clôture.
+   ============================================================ */
+
+/* ---------- Nav de lecture du dossier (AN-11) ---------- */
+.dossier-nav {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 60;
+  pointer-events: none;
+}
+.dossier-nav__bar {
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-primary));
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  will-change: transform;
+}
+.dossier-nav__ref {
+  position: fixed;
+  right: clamp(10px, 3vw, 28px);
+  bottom: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  background: rgba(247, 250, 255, 0.82);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+}
+.dossier-nav__chapter {
+  position: fixed;
+  left: clamp(10px, 3vw, 28px);
+  bottom: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-primary-strong);
+  background: rgba(216, 233, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dossier-nav__bar {
+    transition: none;
+  }
+}
+
+/* ---------- Grain global du dossier (AN-05, bleu) ---------- */
+.grain-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.09, 0 0 0 0 0.29, 0 0 0 0 0.57, 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  animation: grain-shift 1.2s steps(4) infinite;
+}
+@keyframes grain-shift {
+  0% { background-position: 0 0; }
+  25% { background-position: -40px 30px; }
+  50% { background-position: 20px -50px; }
+  75% { background-position: -30px -20px; }
+  100% { background-position: 0 0; }
+}
+
+/* ---------- Chapitre I : héros pleine hauteur ---------- */
+.dossier-cover {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding-block: var(--space-6);
+  margin-inline: calc(50% - 50vw);
+  padding-inline: calc(50vw - 50%);
+}
+.dossier-cover__emblem {
+  position: absolute;
+  right: -4%;
+  top: 8%;
+  opacity: 0.12;
+  color: var(--color-primary-strong);
+  pointer-events: none;
+}
+.dossier-cover__exlibris {
+  position: absolute;
+  left: 4%;
+  bottom: 22%;
+  opacity: 0.7;
+  animation: exlibris-drift 11s ease-in-out infinite alternate;
+}
+@keyframes exlibris-drift {
+  from { transform: translateY(0) rotate(-6deg); }
+  to { transform: translateY(-26px) rotate(6deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dossier-cover__exlibris { animation: none; }
+}
+.dossier-cover__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--space-8);
+  align-items: center;
+  width: min(1120px, calc(100vw - 2 * clamp(20px, 6vw, 72px)));
+  margin-inline: auto;
+  flex: 1;
+}
+@media (min-width: 1024px) {
+  .dossier-cover__grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: clamp(2rem, 6vw, 5rem);
+  }
+}
+.dossier-cover__continue {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--color-border-strong);
+  padding-bottom: 2px;
+  animation: continue-breathe 2.6s ease-in-out infinite;
+}
+.dossier-cover__continue:hover,
+.dossier-cover__continue:focus-visible {
+  color: var(--color-primary-strong);
+}
+@keyframes continue-breathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dossier-cover__continue { animation: none; }
+}
+@media (max-width: 560px) {
+  .dossier-cover__emblem { opacity: 0.08; right: -20%; }
+  .dossier-cover__exlibris { display: none; }
+}
+
+/* ---------- Chapitre II : PV dactylographié ---------- */
+.dossier-pv {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: clamp(var(--space-5), 3vw, var(--space-8));
+  box-shadow: var(--shadow-card);
+}
+.dossier-pv__text {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(0.86rem, 1.4vw, 0.98rem);
+  line-height: 1.85;
+  color: var(--color-text);
+}
+.dossier-pv__typed {
+  white-space: pre-wrap;
+}
+/* La conclusion n'apparaît QU'À la fin de la frappe (récompense). */
+.dossier-conclusion {
+  opacity: 0;
+  translate: 0 14px;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 700ms ease 120ms, translate 700ms cubic-bezier(0.22, 1, 0.36, 1) 120ms, max-height 500ms ease;
+}
+.dossier-conclusion.is-done {
+  opacity: 1;
+  translate: 0 0;
+  max-height: 500px;
+}
+
+/* ---------- Chapitre III : les sept faits (focus scroll) ---------- */
+.dossier-facts {
+  display: grid;
+  gap: var(--space-6);
+}
+.dossier-facts__head {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+  max-width: 62ch;
+}
+.dossier-facts__intro {
+  font-size: var(--text-body-lg);
+  color: var(--color-text-secondary);
+}
+.dossier-facts__stage {
+  position: relative;
+  display: grid;
+  gap: var(--space-6);
+}
+.dossier-facts__thread {
+  position: absolute;
+  inset: 0 auto 0 clamp(-10px, 2vw, 30px);
+  width: 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+.dossier-facts__thread svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+@media (max-width: 720px) {
+  .dossier-facts__thread { display: none; }
+}
+.dossier-facts__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(2.5rem, 8vh, 5.5rem);
+  position: relative;
+  z-index: 1;
+}
+.dossier-factfocus {
+  /* Activation calculée par le scroll : 1 = net au centre. */
+  opacity: calc(0.22 + 0.78 * var(--fact-a, 1));
+  filter: blur(calc((1 - var(--fact-a, 1)) * 3px));
+  transform: translateY(calc((1 - var(--fact-a, 1)) * 16px)) scale(calc(0.985 + 0.015 * var(--fact-a, 1)));
+  transition: opacity 160ms linear, filter 160ms linear, transform 160ms linear;
+  will-change: opacity, filter, transform;
+  display: grid;
+  justify-items: center;
+  min-height: 34vh;
+  align-content: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dossier-factfocus {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+}
+.dossier-factfocus__card {
+  position: relative;
+  width: min(700px, 100%);
+  background: linear-gradient(175deg, #ffffff 0%, #eef4fd 100%);
+  border: 1px solid var(--color-border-strong);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: clamp(var(--space-5), 3vw, var(--space-8)) clamp(var(--space-5), 4vw, var(--space-10));
+  display: grid;
+  gap: var(--space-4);
+}
+.dossier-factfocus:nth-child(odd) .dossier-factfocus__card {
+  rotate: -0.4deg;
+}
+.dossier-factfocus:nth-child(even) .dossier-factfocus__card {
+  rotate: 0.5deg;
+}
+.dossier-factfocus__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+.dossier-factfocus__code {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--color-primary-strong);
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: 4px;
+}
+.dossier-factfocus__title {
+  margin: 0;
+  color: var(--color-primary-strong);
+}
+.dossier-factfocus__text {
+  margin: 0;
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body);
+}
+.dossier-factfocus__indice {
+  margin: 0;
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--color-border-strong);
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--color-text-secondary);
+}
+.dossier-facts__outro {
+  margin-inline: auto;
+  text-align: center;
+  max-width: 50ch;
+  font-family: var(--font-mono);
+  font-size: var(--text-body-sm);
+  color: var(--color-text-secondary);
+  border: 1px dashed var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-blue);
+  padding: var(--space-4) var(--space-6);
+}
+
+/* ---------- Chapitre VI : affaire classée ---------- */
+.dossier-closure {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: center;
+  text-align: center;
+  padding-block: var(--space-8);
+}
+.dossier-closure__body {
+  max-width: 62ch;
+  text-align: left;
+}
+.dossier-closure__note {
+  max-width: 52ch;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+}
+.dossier-closure__ctas {
+  justify-content: center;
+}
+
+/* ---------- Scene : l'intérieur reste au-dessus des calques ---------- */
+.dossier-scene .falling-rays {
+  z-index: 0;
+}

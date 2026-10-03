@@ -87,7 +87,9 @@ export function App() {
           <Route path="/birthday/bibliotheque/chapitre/:chapterId" element={<ChapterPage />} />
           <Route path="/birthday/lettre" element={<LetterPage />} />
           <Route path="/birthday/finale" element={<FinalePage />} />
-          <Route path="/birthday/enquete" element={<CasePage />} />
+          <Route path="/enquete" element={<CasePage />} />
+          {/* Ancienne adresse du dossier : redirigée (jamais de route cassée). */}
+          <Route path="/birthday/enquete" element={<Navigate to="/enquete" replace />} />
           <Route path="/app" element={<DailyLayout />}>
             <Route index element={<DailyHome />} />
             <Route path="lectures" element={<ReadingPage />} />

@@ -49,7 +49,7 @@ const GIFT_ITEMS: BubbleMenuItem[] = [
   },
   {
     label: "l'enquête",
-    href: "/birthday/dossier",
+    href: "/enquete",
     ariaLabel: "The 18th Case — le mini-dossier d'enquête",
     rotation: 6,
     hoverStyles: { bgColor: "#0f2444", textColor: "#8ec5ff" },

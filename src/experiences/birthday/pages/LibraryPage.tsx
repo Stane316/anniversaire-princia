@@ -320,7 +320,7 @@ export function LibraryPage() {
                 </span>
               </Link>
               <Link
-                to="/birthday/dossier"
+                to="/enquete"
                 className="library-cross__card library-cross__card--case stagger-item"
                 style={{ "--stagger-index": 1 } as React.CSSProperties}
                 aria-label="The 18th Case — un mini-dossier d'enquête optionnel"

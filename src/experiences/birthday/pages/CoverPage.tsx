@@ -49,7 +49,7 @@ export function CoverPage() {
               {coverContent.cta}
               <Icon name="arrow-right" size={18} />
             </Link>
-            <Link to="/birthday/enquete" className="btn btn--text">
+            <Link to="/enquete" className="btn btn--text">
               {coverContent.alternative}
             </Link>
           </div>

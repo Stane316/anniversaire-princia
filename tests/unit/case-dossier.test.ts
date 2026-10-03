@@ -30,13 +30,26 @@ describe("The 18th Case reconstruit — intégrité des données (A/B)", () => {
     expect(cover.sealText).toContain("PRINCIA");
   });
 
-  it("le rapport préliminaire comporte des constats factuels non vides", () => {
+  it("le rapport préliminaire est un PV en bloc (3 paragraphes) + conclusion", () => {
     const report = caseDossier.report;
-    expect(report.facts.length).toBeGreaterThanOrEqual(6);
-    for (const fact of report.facts) {
-      expect(fact.length).toBeGreaterThan(40);
+    expect(report.paragraphs.length).toBeGreaterThanOrEqual(3);
+    for (const paragraph of report.paragraphs) {
+      expect(paragraph.length).toBeGreaterThan(40);
     }
     expect(report.conclusion.length).toBeGreaterThan(40);
+    // Le CTA de fin mène vers les sept faits (nouvelle mise en scène).
+    expect(report.cta.length).toBeGreaterThan(10);
+  });
+
+  it("le chapitrage officiel compte 6 chapitres dans l'ordre", () => {
+    expect(caseDossier.chapters.map((c) => c.num)).toEqual([
+      "I",
+      "II",
+      "III",
+      "IV",
+      "V",
+      "VI",
+    ]);
   });
 
   it("l'inventaire des pièces est complet (prose + scellé + stats)", () => {

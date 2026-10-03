@@ -31,7 +31,7 @@ export function FinalePage() {
               <Icon name="arrow-right" size={16} />
             </Link>
             <div className="cluster" style={{ justifyContent: "center" }}>
-              <Link to="/birthday/enquete" className="btn btn--secondary">
+              <Link to="/enquete" className="btn btn--secondary">
                 <Icon name="magnifier" size={16} />
                 {finaleContent.toCase}
               </Link>
