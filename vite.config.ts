@@ -53,7 +53,7 @@ export default defineConfig({
         navigateFallback: "index.html",
         // Les photos personnelles futures restent hors cache agressif :
         // runtime uniquement à la demande, jamais de pré-cache aveugle.
-        globPatterns: ["**/*.{js,css,html,svg,png,woff,woff2}"],
+        globPatterns: ["**/*.{js,css,html,svg,png,webp,woff,woff2}"],
         cleanupOutdatedCaches: true,
       },
       devOptions: {

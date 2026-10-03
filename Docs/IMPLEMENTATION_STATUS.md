@@ -79,7 +79,7 @@ Mis à jour après chaque implémentation. Date de référence : 2 octobre 2026.
 | 5.4 | Volume sous scellé (dévoilé le 4 oct.) | P1 | Contenu Stane | ✅ Fait (3 oct. 2026 — contenu : ⚠️ brouillon issue du brief Stane, à relire) | Verrou de DATE pur (jamais sur la lettre, jamais d'énigme) ; page d'attente avec sceau avant le jour J, grand livre après ; entrée rayonnage « Volume S » |
 | 5.5 | The 18th Case enrichi (vrai dossier) | P1 | — | ✅ Fait (2 oct. 2026) | 3 pièces (Lambo, bleu, campus), mentions de la bibliothécaire, verdict « RÉSOLUE » |
 | 5.6 | Micro-interactions de présence | P1 | — | ✅ Fait (2 oct. 2026) | Ciel ambiant (4 moments), mot du jour, compte à rebours réel J-N, transitions cartes |
-| 5.7 | Intégration contenus personnels de Stane | P1 | Contenu Stane | ⬜ Proposée | Dépendance : matière de Stane |
+| 5.7 | Intégration contenus personnels de Stane | P1 | Contenu Stane | ✅ Partielle (3 oct. 2026) | 21 photos `souvenirs/` versées (optimisées, alt exacts) dans la Salle des souvenirs en spirale ; autres contenus personnels éventuels : toujours de Stane |
 
 ## BASELINE DE STABILITÉ — après 5.3 (2 oct. 2026, §04.2)
 
@@ -204,3 +204,32 @@ Mis à jour après chaque implémentation. Date de référence : 2 octobre 2026.
 - **Baseline après lot :** 6 parcours principaux 200 ; 35/35 tests ; build OK ; aucun secret en code ; `souvenirs/` intact.
 - **Prochaines étapes :** 5.7 suivie par Stane (photos `souvenirs/` + validation des textes brouillons : lettre déjà validée, volume sous scellé à relire), puis déploiement 4.6 à sa convenance.
 - **Non vérifiable ici, annoncé honnêtement :** rendu exact du canvas de particules selon police/webfont sur appareil réel (à confirmer visuellement le jour J), persistence locale hors sandbox.
+
+
+---
+
+## LOT 2 DE LA REFONTE (3 oct. 2026) — composants demandés + 5.7 partielle
+
+### Tentatives d'installation (erreur EXACTE, non maquillée)
+Les trois commandes fournies ont été exécutées telles quelles :
+`npx shadcn@latest add @reactbits-starter/falling-rays-tw`,
+`@reactbits-starter/glass-cursor-tw`,
+`@react-bits/InfiniteSpiral-TS-TW`.
+Erreur identique pour les trois :
+« Request to https://ui.shadcn.com/r/registries.json failed, reason: Client network socket disconnected before secure TLS connection was established ».
+→ Aucune installation réalisée ; aucun fichier shadcn créé ; les registres React Bits Pro restent indisponibles (licence absente ET accès registre bloqué).
+
+### Intégrations natives équivalentes
+| Demande | État |
+|---|---|
+| Falling Rays | ✅ Équivalent natif déjà en place (refonte U2), conservé tel quel |
+| InfiniteSpiral | ✅ **Source complète fournie par Stane intégrée telle quelle** (traduction Tailwind → classes projet, logique et paramètres inchangés) — montée dans la Salle des souvenirs (drag + auto + scroll, pause au survol, reduced-motion géré par le composant) |
+| Glass Cursor | ✅ Équivalent natif : pointeurs fins uniquement, désactivé en tactile et reduced-motion, blur avec repli @supports, aucune interception de clic, listeners/rAF nettoyés |
+
+### 5.7 — Salle des souvenirs (autorisation Stane du 3 oct. 2026)
+- 21 photos téléchargées via l'API GitHub (raw.github inaccessible : contournement par `gh api`, lecture seule ; **le dossier `souvenirs/` source n'a jamais été modifié, déplacé ni renommé**).
+- Optimisation web (auto-orient, ≤1080 px, WebP ~82) → `public/souvenirs-gallery/` (≈ 1,5 Mo au total).
+- **Alt rédigés après inspection visuelle de chaque photo** : descriptions strictement vérifiables, aucun contexte ni sentiment inventé.
+- `globPatterns` élargi à `webp` → les photos rejoignent le précouche PWA (hors-ligne).
+- Smoke : les 21 assets répondent 200 ; routes 200 ; bundle référence le fonds.
+- Baseline après lot : **39/39 tests (7 fichiers)**, tsc 0 erreur, build OK, 114 entrées de précouche.

@@ -33,6 +33,7 @@ import { PlannerPage } from "../features/planner/PlannerPage";
 import { WinsPage } from "../features/wins/WinsPage";
 import { DiscoverPage } from "../features/discover/DiscoverPage";
 import { PwaUpdatePrompt } from "./PwaUpdatePrompt";
+import { GlassCursor } from "../components/effects/GlassCursor";
 
 function EntryGate() {
   // Première visite : invitation à l'expérience. Visites suivantes :
@@ -95,6 +96,7 @@ export function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <PwaUpdatePrompt />
+        <GlassCursor />
       </BrowserRouter>
     </ToastProvider>
   );

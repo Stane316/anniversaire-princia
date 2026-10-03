@@ -2332,3 +2332,109 @@ body[data-daypart="night"] {
     margin-bottom: var(--space-4);
   }
 }
+
+/* ---------- Infinite Spiral (source Stane, intégrée nativement) ---------- */
+.spiral {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.spiral__stage {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+.spiral__item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  width: var(--spiral-width);
+  height: var(--spiral-height);
+  overflow: hidden;
+  border-radius: var(--spiral-radius);
+  border: 1px solid rgba(234, 243, 255, 0.3);
+  background: rgba(142, 197, 255, 0.12);
+  box-shadow: 0 14px 38px rgba(8, 17, 39, 0.22);
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
+}
+.spiral__img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-position: center;
+  user-select: none;
+}
+
+/* ---------- Glass Cursor (équivalent natif, décor pur) ---------- */
+.glass-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid rgba(142, 197, 255, 0.75);
+  background: radial-gradient(circle at 32% 28%, rgba(142, 197, 255, 0.28), rgba(142, 197, 255, 0.06));
+  backdrop-filter: blur(2px) saturate(1.15);
+  -webkit-backdrop-filter: blur(2px) saturate(1.15);
+  box-shadow: 0 0 0 1px var(--gc-ink, rgba(142, 197, 255, 0.22)), 0 6px 18px rgba(21, 52, 91, 0.16);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-normal) ease;
+  z-index: 70;
+}
+@supports not (backdrop-filter: blur(2px)) {
+  .glass-cursor {
+    background: rgba(142, 197, 255, 0.16);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glass-cursor {
+    display: none;
+  }
+}
+
+/* ---------- 5.7 : Salle des souvenirs (galerie en spirale) ---------- */
+.library-souvenirs {
+  background: linear-gradient(180deg, transparent, rgba(11, 30, 58, 0.05), transparent);
+}
+.souvenirs-scene {
+  position: relative;
+  height: 600px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background:
+    radial-gradient(80% 60% at 50% 0%, rgba(45, 101, 184, 0.5) 0%, transparent 60%),
+    linear-gradient(178deg, #15345b 0%, #0f2444 60%, #0b1e3a 100%);
+  border: 1px solid rgba(142, 197, 255, 0.25);
+  box-shadow: 0 24px 60px rgba(5, 15, 33, 0.35), var(--shadow-card);
+}
+.souvenirs-scene__spiral {
+  height: 100%;
+}
+.souvenirs-scene__note {
+  position: absolute;
+  left: var(--space-4);
+  bottom: var(--space-3);
+  z-index: 5;
+  color: rgba(234, 243, 255, 0.72);
+  font-family: var(--font-mono);
+  pointer-events: none;
+}
+@media (max-width: 720px) {
+  .souvenirs-scene {
+    height: 440px;
+  }
+  .souvenirs-scene__note {
+    right: var(--space-4);
+    text-align: center;
+  }
+}
