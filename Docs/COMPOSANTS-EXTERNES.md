@@ -111,3 +111,33 @@ bas de la source perdu dans l'adaptation flux) : la souris le perdait
 → repli → regain → pompage. Ancrage `align-items: flex-end` restauré
 et amplitude plafonnée (`dockHeight` 150) : étirement doux, stylisé,
 uniquement sous le pointeur.
+
+## RefineFrame — photo d'ouverture des Souvenirs (3 oct. 2026)
+
+Composant fourni par Stane (React Bits) intégré dans
+`src/components/media/RefineFrame.tsx` : mosaïque canvas multi-
+résolutions INCHANGÉE (9 niveaux, 14 bandes, balayage lumineux,
+chip de statut). Adaptations documentées : classes Tailwind →
+classes projet (`.refine-frame*`), palette par défaut bleu nuit
+au lieu de zinc/neutral, libelladresse de repli français.
+
+Scène : `SouvenirPhotoIntro` avanti la galerie de
+`/souvenirs` — séquence déclarée queued → generating → refining →
+complete, pause de regard, fondu orchestré par l'état React (jamais
+de temporisation aveugle). Photo attendue (non encore versée) :
+`public/souvenirs/souvenirs_behanzin.*` — quatre extensions
+essayées en cascade ; si le fichier manque, la galerie s'ouvre
+directement, sans blocage. Rejouée une fois par session
+(`sessionStorage`). Tout est local : aucune photo ne quitte
+l'appareil. Dépendances ajoutées : `@hugeicons/react`,
+`@hugeicons/core-free-icons`.
+
+## Mer d'encre identifiable (3 oct. 2026, mission)
+
+Réglages GradientWaves harmonisés (bibliothèque + grand livre) :
+horizon #E9F3FF, vague #2F6FD0, crête #BFD8F7, opacity 1,
+brightness 1,04 — contraste vague/fond 4,35:1 (calculé, WCAG),
+contre 3,91:1 avant, et surtout une séparation nette par la teinte ;
+la section « institution » (blanc opaque historique) passe en
+voile 82 % — la mer reste visible derrière la section claire, le
+texte garde un contraste intégral.

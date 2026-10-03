@@ -6,19 +6,44 @@
  * - inventaire sr-only identique à la salle de la bibliothèque ;
  * - aucune action obligatoire : retour disponible en un geste.
  */
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import InfiniteSpiral from "../../../components/effects/InfiniteSpiral";
 import GlowCursor from "../../../components/effects/GlowCursor";
 import { Icon } from "../../../components/ui/Icon";
+import { SouvenirPhotoIntro } from "../components/SouvenirPhotoIntro";
 import { souvenirPhotos, souvenirsContent } from "../data/souvenirs";
 
+/** L'introduction photographique ne se rejoue pas à chaque visite :
+ *  la scène est un marque-page, pas une porte. (mission 3 oct. 2026) */
+const INTRO_SEEN_KEY = "souvenirs-intro-v1";
+
 export function SouvenirsGalleryPage() {
+  const [showIntro, setShowIntro] = useState<boolean>(
+    () => window.sessionStorage.getItem(INTRO_SEEN_KEY) !== "1",
+  );
+
+  const closeIntro = () => {
+    try {
+      window.sessionStorage.setItem(INTRO_SEEN_KEY, "1");
+    } catch {
+      /* navigation privée stricte : simple non-persistance */
+    }
+    setShowIntro(false);
+  };
+
   return (
     // GlowCursor EST la scène plein écran : sa traînée suit le pointeur
     // (souris comme doigt, pendant le défilement de la spirale) sur le
     // fond nuit — c'est l'endroit où la lumière bleue respire le mieux.
     // Le canvas est en pointer-events:none : le drag de la spirale
     // reste intact, et reduced-motion n'active jamais le WebGL.
+    <>
+    {/* Scène d'introduction photographique (composant Stane —
+        RefineFrame) : la photo de Princia devant la statue du roi
+        Béhanzin se dévoile, puis la galerie apparaît. Repli auto si
+        la photo est absente (rien ne bloque jamais Infinite Spiral). */}
+    {showIntro && <SouvenirPhotoIntro onDone={closeIntro} />}
     <GlowCursor
       className="souvenirs-fullpage"
       color="#8EC5FF"
@@ -76,5 +101,6 @@ export function SouvenirsGalleryPage() {
         ))}
       </ol>
     </GlowCursor>
+    </>
   );
 }

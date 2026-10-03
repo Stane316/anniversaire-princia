@@ -9,7 +9,7 @@
  *    chapitre se déplie panneau par panneau à l'ouverture) ;
  *  - rejetés volontairement : loop/hover (usage lecteur) — les
  *    triggers mount/scroll suffisent ;
- *  - adapation performance (3 oct. 2026) : `will-change: transform,
+ *  - adaptation performance (3 oct. 2026) : `will-change: transform,
  *    opacity` PERMANENT retiré du CSS interne — chaque pièce créait
  *    une couche GPU résiduelle même au repos ; GSAP applique déjà
  *    transforms/force3D pendant l'animation et nettoie à la fin

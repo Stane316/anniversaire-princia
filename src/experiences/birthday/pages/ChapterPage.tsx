@@ -25,10 +25,20 @@ export function ChapterPage() {
     <BirthdayLayout back={{ to: "/birthday/bibliotheque", label: libraryContent.backToLibrary }}>
       {/* Même mer d'encre que la bibliothèque : le livre flotte dessus. */}
       <div className="scene-backdrop" aria-hidden="true">
+
+        {/* Réglages « mer d'encre » — identifiables à l'œil (mission
+              3 oct. 2026) : l'ancienne palette (vague #3E7BD9 sur
+              horizon #F3F8FF, brightness 1, opacity .85) rendait le
+              composant indiscernable du dégradé du body. Les vagues
+              sont désormais nettement bleues, le crêtement lumineux,
+              l'horizon proche du fond pour conserver la douceur du
+              haut de page, et le calque est opaque : le contenu vit
+              au-dessus (z 1), les sections claires laissent respirer
+              la mer au travers de leurs voiles translucides. */}
         <GradientWaves
-          horizonColor="#F3F8FF"
-          waveColor="#3E7BD9"
-          crestColor="#DBEAFE"
+          horizonColor="#E9F3FF"
+          waveColor="#2F6FD0"
+          crestColor="#BFD8F7"
           speed={0.3}
           amplitude={2.6}
           waveScale={0.55}
@@ -40,8 +50,8 @@ export function ChapterPage() {
           height={5.0}
           fogDepth={26}
           detail="low"
-          brightness={1}
-          opacity={0.85}
+          brightness={1.04}
+          opacity={1}
           grain={false}
           mouseInteraction
           parallaxStrength={0.32}
