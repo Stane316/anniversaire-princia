@@ -13,13 +13,16 @@
  */
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import { ToastProvider } from "../components/ui/Toast";
 import { Icon } from "../components/ui/Icon";
 import { visitMemory } from "../data/repositories";
+import { getDaypart } from "../lib/daypart";
 import { WelcomePage } from "../experiences/birthday/pages/WelcomePage";
 import { CoverPage } from "../experiences/birthday/pages/CoverPage";
 import { LibraryPage } from "../experiences/birthday/pages/LibraryPage";
 import { ChapterPage } from "../experiences/birthday/pages/ChapterPage";
+import { SealedVolumePage } from "../experiences/birthday/pages/SealedVolumePage";
 import { LetterPage } from "../experiences/birthday/pages/LetterPage";
 import { FinalePage } from "../experiences/birthday/pages/FinalePage";
 import { CasePage } from "../experiences/birthday/pages/CasePage";
@@ -64,6 +67,12 @@ function NotFoundPage() {
 }
 
 export function App() {
+  // 5.6 — Ciel ambiant : teinte posée UNE fois au démarrage (aucune
+  // boucle d'animation ; purement esthétique, derrière le contenu).
+  useEffect(() => {
+    document.body.dataset["daypart"] = getDaypart();
+  }, []);
+
   return (
     <ToastProvider>
       <BrowserRouter>
@@ -71,6 +80,7 @@ export function App() {
           <Route path="/" element={<EntryGate />} />
           <Route path="/birthday" element={<CoverPage />} />
           <Route path="/birthday/bibliotheque" element={<LibraryPage />} />
+          <Route path="/birthday/bibliotheque/chapitre/volume-scelle" element={<SealedVolumePage />} />
           <Route path="/birthday/bibliotheque/chapitre/:chapterId" element={<ChapterPage />} />
           <Route path="/birthday/lettre" element={<LetterPage />} />
           <Route path="/birthday/finale" element={<FinalePage />} />

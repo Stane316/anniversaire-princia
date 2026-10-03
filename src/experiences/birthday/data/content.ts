@@ -92,6 +92,14 @@ export const libraryContent = {
  * Toutes les plaisanteries ci-dessous restent strictement ancrées
  * aux faits validés du document 00 (même règle que la lettre).
  */
+export const libraryCaseTeaser = {
+  intro:
+    "Un dossier atterrit dans la salle d\u2019archives du sous-sol : cote exacte 10-04. Le service l\u2019a class\u00e9 \u00e0 part, dans le fonds des \u00e9nigmes d\u2019anniversaire.",
+  title: "The 18th Case",
+  line: "D\u00e9part pr\u00e9vu le 4 octobre, r\u00e9f\u00e9rence 10-04 — deux dates qui disent d\u00e9j\u00e0 presque tout. Le reste se gagne au fil du dossier.",
+  cta: "S\u2019introduire dans le dossier",
+} as const;
+
 export const libraryCodex = {
   institution: "Blue Library — Grande Salle Bleue",
   collection: "Fonds Princia",
@@ -207,11 +215,11 @@ export const birthdayChapters: BirthdayChapter[] = [
     paragraphs: [
       "Impossible de parler de toi sans parler du bleu. Le bleu ciel, précisément. Une couleur qui te suit partout — jusqu'aux endroits où, entre nous, elle n'avait pas forcément besoin d'être. Tu sais de quoi je parle.",
       "Un jour, tu as réclamé une Lamborghini bleue pour ton anniversaire. Le budget de cette année se situait, disons, légèrement en dessous du prix d'une Lamborghini. Alors ça a été une bibliothèque bleue à la place. On espère que l'effort de substitution sera apprécié à sa juste valeur.",
-      "Entre le bleu, les romans et les séries policières, il n'en fallait pas plus pour imaginer cette expérience : une bibliothèque qui en cache peut-être une, d'enquête…",
+      "Entre le bleu, les romans qui font rêver et les enquêtes qu'on collectionne — jusque dans un certain palais d'apothicaires, où l'observation reste la meilleure arme — il n'en fallait pas plus pour imaginer cette expérience : une bibliothèque qui en cache peut-être une, d'enquête…",
     ],
     aside: "Le bleu n'est pas qu'une couleur. C'est un état d'esprit.",
     callNumber: "PRC-18/BL·05",
-    marginNote: "Répertorié dans toutes les nuances du bleu, y compris là où personne ne l'attendait. Dossier Lamborghini : toujours en attente de financement.",
+    marginNote: "Répertorié dans toutes les nuances du bleu, y compris là où personne ne l'attendait. Dossier Lamborghini : toujours en attente de financement. Le rayon frissons reste ouvert tard — la bibliothécaire nie toute responsabilité.",
     gradient: { top: "#8EC5FF", bottom: "#24559F" },
   },
 ];
@@ -263,6 +271,7 @@ export const caseContent = {
     paragraphs: [
       "Une étrange affaire a été retrouvée entre les rayonnages de la Blue Library. Tout y tourne autour d'un seul et même chiffre : 18.",
       "À toi d'en découvrir la vérité, indice après indice.",
+      "L'ambition était la mise en abyme du suspense — pas le cinéma d'horreur : aucun cri obligatoire ne t'attend derrière le prochain clic.",
     ],
     mention: "La bibliothécaire jure n'avoir rien à voir avec ce dossier. Personne ne l'a crue.",
     note: "Aucune obligation : la lettre et la bibliothèque te restent accessibles à tout moment.",
@@ -303,7 +312,6 @@ export type CaseRiddle =
       hint: string;
       placeholder: string;
     };
-
 const lamChoices = [
   { id: "tesla", label: "Une Tesla grise" },
   { id: "twingo", label: "Une Twingo rouge" },
@@ -390,3 +398,43 @@ export const caseSteps = [
 ] as const;
 
 export type CaseStep = (typeof caseSteps)[number];
+
+/** ============================================================
+ * 5.4 — LE VOLUME SOUS SCELLÉ
+ * Révélation personnelle, verrouillée jusqu'au jour J.
+ * ⚠️  BROUILLON POUR STANE — relis et ajuste. Construit
+ * UNIQUEMENT à partir des faits du brief de mission (Stane) :
+ *   - le geste du riz apporté sur le campus (acte d'attention) ;
+ *   - les prises de nouvelles lors des nuits blanches/maladies ;
+ *   - « elle se dit parfois méchante » → REGARD de Stane
+ *     (présenté comme son regard, jamais comme un diagnostic) ;
+ *   - Les Carnets de l'Apothicaire (Maomao, Jinshi) : clins d'œil.
+ * Contrainte doc 00 §2.2 : encourager sans jamais faire peser
+ * les études ou les objectifs.
+ * ============================================================ */
+
+export const SEALED_VOLUME_UNLOCK_ISO = "2026-10-04";
+
+export const sealedVolume = {
+  id: "volume-scelle",
+  cote: "PRC-18/S∞",
+  number: "S",
+  kicker: "Le volume sous scellé",
+  /** Affichage tant que le jour J n'est pas arrivé. */
+  sealed: {
+    title: "Réservé au jour J",
+    line: "Ce volume est sous scellé. Il s'ouvrira de lui-même le 4 octobre — certains contenus méritent d'attendre.",
+  },
+  /** Après ouverture. */
+  title: "Ce que les gestes disent tout bas",
+  paragraphs: [
+    "Il y a quelque temps, alors que les journées tiraient en longueur et que même préparer du riz me fatiguait, tu as cuisiné. Et tu as apporté. Sur le campus, sans en faire tout un événement — juste, ce jour-là, à ce moment-là. Ce n'est pas la taille du geste qui reste. C'est qu'il existait.",
+    "C'est ta manière, d'ailleurs. Quand les nuits s'allongent de mon côté, ou que la forme baisse, il y a toujours ce message pour prendre des nouvelles. Une attention qui ne réclame aucun applaudissement. Une attention qui est simplement là.",
+    "Parfois, tu dis en riant un peu que tu es la méchante de l'histoire. Permets à l'auteur de cette bibliothèque de corriger doucement la page — et je le signe de ma main, c'est mon regard : ce que tu appelles méchanceté, moi j'y lis quelqu'un qui sait poser ses limites, préserver son temps et son énergie. Ce n'est pas de la méchanceté. C'est du soin, qui commence par soi — et qui, très vite, rejaillit sur les autres.",
+    "Pour la suite ? Avance comme tu sais le faire : sans te presser, sans te comparer. Tes dix-huit ans ne sont pas un examen à réussir. Ils sont un volume qui s'ouvre — et le lecteur de ce côté-ci a hâte de suivre la suite.",
+  ],
+  aside: "Versé au dossier sans mise en scène — les gestes vrais n'en ont pas besoin.",
+  marginNote:
+    "Classé parmi les « preuves d'attention ». Si Maomao était passée par là, ce geste serait déjà répertorié : attention déguisée en banalité. Elle ne s'y trompe jamais.",
+  gradient: { top: "#2D65B8", bottom: "#0F2444" },
+} as const;

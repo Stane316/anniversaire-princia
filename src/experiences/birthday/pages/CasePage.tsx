@@ -30,6 +30,7 @@ import { Icon } from "../../../components/ui/Icon";
 import { useReducedMotion } from "../../../motion/useReducedMotion";
 import { MarginNote } from "../../../components/library/MarginNote";
 import { ExLibrisStamp } from "../../../components/library/ExLibrisStamp";
+import { FallingRays } from "../../../components/effects/FallingRays";
 
 /** Numéro de pièce à la Jenny : A-01, A-02… (pure présentation). */
 function exhibitNumber(clueIndex: number): string {
@@ -108,7 +109,10 @@ export function CasePage() {
 
   return (
     <BirthdayLayout back={{ to: "/birthday/bibliotheque", label: caseContent.intro.back }}>
-      <section className="container container--readable section" style={{ paddingBlock: "var(--space-12)" }}>
+      {/* Univers enquête : scène nuit-bleu + rayons (décor total). */}
+      <div className="case-scene">
+        <FallingRays rayCount={14} />
+        <section className="case-scene__inner container container--readable section">
         <header className="stack" style={{ alignItems: "start", marginBottom: "var(--space-8)" }}>
           <p className="case-reference">
             Réf. {caseContent.reference} — versée à la Grande Salle Bleue
@@ -143,7 +147,7 @@ export function CasePage() {
 
         {/* -------- Étape : introduction (CASE-01/02) -------- */}
         {progress === 0 && (
-          <div ref={fileRef} className="case-file stack">
+          <div ref={fileRef} className="case-file case-file--cover stack">
             <span className="case-stamp">Ouverture</span>
             <ul className="case-filemeta" aria-label="Mentions du dossier">
               {caseContent.intro.fileMeta.map((meta) => (
@@ -331,7 +335,8 @@ export function CasePage() {
             </div>
           </div>
         )}
-      </section>
+        </section>
+      </div>
     </BirthdayLayout>
   );
 }
