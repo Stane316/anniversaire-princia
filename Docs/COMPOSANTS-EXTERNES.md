@@ -84,3 +84,30 @@ défilement) ; et un filet de sécurité de visibilité a été ajouté aux
 révélations au scroll — le contenu prime toujours sur l'effet. Le
 composant WebThreads demeure importable (ses gardes de tests restent
 actives).
+
+## Fond pleine page : la règle du z-index (3 oct. 2026, soir)
+
+Un calque fixed en `z-index: -1` est peint SOUS les fonds des blocs
+(y compris celui, opaque, de `<body>`) : le background restait confiné
+dans un « compartiment » invisible et seul le dégradé du body se
+voyait. Règle désormais garantie par tests : fond d'espace à
+`z-index: 0`, contenu de la page porté à `1`. Le composant
+GradientWaves est ainsi visible sur **l'intégralité** des landing
+pages bibliothèque et grand livre.
+
+## Enquête lisible en toutes circonstances
+
+Les révélations au scroll ne masquent plus jamais par défaut : le
+masquage `[data-reveal]` n'est armé (`reveal-armed` sur `<html>`) que
+par un callback d'observer réel. Vieux service worker, observer muet,
+prefers-reduced-motion → contenu toujours affiché. La PWA est passée
+en `autoUpdate` : chaque visite reçoit la version la plus récente
+(plus de versions JS/CSS mélangées).
+
+## Menu Dock : va-et-vient chaotique résolu
+
+Le rail remontait pendant l'étirement du cadre spring animé (ancrage
+bas de la source perdu dans l'adaptation flux) : la souris le perdait
+→ repli → regain → pompage. Ancrage `align-items: flex-end` restauré
+et amplitude plafonnée (`dockHeight` 150) : étirement doux, stylisé,
+uniquement sous le pointeur.

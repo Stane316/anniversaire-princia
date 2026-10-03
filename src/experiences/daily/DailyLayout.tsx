@@ -103,9 +103,13 @@ export function DailyLayout() {
           }))}
           activeLabel={activeLabel}
           showLabels
+          // Amplitude calmée : cadre animé plafonné (dockHeight),
+          // le rail ancré en bas empêche tout va-et-vient.
+
           baseItemSize={56}
           magnification={68}
           panelHeight={86}
+          dockHeight={150}
           distance={140}
         />
       </nav>

@@ -29,6 +29,11 @@ export function useInView<T extends HTMLElement>(threshold = 0.2) {
     let done = false;
     const io = new IntersectionObserver(
       ([entry]) => {
+        // Preuve de vie : le premier callback (même sans intersection)
+        // autorise le CSS à masquer les contenus hors écran. Sans
+        // callback, « reveal-armed » n'est jamais posé et tout reste
+        // visible (garde invulnérable du 3 oct. 2026).
+        document.documentElement.classList.add("reveal-armed");
         if (entry.isIntersecting && !done) {
           done = true;
           setInView(true);

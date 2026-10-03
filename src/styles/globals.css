@@ -583,6 +583,11 @@ a {
   display: flex;
   max-width: min(96vw, 560px);
   justify-content: center;
+  /* Rail ancré EN BAS du cadre animé (comme le absolute bottom-2 de la
+     source) : sans cet ancrage, le rail remontait pendant l'étirement
+     du cadre, la souris le « perdait » (mouseleave), il se repliait,
+     la retrouvait… va-et-vient incessant signalé le 3 oct. 2026. */
+  align-items: flex-end;
 }
 .dock__panel {
   display: flex;
@@ -2188,6 +2193,15 @@ body[data-daypart="night"] {
   padding-block: var(--space-12);
 }
 
+.library-landing {
+  position: relative;
+  z-index: 1; /* porté au-dessus du fond d'espace fixe (z-index: 0) */
+}
+.reading-book {
+  position: relative;
+  z-index: 1; /* grand livre : porté au-dessus du fond d'espace fixe */
+}
+
 .library-hero {
   position: relative;
   padding: var(--space-14) 0 var(--space-12);
@@ -2852,15 +2866,21 @@ body[data-daypart="night"] {
     opacity 600ms ease var(--reveal-delay, 0ms),
     translate 600ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
 }
-[data-reveal]:not(.is-in) {
+/* Contenu visible PAR DÉFAUT. Le masquage n'est ARMÉ (« reveal-armed »
+   sur <html>) que lorsqu'un callback IntersectionObserver réel a prouvé
+   que la machine de révélation tourne (posé par useInView). En contexte
+   dégradé (Observer muet, version mélangée par un vieux service
+   worker…), la classe n'est jamais posée : le texte reste toujours
+   affiché — le contenu prime toujours sur l'effet. */
+.reveal-armed [data-reveal]:not(.is-in) {
   opacity: 0;
   translate: 0 18px;
 }
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] {
-    transition: none;
-    opacity: 1;
-    translate: none;
+    transition: none !important;
+    opacity: 1 !important;
+    translate: none !important;
   }
 }
 
@@ -3625,14 +3645,18 @@ body[data-daypart="night"] {
 }
 
 /* ---------- Grain global du dossier (AN-05, bleu) ---------- */
-/* Fond d'espace fourni par les composants Stane (WebThreads,
-   GradientWaves) : calque fixe derrière TOUT le contenu (z -1),
-   jamais interactif, plein viewport — la taille du canvas reste
-   raisonnable quelle que soit la longueur de la page. */
+/* Fond d'espace fourni par les composants Stane (GradientWaves) :
+   calque fixe pleine page sous le contenu (z-index: 0, contenu porté
+   à 1), jamais interactif — la taille du canvas reste raisonnable
+   quelle que soit la longueur de la page. */
 .scene-backdrop {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  /* JAMAIS de z-index négatif : les fonds des blocs (dont celui, opaque,
+     de <body>) se peignent PAR-DESSUS les calques à z-index < 0 — c'est
+     ce qui confinait le fond dans un « compartiment » invisible.
+     z-index: 0 ici, contenu porté à 1 par la page concernée. */
+  z-index: 0;
   pointer-events: none;
   overflow: hidden;
 }
