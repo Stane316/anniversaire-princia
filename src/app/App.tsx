@@ -23,6 +23,7 @@ import { CoverPage } from "../experiences/birthday/pages/CoverPage";
 import { LibraryPage } from "../experiences/birthday/pages/LibraryPage";
 import { ChapterPage } from "../experiences/birthday/pages/ChapterPage";
 import { SealedVolumePage } from "../experiences/birthday/pages/SealedVolumePage";
+import { SouvenirsGalleryPage } from "../experiences/birthday/pages/SouvenirsGalleryPage";
 import { LetterPage } from "../experiences/birthday/pages/LetterPage";
 import { FinalePage } from "../experiences/birthday/pages/FinalePage";
 import { CasePage } from "../experiences/birthday/pages/CasePage";
@@ -82,6 +83,7 @@ export function App() {
           <Route path="/birthday" element={<CoverPage />} />
           <Route path="/birthday/bibliotheque" element={<LibraryPage />} />
           <Route path="/birthday/bibliotheque/chapitre/volume-scelle" element={<SealedVolumePage />} />
+          <Route path="/souvenirs" element={<SouvenirsGalleryPage />} />
           <Route path="/birthday/bibliotheque/chapitre/:chapterId" element={<ChapterPage />} />
           <Route path="/birthday/lettre" element={<LetterPage />} />
           <Route path="/birthday/finale" element={<FinalePage />} />

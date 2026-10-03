@@ -23,6 +23,7 @@ import { invitationContent, welcomeContent } from "../data/content";
 import { visitMemory } from "../../../data/repositories";
 import { useReducedMotion } from "../../../motion/useReducedMotion";
 import { ExLibrisStamp } from "../../../components/library/ExLibrisStamp";
+import BlurText from "../../../components/text/BlurText";
 import { Icon } from "../../../components/ui/Icon";
 
 type IntroPhase = "sealed" | "opening" | "open";
@@ -32,6 +33,10 @@ export function WelcomePage() {
   const [phase, setPhase] = useState<IntroPhase>(() =>
     reducedMotion || visitMemory.hasSeenIntro() ? "open" : "sealed",
   );
+  // Le message d'accueil BlurText naît un instant APRÈS l'ouverture
+  // de l'enveloppe (délai voulu par Stane — contenu jamais bloqué :
+  // le titre/lead sont déjà là avant l'apparition du message).
+  const [greetingReady, setGreetingReady] = useState(false);
 
   const envelopeRef = useRef<HTMLDivElement>(null);
   const flapRef = useRef<HTMLDivElement>(null);
@@ -94,6 +99,16 @@ export function WelcomePage() {
     const id = window.setTimeout(() => headingRef.current?.focus({ preventScroll: true }), 80);
     return () => window.clearTimeout(id);
   }, [phase]);
+
+  // Délai volonté avant l'arrivée du message « Joyeux anniversaire ».
+  useEffect(() => {
+    if (phase !== "open") {
+      setGreetingReady(false);
+      return;
+    }
+    const id = window.setTimeout(() => setGreetingReady(true), reducedMotion ? 0 : 1050);
+    return () => window.clearTimeout(id);
+  }, [phase, reducedMotion]);
 
   // Scintillements décoratifs de l'invitation ouverte (réutilisés de BL-01).
   useEffect(() => {
@@ -191,6 +206,16 @@ export function WelcomePage() {
             )}
             <ExLibrisStamp text="EX · LIBRIS" subline="PRC-18" size={84} rotate={-9} ink="rgba(57, 120, 212, 0.5)" />
             <div className="stack-lg invitation-card__inner">
+              {phase === "open" && greetingReady && (
+                <BlurText
+                  text="Joyeux anniversaire, Princia."
+                  animateBy="words"
+                  direction="top"
+                  delay={190}
+                  stepDuration={0.5}
+                  className="welcome-greeting"
+                />
+              )}
               <p className="kicker">{welcomeContent.kicker}</p>
               <h1 ref={headingRef} tabIndex={-1} className="display invitation-card__title">
                 {welcomeContent.title}
