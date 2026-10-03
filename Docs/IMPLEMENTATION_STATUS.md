@@ -494,3 +494,12 @@ tsc 0 erreur ; **122/122 tests (15 fichiers)** — critères des fonds mis à jo
 | Affichage enquête | **Fiabilisé** | Rendu différé retiré ; héros recentré ; révélations au scroll à visibilité garantie |
 | Menu de l'espace | **Dock** animé | Composant fourni intégré (libellés permanents, page courante, reduced-motion) |
 | Baseline | **135/135** | tsc 0 erreur, build propre, 8 routes 200 |
+
+## Lot 3 oct. 2026 (nuit) — fond pleine page, enquête lisible, Dock stable
+
+| Livraine | Statut | Cause & réparation |
+|---|---|---|
+| Background bibliothèque confiné | **Résolu** | z-index négatif sous le fond de body → 0 + contenu porté à 1 |
+| Enquête sans texte | **Résolu** | Masquage par défaut fatal si l'observer n'acquitte pas → armé seulement sur preuve de vie ; PWA `autoUpdate` |
+| Dock va-et-vient chaotique | **Résolu** | Ancrage bas du rail perdu dans l'adaptation → `align-items: flex-end` + amplitude plafonnée |
+| Baseline | **142/142** | tsc 0 erreur, build OK, routes 200 |

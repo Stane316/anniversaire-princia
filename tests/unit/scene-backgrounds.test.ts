@@ -99,11 +99,14 @@ describe("GradientWaves (background bibliothèque) — gardes", () => {
 describe("Calque de fond — CSS projet", () => {
   const css = read("src/styles/globals.css");
 
-  it("le fond est fixe, derrière tout, jamais cliquable", () => {
+  it("le fond est fixe, pleine page au-dessus du fond body, jamais cliquable", () => {
     const block = css.match(/\.scene-backdrop\s*\{[^}]+\}/);
     expect(block).not.toBeNull();
     expect(block![0]).toContain("position: fixed");
-    expect(block![0]).toContain("z-index: -1");
+    // Bascule explicite (3 oct. 2026) : z-index négatif = calque
+    // recouvert par le fond de body (« compartiment » invisible).
+    expect(block![0]).toContain("z-index: 0");
+    expect(block![0]).not.toContain("z-index: -1");
     expect(block![0]).toContain("pointer-events: none");
   });
 });
