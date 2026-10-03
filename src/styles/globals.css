@@ -580,9 +580,10 @@ a {
   display: grid;
   place-items: center;
   padding: clamp(16px, 4vw, 48px);
+  /* Synchronisé avec FADE_MS de SouvenirPhotoIntro. */
   transition:
-    opacity 620ms cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s linear 620ms;
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 700ms;
   opacity: 1;
   visibility: visible;
 }
@@ -3286,20 +3287,8 @@ body[data-daypart="night"] {
 }
 
 /* ---------- Pièce I : couverture ---------- */
-.dossier-cover {
-  display: grid;
-  gap: var(--space-8);
-}
-.dossier-cover__grid {
-  display: grid;
-  gap: var(--space-8);
-  align-items: start;
-}
-@media (min-width: 900px) {
-  .dossier-cover__grid {
-    grid-template-columns: 1.25fr 0.85fr;
-  }
-}
+/* .dossier-cover et .dossier-cover__grid sont définis une seule fois
+   dans la couche V2 ci-dessous, après fusion des anciennes règles. */
 .dossier-cover__main {
   display: grid;
   gap: var(--space-5);
@@ -3334,6 +3323,7 @@ body[data-daypart="night"] {
   font-size: clamp(1.8rem, 4.6vw, 3rem);
   line-height: var(--leading-display);
   color: var(--color-text);
+  overflow-wrap: anywhere;
 }
 .dossier-cover__title-name {
   font-family: var(--font-serif);
@@ -3341,6 +3331,7 @@ body[data-daypart="night"] {
   line-height: 0.95;
   color: var(--color-primary-strong);
   text-shadow: 0 2px 0 rgba(57, 120, 212, 0.18);
+  overflow-wrap: anywhere;
 }
 .dossier-cover__lead {
   font-size: var(--text-body-lg);
@@ -3442,14 +3433,7 @@ body[data-daypart="night"] {
   color: var(--color-text-secondary);
   max-width: 44ch;
 }
-.dossier-facts {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-5);
-  counter-reset: dossier-fait;
-}
+/* .dossier-facts est défini une seule fois dans la couche V2 ci-dessous. */
 .dossier-fact {
   display: grid;
   gap: 6px;
@@ -4017,15 +4001,28 @@ body[data-daypart="night"] {
   display: grid;
   gap: var(--space-8);
   align-items: center;
-  width: min(1120px, calc(100vw - 2 * clamp(20px, 6vw, 72px)));
-  margin-inline: auto;
+  /* Le parent .container reste l'unique propriétaire de la mesure. */
+  width: 100%;
+  margin-inline: 0;
   flex: 1;
+}
+@media (min-width: 900px) {
+  .dossier-cover__grid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr);
+  }
 }
 @media (min-width: 1024px) {
   .dossier-cover__grid {
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
     gap: clamp(2rem, 6vw, 5rem);
   }
+}
+.dossier-cover__main,
+.dossier-cover__side {
+  min-width: 0;
+}
+.dossier-cover__side {
+  position: relative;
 }
 .dossier-cover__continue {
   display: inline-flex;
@@ -4094,6 +4091,10 @@ body[data-daypart="night"] {
 .dossier-facts {
   display: grid;
   gap: var(--space-6);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: dossier-fait;
 }
 .dossier-facts__head {
   display: grid;

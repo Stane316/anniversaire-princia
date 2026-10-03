@@ -247,14 +247,21 @@ const InfiniteSpiral = ({
       ref={rootRef}
       className={`spiral ${className}`}
       style={rootStyle}
-      onMouseEnter={() => {
-        hoveredRef.current = true;
+      /* Pause et glisser-déposer sont réservés aux cartes ; les marges
+         latérales restent disponibles pour le défilement naturel. */
+      onMouseOver={(event) => {
+        hoveredRef.current = Boolean(
+          (event.target as Element | null)?.closest?.(".spiral__item"),
+        );
       }}
       onMouseLeave={() => {
         hoveredRef.current = false;
       }}
       onPointerDown={event => {
         if (!dragEnabled || event.button !== 0) return;
+        if (!(event.target as Element | null)?.closest?.(".spiral__item")) {
+          return;
+        }
         draggingRef.current = true;
         dragMovedRef.current = false;
         lastPointerYRef.current = event.clientY;
