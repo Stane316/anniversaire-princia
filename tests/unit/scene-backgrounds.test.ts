@@ -47,20 +47,14 @@ describe("WebThreads (background enquête) — gardes", () => {
     expect(comp).toContain("WebGL indisponible");
   });
 
-  it("intégré à la section enquête en encre bleue (lightMode), plafonné", () => {
+  it("retiré de l'enquête sur prescription (composant gardé intact)", () => {
+    // Décision Stane (3 oct. 2026) : la section enquête n'a plus de
+    // fond WebGL — retour à l'identité v2 claire et lisible, sans
+    // reculer sur le reste. Le composant reste disponible et tests
+    // ses gardes dans ce fichier.
     const page = read("src/experiences/birthday/pages/CasePage.tsx");
-    expect(page).toContain("<WebThreads");
-    expect(page).toContain("lightMode");
-    expect(page).toContain('backgroundColor="#EEF5FF"');
-    expect(page).toContain('color1="#1E5BB4"');
-    expect(page).toContain('color2="#5B9BEB"');
-    expect(page).toContain('color3="#C9E1FF"');
-    expect(page).toContain("targetFps={30}");
-    expect(page).toContain("resolutionScale={0.55}");
-    expect(page).toContain("opacity={0.9}");
-    // Jamais les couleurs de la démo.
-    expect(page).not.toContain("#5227FF");
-    expect(page).not.toContain("#FF9FFC");
+    expect(page).not.toContain("<WebThreads");
+    expect(page).not.toContain("scene-backdrop");
   });
 });
 
@@ -114,11 +108,36 @@ describe("Calque de fond — CSS projet", () => {
   });
 });
 
-describe("Section enquête allégée", () => {
+describe("Section enquête — affichage v2 restauré (sans reculer)", () => {
   const page = read("src/experiences/birthday/pages/CasePage.tsx");
   const verdict = read(
     "src/experiences/birthday/components/dossier/CaseVerdict.tsx",
   );
+  const css = read("src/styles/globals.css");
+
+  it("aucun fond WebGL ; identité claire d'origine restaurée", () => {
+    expect(page).not.toContain("<WebThreads");
+    const scene = css.match(/\.dossier-scene\s*\{[^}]+\}/);
+    expect(scene).not.toBeNull();
+    expect(scene![0]).toContain("#eef5ff");
+    expect(scene![0]).not.toContain("rgba(238, 245, 255");
+  });
+
+  it("plus de rendu différé expérimental sur les chapitres", () => {
+    const inner = css.match(/\.dossier-scene__inner > section\s*\{[^}]+\}/);
+    expect(inner).toBeNull();
+  });
+
+  it("la couverture ne dépend plus de l'astuce 50vw plein-bleed", () => {
+    const cover = css.match(/\.dossier-cover \{[^}]+\}/);
+    expect(cover).not.toBeNull();
+    // Bloc du dossier v2 : min-height 100svh présent, calage vw absent.
+    expect(css).toMatch(/\.dossier-cover\s*\{[^}]*min-height:\s*100svh/);
+    const blocks = css.match(/\.dossier-cover \{[^}]+\}/g) ?? [];
+    for (const b of blocks) {
+      expect(b).not.toContain("calc(50% - 50vw)");
+    }
+  });
 
   it("plus de rayons animés à l'échelle de la scène", () => {
     expect(page).not.toContain("FallingRays");

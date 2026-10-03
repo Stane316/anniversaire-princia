@@ -484,3 +484,13 @@ Code lu ligne à ligne ; les chiffres sont de l'arithmétique de surfaces
 
 ### Baseline après lot
 tsc 0 erreur ; **122/122 tests (15 fichiers)** — critères des fonds mis à jour vers les nouvelles garanties (jamais masqué un échec: anciens réglages remplacés par les nouveaux) ; build OK (132 entrées ≈ 4,2 Mo) ; preview 4180 : 8 routes × 200, moteur GlowCursor optimisé servi.
+
+## Lot 3 oct. 2026 (soir) — volume-sheet, backgrounds, Dock
+
+| Livraine | Statut | Détail |
+|---|---|---|
+| Panneau volume (bibliothèque) | **Refait** | Marges fluides (clamp) — texte jamais collé ; titre déplié par FoldText à chaque volume ; fond translucide |
+| Background enquête | **Retiré** (prescription) | Identité claire v2 restaurée |
+| Affichage enquête | **Fiabilisé** | Rendu différé retiré ; héros recentré ; révélations au scroll à visibilité garantie |
+| Menu de l'espace | **Dock** animé | Composant fourni intégré (libellés permanents, page courante, reduced-motion) |
+| Baseline | **135/135** | tsc 0 erreur, build propre, 8 routes 200 |

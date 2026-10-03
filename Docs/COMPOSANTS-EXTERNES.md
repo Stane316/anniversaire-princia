@@ -55,3 +55,32 @@ npm run dev     # lance le serveur local
 npm test        # vérifie que toutes les pièces sont en place (122 tests)
 npm run build   # génère la version à publier
 ```
+
+## Dock du menu de l'espace (3 oct. 2026)
+
+Composant fourni par Stane (React Bits), intégré au **menu existant**
+de l'espace (« Mon espace ») — pas de menu parallèle : la liste
+historique est remplacée. Mécanique spring/motion intacte
+(magnification au survol, tooltip, clavier). Adaptations documentées :
+
+- classes Tailwind → design system bleu (jamais le noir de la démo) ;
+- ancrage porté par la nav parente (le Dock reste réutilisable) ;
+- `showLabels` : libellés permanents sous les icônes (mobile sans
+  survol, lisibilité permanente) ;
+- `activeLabel` : la page courante porte `aria-current="page"` et le
+  badge bleu majeur ;
+- reduced-motion : magnification coupée, menu identique à tailles
+  fixes.
+
+## Enquête : retrait du fond WebThreads (3 oct. 2026, prescription)
+
+Stane a tranché : la section enquête renonce entièrement à son fond
+WebGL. Retour à l'identité « reconstruction v2 + personnalisation »
+sans reculer plus loin : héros, PV, sept faits, clôture, navigation
+intacts. Ont aussi été retirés : le rendu différé expérimental des
+courts de chapitre (content-visibility), le calage plein-bleed du
+héros sur la largeur viewport (désaxait la page avec la barre de
+défilement) ; et un filet de sécurité de visibilité a été ajouté aux
+révélations au scroll — le contenu prime toujours sur l'effet. Le
+composant WebThreads demeure importable (ses gardes de tests restent
+actives).

@@ -36,7 +36,6 @@ import { CaseEvidence } from "../components/dossier/CaseEvidence";
 import { CaseVerdict } from "../components/dossier/CaseVerdict";
 import { CaseClosure } from "../components/dossier/CaseClosure";
 import { GrainLayer } from "../../../components/effects/GrainLayer";
-import WebThreads from "../../../components/backgrounds/WebThreads";
 
 const CLUE_IDS = caseSteps
   .filter((step) => step.type === "clue")
@@ -95,40 +94,6 @@ export function CasePage() {
       back={{ to: "/birthday/bibliotheque", label: "Retour à la bibliothèque" }}
     >
       <div className="dossier-scene">
-        {/* Fond d'espace (composant Stane — WebThreads) : le « fil de
-            l'enquête » tissé à l'encre bleue sur la page (lightMode —
-            la paperasse du dossier reste claire et lisible). GPU pur,
-            mis en pause hors écran, DPR ≤ 1.5 — remplace les deux
-            effets CPU lourds (grain animé + rayons) qui bloquaient la
-            fluidité de la section (audit du 3 oct. 2026). */}
-        <div className="scene-backdrop" aria-hidden="true">
-          <WebThreads
-            lightMode
-            backgroundColor="#EEF5FF"
-            color1="#1E5BB4"
-            color2="#5B9BEB"
-            color3="#C9E1FF"
-            speed={0.14}
-            threadCount={6}
-            frequency={4.2}
-            spread={0.3}
-            taper={0.9}
-            position={0.42}
-            fanMode="center"
-            glow={0.026}
-            falloff={0.62}
-            thickness={1.3}
-            brightness={0.72}
-            opacity={0.9}
-            mirror
-            grain={false}
-            mouseInteraction
-            mouseStrength={0.22}
-            targetFps={30}
-            resolutionScale={0.55}
-            className="scene-backdrop__canvas"
-          />
-        </div>
         {/* Texture photographique du dossier : grain statique (plus
             aucune animation — voir audit). */}
         <GrainLayer />

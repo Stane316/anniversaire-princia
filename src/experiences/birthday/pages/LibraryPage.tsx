@@ -27,6 +27,7 @@ import { ParticleName } from "../../../components/effects/ParticleName";
 import { SouvenirsSection } from "../components/SouvenirsSection";
 import { Icon } from "../../../components/ui/Icon";
 import GradientWaves from "../../../components/backgrounds/GradientWaves";
+import FoldText from "../../../components/text/FoldText";
 
 export function LibraryPage() {
   const [openVolumeId, setOpenVolumeId] = useState<string | null>(null);
@@ -254,7 +255,24 @@ export function LibraryPage() {
                       {openVolume.kicker}
                     </p>
                     <h3 ref={sheetHeadingRef} tabIndex={-1} className="h2 volume-sheet__title">
-                      {openVolume.title}
+                      {/* Nom du volume déplié panneau par panneau (composant
+                          Stane — FoldText), comme dans le grand livre ; rejoué
+                          à chaque volume ouvert (clé = id du volume). */}
+                      <FoldText
+                        key={openVolume.id}
+                        text={openVolume.title}
+                        splitBy="word"
+                        hinge="left"
+                        trigger="mount"
+                        duration={0.7}
+                        stagger={0.1}
+                        ease="power3.out"
+                        perspective={760}
+                        creaseShading={0.5}
+                        fontSize="1em"
+                        fontWeight="inherit"
+                        color="inherit"
+                      />
                     </h3>
                     <p className="text-caption text-muted" style={{ fontFamily: "var(--font-mono)" }}>
                       Cote {openVolume.callNumber} · {libraryCodex.collection}

@@ -10,11 +10,12 @@
  * lettre, bibliothèque, enquête. Bouton toujours visible, jamais
  * bloquant ; Échap ferme.
  */
-import { NavLink, Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "../../components/ui/Icon";
 import type { IconName } from "../../components/ui/Icon";
 import BubbleMenu from "../../components/menu/BubbleMenu";
 import type { BubbleMenuItem } from "../../components/menu/BubbleMenu";
+import Dock from "../../components/dock/Dock";
 
 const NAV_ITEMS: { to: string; label: string; icon: IconName; end?: boolean }[] = [
   { to: "/app", label: "Accueil", icon: "home", end: true },
@@ -64,6 +65,17 @@ const GIFT_ITEMS: BubbleMenuItem[] = [
 ];
 
 export function DailyLayout() {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  // Page courante : correspondance au prefep plus spécifique d'abord
+  // (/app exact ne doit pas voler l'actif de /app/lectures…).
+  const activeLabel =
+    [...NAV_ITEMS]
+      .sort((a, b) => b.to.length - a.to.length)
+      .find((item) =>
+        item.end ? pathname === item.to : pathname.startsWith(item.to),
+      )?.label ?? NAV_ITEMS[0].label;
+
   return (
     <div className="page">
       <header className="top-nav">
@@ -79,22 +91,23 @@ export function DailyLayout() {
         <Outlet />
       </main>
 
-      <nav className="daily-nav" aria-label="Navigation principale de l'espace quotidien">
-        <ul className="daily-nav__list">
-          {NAV_ITEMS.map((item) => (
-            <li key={item.to}>
-              <NavLink
-                to={item.to}
-                end={item.end}
-                className="daily-nav__link"
-                aria-label={item.label}
-              >
-                <Icon name={item.icon} />
-                <span>{item.label}</span>
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+      {/* Menu principal animé (composant Stane — Dock) : les cinq
+          sections de l'espace, magnification douce au survol, libellés
+          toujours visibles (mobile), page courante marquée. */}
+      <nav className="daily-dock" aria-label="Navigation principale de l'espace quotidien">
+        <Dock
+          items={NAV_ITEMS.map((item) => ({
+            icon: <Icon name={item.icon} size={20} />,
+            label: item.label,
+            onClick: () => navigate(item.to),
+          }))}
+          activeLabel={activeLabel}
+          showLabels
+          baseItemSize={56}
+          magnification={68}
+          panelHeight={86}
+          distance={140}
+        />
       </nav>
 
       <BubbleMenu

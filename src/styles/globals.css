@@ -564,6 +564,96 @@ a {
 }
 
 /* ---------- Navigation espace quotidien (barre mobile / pilule desktop) ---------- */
+/* Dock (composant Stane) — menu principal de l'espace : rail flottant
+   centré, magnification douce au survol, libellés permanents,
+   page courante marquée au bleu majeur. */
+.daily-dock {
+  position: fixed;
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.daily-dock .dock {
+  pointer-events: auto;
+  display: flex;
+  max-width: min(96vw, 560px);
+  justify-content: center;
+}
+.dock__panel {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(0.5rem, 2vw, 1rem);
+  padding: 0.45rem clamp(0.75rem, 2.5vw, 1.25rem);
+  border-radius: 22px;
+  border: 1px solid var(--color-border-strong);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-card);
+}
+.dock__item {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background: linear-gradient(160deg, #ffffff, #e9f2fe);
+  box-shadow: 0 4px 10px rgba(21, 52, 91, 0.1);
+  color: var(--color-primary);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+.dock__item:focus-visible {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+.dock__item--active {
+  background: linear-gradient(160deg, #2d65b8, #174a91);
+  border-color: rgba(45, 101, 184, 0.55);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(23, 74, 145, 0.35);
+}
+.dock__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+.dock__label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: inherit;
+  white-space: nowrap;
+}
+.dock__tooltip {
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  width: fit-content;
+  white-space: pre;
+  border-radius: 8px;
+  border: 1px solid var(--color-border-strong);
+  background: #0f2444;
+  color: #eef5ff;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.72rem;
+  pointer-events: none;
+}
+@media (max-width: 420px) {
+  .dock__label { font-size: 0.55rem; }
+}
+
 .daily-nav {
   position: fixed;
   bottom: 0;
@@ -614,7 +704,7 @@ a {
 }
 
 .daily-content {
-  padding-bottom: calc(var(--nav-height) + var(--space-10) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(96px + var(--space-10) + env(safe-area-inset-bottom, 0px));
 }
 
 @media (min-width: 900px) {
@@ -2193,11 +2283,15 @@ body[data-daypart="night"] {
 .volume-sheet {
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-lg);
-  background: linear-gradient(160deg, #fdfefe, #eef5fd);
+  /* Blanc 92 % : la mer d'encre (fond d'espace) respire au travers,
+     la lecture reste parfaite (3 oct. 2026). */
+  background: linear-gradient(160deg, rgba(253, 254, 254, 0.94), rgba(238, 245, 253, 0.9));
   box-shadow: var(--shadow-card);
-  padding: var(--space-7);
+  /* Respiration fluide : jamais collé aux extrémités, quel que soit
+     l'écran — même standard que le grand livre. */
+  padding: clamp(1.5rem, 4.5vw, 2.9rem) clamp(1.35rem, 5vw, 3.2rem);
   display: grid;
-  gap: var(--space-6);
+  gap: clamp(1.1rem, 2.8vw, 1.8rem);
 }
 .volume-sheet__head {
   display: flex;
@@ -2207,6 +2301,12 @@ body[data-daypart="night"] {
   flex-wrap: wrap;
   border-bottom: 1px solid var(--color-border);
   padding-bottom: var(--space-5);
+}
+.volume-sheet__title {
+  font-family: var(--font-serif);
+  line-height: 1.14;
+  text-wrap: balance;
+  margin-top: var(--space-2);
 }
 .volume-sheet__title:focus {
   outline: none;
@@ -2768,12 +2868,9 @@ body[data-daypart="night"] {
 .dossier-scene {
   position: relative;
   overflow: hidden;
-  /* Voile translucide : le fond WebThreads (fils d'encre) respire au
-     travers — c'était son masquage par un voile OPAQUE qui rendait le
-     background invisible (3 oct. 2026). Lisibilité préservée. */
   background:
-    radial-gradient(1100px 520px at 85% -8%, rgba(142, 197, 255, 0.18), transparent 65%),
-    linear-gradient(180deg, rgba(238, 245, 255, 0.62) 0%, rgba(247, 250, 255, 0.5) 34%, rgba(242, 247, 255, 0.62) 100%);
+    radial-gradient(1100px 520px at 85% -8%, rgba(142, 197, 255, 0.24), transparent 65%),
+    linear-gradient(180deg, #eef5ff 0%, var(--color-background) 34%, #f2f7ff 100%);
   padding-block: var(--space-8);
 }
 .dossier-scene__inner {
@@ -2783,17 +2880,7 @@ body[data-daypart="night"] {
   gap: clamp(4.5rem, 12vw, 9rem);
 }
 
-/* Rendu différé des chapitres lourds : le navigateur saute la mise en
-   page/peinture des sections éloignées du viewport (perf 3 oct. 2026),
-   la taille estimée évite tout saut de scroll. */
-.dossier-scene__inner > section {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 860px;
-}
-.dossier-cover {
-  /* Le héros, lui, est toujours rendu (premier écran). */
-  content-visibility: visible;
-}
+
 
 /* ---------- Bandeau défilant ---------- */
 .marquee {
@@ -3584,8 +3671,8 @@ body[data-daypart="night"] {
   justify-content: space-between;
   gap: var(--space-6);
   padding-block: var(--space-6);
-  margin-inline: calc(50% - 50vw);
-  padding-inline: calc(50vw - 50%);
+  /* Pleine mesure du conteneur, sans calage sur la largeur viewport :
+     le hack plein-bleed dépassait la barre de défilement et désaxait la page. */
 }
 .dossier-cover__emblem {
   position: absolute;
