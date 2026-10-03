@@ -92,6 +92,14 @@ export const libraryContent = {
  * Toutes les plaisanteries ci-dessous restent strictement ancrées
  * aux faits validés du document 00 (même règle que la lettre).
  */
+export const libraryCaseTeaser = {
+  intro:
+    "Un dossier atterrit dans la salle d\u2019archives du sous-sol : cote exacte 10-04. Le service l\u2019a class\u00e9 \u00e0 part, dans le fonds des \u00e9nigmes d\u2019anniversaire.",
+  title: "The 18th Case",
+  line: "D\u00e9part pr\u00e9vu le 4 octobre, r\u00e9f\u00e9rence 10-04 — deux dates qui disent d\u00e9j\u00e0 presque tout. Le reste se gagne au fil du dossier.",
+  cta: "S\u2019introduire dans le dossier",
+} as const;
+
 export const libraryCodex = {
   institution: "Blue Library — Grande Salle Bleue",
   collection: "Fonds Princia",
