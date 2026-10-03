@@ -53,7 +53,9 @@ export default defineConfig({
         navigateFallback: "index.html",
         // Les photos personnelles futures restent hors cache agressif :
         // runtime uniquement à la demande, jamais de pré-cache aveugle.
-        globPatterns: ["**/*.{js,css,html,svg,png,webp,woff,woff2}"],
+        // inclut jpeg/jpg : la photo d'ouverture intro (/souvenirs/…jpeg)
+        // doit rester disponible hors ligne comme le reste de la bibliothèque
+        globPatterns: ["**/*.{js,css,html,svg,png,webp,jpg,jpeg,woff,woff2}"],
         cleanupOutdatedCaches: true,
       },
       devOptions: {
