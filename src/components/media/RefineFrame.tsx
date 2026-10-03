@@ -58,10 +58,15 @@ interface Live {
   reduce: boolean;
 }
 
+/** Voile appliqué à la photo À CHAQUE étape (mission 3 oct. 2026,
+ *  chantier B) : le flou initial doit être NETTEMENT perceptible
+ *  (blur 4 px était invisible sur une photo nette). La mosaïque
+ *  canvas (LEVELS 48→1) fournit la pixellisation ; ces valeurs sont
+ *  le voile CSS complémentaire du <img> sous le canvas. */
 const STAGES: Record<RefineFrameStatus, Stage> = {
-  queued: { blur: 4, sat: 0.6, scale: 1.04, opacity: 0.55 },
-  generating: { blur: 1.5, sat: 0.8, scale: 1.02, opacity: 0.85 },
-  refining: { blur: 0.5, sat: 0.95, scale: 1.005, opacity: 1 },
+  queued: { blur: 16, sat: 0.55, scale: 1.06, opacity: 0.55 },
+  generating: { blur: 8, sat: 0.78, scale: 1.035, opacity: 0.8 },
+  refining: { blur: 2.5, sat: 0.94, scale: 1.01, opacity: 1 },
   complete: { blur: 0, sat: 1, scale: 1, opacity: 1 },
   error: { blur: 2, sat: 0.5, scale: 1, opacity: 0.28 }
 };
@@ -317,7 +322,11 @@ const RefineFrame: React.FC<RefineFrameProps> = ({
           '--rf-bg': background,
           '--rf-ink': color,
           '--rf-stage': `${stageDuration}ms`,
-          '--rf-blur': `${mosaic ? 0 : stage.blur}px`,
+          /* Le voile de flou n'est plus tué dès que le canvas est prêt
+             (cause racine du « flou imperceptible » rapporté) : il
+             accompagne la mosaïque et ne s'éteint qu'avec le statut
+             complete (blur 0) — révélation nettement perceptible. */
+          '--rf-blur': `${stage.blur}px`,
           '--rf-sat': stage.sat,
           '--rf-scale': mosaic ? 1 : stage.scale,
           '--rf-opacity': stage.opacity

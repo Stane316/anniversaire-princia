@@ -5,6 +5,27 @@ Mis à jour après chaque implémentation. Date de référence : 2 octobre 2026.
 
 ---
 
+## 2026-10-03 (nuit) — Chantier B bouclé : intro photographique réparée
+
+- **Flou perceptible (cause racine)** : dès que le canvas mosaïque était prêt,
+  `--rf-blur` était forcé à 0 → plus aucun flou. Le voile accompagne désormais
+  la mosaïque et ne s'éteint qu'à `complete` (paliers 16 → 8 → 2.5 → 0 px).
+- **Séquence explicite et configurable** : `REVEAL_STEPS` (950 / 2000 / 2000 ms)
+  + `HOLD_COMPLETE_MS = 2400` (photo nette, paramètre distinct) + `FADE_MS = 700`.
+- **Replay garanti** : suppression du `sessionStorage` — l'introduction se
+  rejoue à chaque entrée dans Souvenirs et à chaque rechargement, sans état
+  « déjà vue » (exigence §5.5). Bouton « Passer » actif à tout instant.
+- **Enquête (chantier A)** : audit de référence Jenny (dépôt cloné lu) → la
+  reconstruction « The 18th Case » existante est conforme (sceau N°18 non
+  animal, PV machine-à-écrire 2 colonnes, BlueThread). Les 7 faits officiels
+  étaient déjà intégrés. Routage menu `/enquete` vérifié sain (chemin absolu
+  + preventDefault).
+- **Sécurité** : `npm audit` = 0 vulnérabilité ; API Dependabot GitHub
+  inaccessible (403, permissions limites) ; aucun secret exposé.
+- **Preuves** : 170/170 tests (20 fichiers), build OK, 7 routes × 200, photo
+  servie 200. Limite assumée : rendu navigateur réel non vérifiable ici.
+
+
 ## 2026-10-03 (soir) — Reprise technique : photo, PWA, OG, contre-preuves enquête
 
 - **Photo d'ouverture livrée pour de vrai** : `public/souvenirs/souvenirs_behanzin.jpeg`
