@@ -24,6 +24,7 @@ import { RulesBoard } from "../../../components/library/RulesBoard";
 import { ReaderCard } from "../../../components/library/ReaderCard";
 import { MarginNote } from "../../../components/library/MarginNote";
 import { ParticleName } from "../../../components/effects/ParticleName";
+import { SouvenirsSection } from "../components/SouvenirsSection";
 import { Icon } from "../../../components/ui/Icon";
 
 export function LibraryPage() {
@@ -286,6 +287,11 @@ export function LibraryPage() {
             )}
           </div>
         </section>
+
+        {/* ====================================================
+            5.7 — Salle des souvenirs (galerie en spirale)
+            ==================================================== */}
+        <SouvenirsSection />
 
         {/* ====================================================
             Traversées — la lettre et le dossier du campus
