@@ -503,3 +503,12 @@ tsc 0 erreur ; **122/122 tests (15 fichiers)** — critères des fonds mis à jo
 | Enquête sans texte | **Résolu** | Masquage par défaut fatal si l'observer n'acquitte pas → armé seulement sur preuve de vie ; PWA `autoUpdate` |
 | Dock va-et-vient chaotique | **Résolu** | Ancrage bas du rail perdu dans l'adaptation → `align-items: flex-end` + amplitude plafonnée |
 | Baseline | **142/142** | tsc 0 erreur, build OK, routes 200 |
+
+## Lot 3 oct. 2026 (mission soir) — fond visible, enquête prouvée, photo d'ouverture
+
+| Livraine | Statut | Détail |
+|---|---|---|
+| GradientWaves identifiable | **Renforcé** | Palette rehaussée (contraste 4,35:1 calculé) + section blanche translucide + hiérarchie couches documentée |
+| Texte de l'enquête | **Prouvé** (jsdom) | 15+ blocs data-reveal visibles sans observer ; tous les textes narratifs dans le DOM |
+| Photo d'ouverture Souvenirs | **Structure livrée** | RefineFrame + séquence orchestrée ; **fichier photo non encore versé** (repli galerie actif) |
+| Baseline | **162/162** (18 fichiers) | tsc 0 erreur, build OK, 7 routes 200 |

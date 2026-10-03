@@ -77,22 +77,37 @@ describe("GradientWaves (background bibliothèque) — gardes", () => {
     expect(comp).toContain("if (reducedMotion) return;");
   });
 
-  it("intégré à la bibliothèque ET au livre des chapitres, vagues bleues", () => {
+  it("intégré à la bibliothèque ET au livre, vagues IDENTIFIABLES", () => {
+    // Bascule explicite (mission du 3 oct. 2026) : l'ancienne palette
+    // (#F3F8FF/#3E7BD9/#DBEAFE, opacity .85) était indiscernable du
+    // dégradé du body — Stane ne pouvait pas confirmer visuellement
+    // la présence du composant. Réglages renforcés, gardés ici.
     for (const page of [
       "src/experiences/birthday/pages/LibraryPage.tsx",
       "src/experiences/birthday/pages/ChapterPage.tsx",
     ]) {
       const src = read(page);
       expect(src).toContain("<GradientWaves");
-      expect(src).toContain('horizonColor="#F3F8FF"');
-      expect(src).toContain('waveColor="#3E7BD9"');
-      expect(src).toContain('crestColor="#DBEAFE"');
+      expect(src).toContain('horizonColor="#E9F3FF"');
+      expect(src).toContain('waveColor="#2F6FD0"');
+      expect(src).toContain('crestColor="#BFD8F7"');
+      expect(src).toContain("opacity={1}");
+      expect(src).toContain("brightness={1.04}");
       expect(src).toContain('detail="low"');
       expect(src).toContain("targetFps={30}");
       expect(src).toContain("resolutionScale={0.5}");
       expect(src).not.toContain("#5227FF");
       expect(src).not.toContain("#FF9FFC");
     }
+  });
+
+  it("la section blanche de la bibliothèque laisse respirer la mer", () => {
+    const css = read("src/styles/globals.css");
+    const block = css.match(/\.library-institution \{[^}]+\}/);
+    expect(block).not.toBeNull();
+    expect(block![0]).toContain("rgba(247, 250, 255, 0.82)");
+    // Plus jamais le blanc opaque qui recouvrait le composant.
+    expect(block![0]).not.toContain("var(--color-surface)");
   });
 });
 
