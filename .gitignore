@@ -1,0 +1,24 @@
+# Dépendances
+node_modules/
+
+# Build / artefacts
+dist/
+dist-ssr/
+*.local
+
+# Environnement et secrets — jamais commités (doc 00 §10.4)
+.env
+.env.*
+!.env.example
+
+# Caches et logs
+.vite/
+*.log
+npm-debug.log*
+
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+
+# Fichiers de travail temporaires (aperçus d'icônes, essais d'export…)
+.tmp/
