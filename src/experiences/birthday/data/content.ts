@@ -215,11 +215,11 @@ export const birthdayChapters: BirthdayChapter[] = [
     paragraphs: [
       "Impossible de parler de toi sans parler du bleu. Le bleu ciel, précisément. Une couleur qui te suit partout — jusqu'aux endroits où, entre nous, elle n'avait pas forcément besoin d'être. Tu sais de quoi je parle.",
       "Un jour, tu as réclamé une Lamborghini bleue pour ton anniversaire. Le budget de cette année se situait, disons, légèrement en dessous du prix d'une Lamborghini. Alors ça a été une bibliothèque bleue à la place. On espère que l'effort de substitution sera apprécié à sa juste valeur.",
-      "Entre le bleu, les romans et les séries policières, il n'en fallait pas plus pour imaginer cette expérience : une bibliothèque qui en cache peut-être une, d'enquête…",
+      "Entre le bleu, les romans qui font rêver et les enquêtes qu'on collectionne — jusque dans un certain palais d'apothicaires, où l'observation reste la meilleure arme — il n'en fallait pas plus pour imaginer cette expérience : une bibliothèque qui en cache peut-être une, d'enquête…",
     ],
     aside: "Le bleu n'est pas qu'une couleur. C'est un état d'esprit.",
     callNumber: "PRC-18/BL·05",
-    marginNote: "Répertorié dans toutes les nuances du bleu, y compris là où personne ne l'attendait. Dossier Lamborghini : toujours en attente de financement.",
+    marginNote: "Répertorié dans toutes les nuances du bleu, y compris là où personne ne l'attendait. Dossier Lamborghini : toujours en attente de financement. Le rayon frissons reste ouvert tard — la bibliothécaire nie toute responsabilité.",
     gradient: { top: "#8EC5FF", bottom: "#24559F" },
   },
 ];
@@ -271,6 +271,7 @@ export const caseContent = {
     paragraphs: [
       "Une étrange affaire a été retrouvée entre les rayonnages de la Blue Library. Tout y tourne autour d'un seul et même chiffre : 18.",
       "À toi d'en découvrir la vérité, indice après indice.",
+      "L'ambition était la mise en abyme du suspense — pas le cinéma d'horreur : aucun cri obligatoire ne t'attend derrière le prochain clic.",
     ],
     mention: "La bibliothécaire jure n'avoir rien à voir avec ce dossier. Personne ne l'a crue.",
     note: "Aucune obligation : la lettre et la bibliothèque te restent accessibles à tout moment.",

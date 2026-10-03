@@ -76,7 +76,7 @@ Mis à jour après chaque implémentation. Date de référence : 2 octobre 2026.
 | 5.1 | Système fictionnel de la bibliothèque | P0 | Vague 1 validée | ✅ Fait (2 oct. 2026) | Cotes, règlement, carte de lectrice, tampons, notes de bibliothécaire |
 | 5.2 | Livre à pages tournantes (3D CSS + anime.js) | P0 | Vague 1 validée | ✅ Fait (2 oct. 2026) | `ReadingBook` ; reduced-motion = navigation instantanée |
 | 5.3 | Entrée immersive orchestrée | P0 | — | ✅ Fait (2 oct. 2026) | Enveloppe cachetée → sceau brisé → invitation ; skippable, mémorisée, reduced-motion = immédiate |
-| 5.4 | Volume sous scellé (dévoilé le 4 oct.) | P1 | Contenu Stane | ⬜ Proposée | Dépendance : texte de Stane |
+| 5.4 | Volume sous scellé (dévoilé le 4 oct.) | P1 | Contenu Stane | ✅ Fait (3 oct. 2026 — contenu : ⚠️ brouillon issue du brief Stane, à relire) | Verrou de DATE pur (jamais sur la lettre, jamais d'énigme) ; page d'attente avec sceau avant le jour J, grand livre après ; entrée rayonnage « Volume S » |
 | 5.5 | The 18th Case enrichi (vrai dossier) | P1 | — | ✅ Fait (2 oct. 2026) | 3 pièces (Lambo, bleu, campus), mentions de la bibliothécaire, verdict « RÉSOLUE » |
 | 5.6 | Micro-interactions de présence | P1 | — | ✅ Fait (2 oct. 2026) | Ciel ambiant (4 moments), mot du jour, compte à rebours réel J-N, transitions cartes |
 | 5.7 | Intégration contenus personnels de Stane | P1 | Contenu Stane | ⬜ Proposée | Dépendance : matière de Stane |
@@ -163,3 +163,44 @@ Mis à jour après chaque implémentation. Date de référence : 2 octobre 2026.
 
 - Panneau permettant à Stane d'éditer les contenus « À découvrir » depuis l'interface (nécessite décision + mécanisme, doc 01 §26.5).
 - Rappels de notification (P2 — exige infrastructure fiable, doc 03 §14).
+
+---
+
+## REFONTE VISUELLE ET NARRATIVE (mission du 3 oct. 2026) — lot livré
+
+### Audit préalable (constats vérifiables)
+| Point | Constat |
+|---|---|
+| Ce qui fonctionne / à préserver | Parcours complet 5.1–5.6 + features quotidiennes ; lettre gelée par test ; ReadingBook, composants 5.1, `.case-*`, `.presence-*` ; accessibilité/reduced-motion ; PWA |
+| Points blancs | Pas de révélation personnelle au jour J (5.4) ; univers visuels voisins (même métaphore partout) ; pages→pages parfois en rupture ; goûts de Princia du brief (romance, Apothicaire, horreur, riz/nuits blanches) non représentés |
+| React Bits Pro | `REACTBITS_LICENSE_KEY` **absente de l'environnement** et aucun registre shadcn n'est configuré → l'installation aurait échoué (401 registre privé) → **volontairement NON lancée** ; solutions de repli natives livrées à la place et documentées ici. Aucune clé inventée, saisie ou stockée. |
+| `souvenirs/` | Dossier présent sur GitHub (15 photos) — repéré, **réservé strictement à la phase 5.7**, non intégré ni modifié |
+
+### Unités livrées
+| ID | Nom | Statut |
+|---|---|---|
+| R-U1 / 5.4 | Volume sous scellé, contenu du brief (riz, nuits blanches, regard sur la « méchanceté » — signé comme le regard de Stane, jamais un diagnostic) | ✅ (⚠️ brouillon Stane) |
+| R-U2 | The 18th Case : scène cinématographique nuit-bleu + **Falling Rays natif** (décor total) | ✅ |
+| R-U3 | Blue Library en landing narrative : **Particle Text natif « Princia »** (canvas 2D), héro-signée, institution composée, volumes feuilletés EN PLACE, traversées lettre/dossier | ✅ |
+| R-U4 | Écrin de la lettre (postmark, cachet, capitaiçon, sceau « S ») — **texte inchangé** | ✅ |
+| R-U5 | Personnalisation sélective (ch. 5 : romance/Apothicaire/enquêtes en clin d'œil ; dossier : suspense revendiqué sans jumpscare) | ✅ |
+| R-U6 | Boucle documentée + rapport A–G | ✅ (ce document + message de fin) |
+
+### Repli React Bits — procédure future (quand la licence sera fournie)
+- Activer `REACTBITS_LICENSE_KEY` dans l'**environnement** (jamais dans le code, fichiers ou commits).
+- Puis : `npx shadcn@latest add @reactbits-starter/particle-text-tw`, `@reactbits-starter/falling-rays-tw` (docs : pro.reactbits.dev/docs/components/particle-text, /falling-rays).
+- `ParticleName` et `FallingRays` natifs ont la même interface mentale ; le remplacement sera localisé (2 fichiers) sans toucher aux pages ni à l'accessibilité.
+
+### Matrice de non-régression exécutée (unité R, 3 oct. 2026)
+| Domaine | Résultat | Méthode |
+|---|---|---|
+| Démarrage / build / navigation | ✅ | tsc 0 erreur ; build OK ; preview : `/birthday`, `/birthday/bibliotheque`, `/birthday/lettre`, `/birthday/dossier`, `/chapitre/volume-scelle`, `/app` → **200** |
+| Contenu | ✅ | test garde-fou de la lettre **toujours vert** (texte inchangé) ; 35/35 tests (6 fichiers) ; cotes uniques |
+| Interactions / données | ✅ | feuillet inline (état lisible URL non requis) ; clés existantes inchangées ; rien de neuf côté persistance |
+| Accessibilité | ✅ | h1 sr-only réel (canvas `aria-hidden`) ; focus déplacé au feuillet ; boutons libellés ; hover jamais seul moyen de révéler |
+| Motion non bloquant | ✅ | reduced-motion : prénom statique / rayons fixes ; rAF annulé et listeners retirés au démontage ; filtres CSS primitives |
+| Textes / honnêteté | ✅ | aucune invention ; faits issus du brief Stane uniquement ; repli annoncé, installation non maquillée |
+
+- **Baseline après lot :** 6 parcours principaux 200 ; 35/35 tests ; build OK ; aucun secret en code ; `souvenirs/` intact.
+- **Prochaines étapes :** 5.7 suivie par Stane (photos `souvenirs/` + validation des textes brouillons : lettre déjà validée, volume sous scellé à relire), puis déploiement 4.6 à sa convenance.
+- **Non vérifiable ici, annoncé honnêtement :** rendu exact du canvas de particules selon police/webfont sur appareil réel (à confirmer visuellement le jour J), persistence locale hors sandbox.

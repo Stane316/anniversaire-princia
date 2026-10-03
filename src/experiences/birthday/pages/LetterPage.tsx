@@ -9,6 +9,7 @@
 import { Link } from "react-router-dom";
 import { BirthdayLayout } from "../BirthdayLayout";
 import { letterContent } from "../data/content";
+import { ExLibrisStamp } from "../../../components/library/ExLibrisStamp";
 import { Icon } from "../../../components/ui/Icon";
 import { visitMemory } from "../../../data/repositories";
 
@@ -28,7 +29,14 @@ export function LetterPage() {
         </header>
 
         <div className="letter-sheet appear">
-          <p className="h4" style={{ fontFamily: "var(--font-serif)", marginBottom: "var(--space-6)" }}>
+          {/* Écrin — ornements purs, le texte reste exactement celui validé. */}
+          <span className="letter-sheet__postmark" aria-hidden="true">
+            04 · 10 · 2026 — Grande Salle Bleue
+          </span>
+          <span className="letter-sheet__stamp" aria-hidden="true">
+            <ExLibrisStamp text="PRC-18/L∞" subline="hors collection" size={86} rotate={9} />
+          </span>
+          <p className="letter-sheet__salutation h4">
             {letterContent.salutation}
           </p>
           <div className="prose">
@@ -50,7 +58,12 @@ export function LetterPage() {
             {letterContent.signatureLine}
           </blockquote>
           <p className="h4">{letterContent.closing}</p>
-          <p className="letter-sign">{letterContent.signature}</p>
+          <p className="letter-sign wrap-seal">
+            {letterContent.signature}
+            <span className="letter-sheet__seal" aria-hidden="true">
+              S
+            </span>
+          </p>
         </div>
 
         <nav className="cluster" style={{ justifyContent: "center", marginTop: "var(--space-10)" }}>
