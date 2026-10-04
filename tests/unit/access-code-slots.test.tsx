@@ -9,7 +9,7 @@ import {
   verifyAccessCode,
 } from "../../src/features/access/accessSession";
 
-describe("Code d'accès à 6 chiffres (041026) et composant CodeSlots", () => {
+describe("Code d'accès à 6 chiffres (041026) et composant React Bits CodeSlots", () => {
   beforeEach(() => {
     cleanup();
     window.localStorage.clear();
@@ -43,11 +43,13 @@ describe("Code d'accès à 6 chiffres (041026) et composant CodeSlots", () => {
     expect(screen.queryByTestId("protected-letter")).toBeNull();
     expect(screen.getByText("Le sceau d'entrée")).toBeTruthy();
 
-    const inputs = screen.getAllByRole("textbox");
-    expect(inputs).toHaveLength(6);
+    const input = screen.getByRole("textbox", {
+      name: /Code d'accès à 6 chiffres/i,
+    });
+    expect(input).toBeTruthy();
 
-    // Saisie d'un code erroné par collage
-    fireEvent.paste(inputs[0]!, {
+    // Saisie d'un code erroné par collage dans CodeSlots
+    fireEvent.paste(input, {
       clipboardData: { getData: () => "111111" },
     });
 
@@ -64,11 +66,11 @@ describe("Code d'accès à 6 chiffres (041026) et composant CodeSlots", () => {
     fireEvent.click(retryBtn);
     expect(screen.queryByRole("alert")).toBeNull();
 
-    // Saisie du bon code 041026 au clavier case par case
+    // Saisie du bon code 041026 au clavier chiffre par chiffre dans CodeSlots
     const digits = ["0", "4", "1", "0", "2", "6"];
-    digits.forEach((d, idx) => {
-      fireEvent.keyDown(inputs[idx]!, { key: d });
-    });
+    for (const d of digits) {
+      fireEvent.keyDown(input, { key: d });
+    }
 
     // Clique sur « Entrer maintenant » (ou fin de transition) pour ouvrir la lettre
     const enterBtn = screen.queryByRole("button", {
@@ -89,8 +91,10 @@ describe("Code d'accès à 6 chiffres (041026) et composant CodeSlots", () => {
       </AccessCodeGate>,
     );
 
-    const inputs = screen.getAllByRole("textbox");
-    fireEvent.paste(inputs[0]!, {
+    const input = screen.getByRole("textbox", {
+      name: /Code d'accès à 6 chiffres/i,
+    });
+    fireEvent.paste(input, {
       clipboardData: { getData: () => "04-10-26" },
     });
 
