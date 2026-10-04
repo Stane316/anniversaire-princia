@@ -83,7 +83,7 @@ Elles ne doivent pas conduire à supposer qu'elle apprécie tous les contenus d'
 
 ## 2.2. Parcours universitaire
 
-Princia étudie le génie environnemental à l'École polytechnique d'Abomey-Calavi (EPAK), sur le campus universitaire d'Abomey-Calavi.
+Princia étudie le génie environnemental à l'École polytechnique d'Abomey-Calavi (EPAC), sur le campus universitaire d'Abomey-Calavi.
 
 Elle accorde de l'importance à ses études et souhaite progresser. Le carnet universitaire doit l'aider à transformer ses intentions en actions réalistes, sans lui imposer un système de performance ou un classement.
 

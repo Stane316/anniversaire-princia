@@ -15,7 +15,7 @@
  *   - déménagement de Princia après la troisième, contact interrompu ;
  *   - retrouvailles quand Stane était en Terminale ;
  *   - même campus universitaire (Abomey-Calavi), établissements
- *     différents — Princia : génie environnemental à l'EPAK ;
+ *     différents — Princia : génie environnemental à l'EPAC ;
  *   - bleu (ciel) comme couleur identitaire partagée ;
  *   - blague : Lamborghini bleue réclamée en cadeau d'anniversaire ;
  *   - plaisanterie documentée sur le bleu jusque dans les toilettes ;
@@ -126,7 +126,7 @@ export const readerCard = {
     { label: "Statut", value: "Lectrice émérite — romans et enquêtes" },
     {
       label: "Rayons fréquentés",
-      value: "Lecture · séries policières · informatique · génie environnemental (EPAK)",
+      value: "Lecture · séries policières · informatique · génie environnemental (EPAC)",
     },
     { label: "Signe distinctif", value: "Allégeance officielle et documentée au bleu ciel" },
     { label: "Validité", value: "À vie — renouvelable à chaque chapitre" },
@@ -199,7 +199,7 @@ export const birthdayChapters: BirthdayChapter[] = [
     title: "Les retrouvailles",
     paragraphs: [
       "Les retrouvailles sont arrivées quand j'étais en Terminale. Comme si de rien n'était, comme si le marque-page avait tenu bon pendant tout ce temps.",
-      "Et puis la surprise, plus tard : réaliser qu'on arpente le même campus d'Abomey-Calavi. Toi au génie environnemental, à l'EPAK ; moi pas loin. Deux établissements différents, un même chemin qui se recroise.",
+      "Et puis la surprise, plus tard : réaliser qu'on arpente le même campus d'Abomey-Calavi. Toi au génie environnemental, à l'EPAC ; moi pas loin. Deux établissements différents, un même chemin qui se recroise.",
       "Cette fois, c'est reparti pour de bon.",
     ],
     aside: "La preuve que certaines histoires refusent de s'arrêter.",
@@ -391,7 +391,7 @@ export const caseSteps = [
     reveal: {
       stamp: "Élément vérifié",
       title: "Abomey-Calavi",
-      body: "Localisation confirmée : même campus, deux établissements — le génie environnemental à l'EPAK d'un côté, pas loin de l'autre. La géographie de l'affaire tient en une phrase : les chemins finissent toujours par se recroiser.",
+      body: "Localisation confirmée : même campus, deux établissements — le génie environnemental à l'EPAC d'un côté, pas loin de l'autre. La géographie de l'affaire tient en une phrase : les chemins finissent toujours par se recroiser.",
       mention: "Classée définitivement. La distance officielle entre les deux établissements : « raisonnable ».",
     },
   },
@@ -475,7 +475,7 @@ export const caseDossier = {
         { label: "Âge au moment des faits", value: "18 ans, tout juste" },
         {
           label: "Statut",
-          value: "Lectrice émérite — étudiante en génie environnemental (EPAK)",
+          value: "Lectrice émérite — étudiante en génie environnemental (EPAC)",
         },
         { label: "Signes particuliers", value: "Franche. Directe. Simple. Douce." },
         {
