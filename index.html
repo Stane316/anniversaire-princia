@@ -3,30 +3,74 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>PRINCIA — Chapter 18</title>
     <meta
       name="description"
-      content="PRINCIA — Chapter 18. Une expérience anniversaire personnelle, puis un espace rien qu'à elle."
+      content="PRINCIA — Chapter 18. Une expérience personnelle créée pour célébrer les 18 ans de Princia, prolongée par son espace quotidien."
     />
+    <meta name="application-name" content="PRINCIA — Chapter 18" />
+    <meta name="author" content="Stane" />
     <meta name="theme-color" content="#3978D4" />
-    <!-- Pas d'indexation : page destinée à une diffusion discrète (doc 00 §7.2).
-         Attention : cela ne constitue pas à lui seul une protection d'accès. -->
-    <meta name="robots" content="noindex, nofollow" />
-    <!-- Partage privé soigné (WhatsApp, Messages…) sans exposer de photo
-         personnelle : seule l'icône neutre de l'app est référencée. -->
+    <meta name="color-scheme" content="light" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Chapter 18" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <!-- Confidentialité & SEO (doc 00 §7.2, doc 03 §16) :
+         - noindex, nofollow, noarchive empêche l'indexation par les moteurs
+           de recherche tout en laissant les robots d'aperçu de messagerie
+           (WhatsApp, iMessage, Telegram, Discord, X…) lire les balises OG ;
+         - attention : ceci ne constitue pas un contrôle d'accès serveur. -->
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="googlebot" content="noindex, nofollow, noarchive" />
+
+    <!-- URL PROVISOIRE À REMPLACER PAR L'URL NETLIFY DÉFINITIVE
+         Dès que le sous-domaine Netlify final est connu, remplacer
+         https://princia-chapter18.netlify.app par l'URL réelle. -->
+    <link rel="canonical" href="https://princia-chapter18.netlify.app/" />
+
+    <!-- Open Graph — Prévisualisation de partage sobre (aucune photo
+         personnelle exposée : carte dédiée 1200×630 au livre bleu « P »). -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PRINCIA — Chapter 18" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:url" content="https://princia-chapter18.netlify.app/" />
     <meta property="og:title" content="PRINCIA — Chapter 18" />
     <meta
       property="og:description"
-      content="Une expérience anniversaire personnelle, puis un espace rien qu'à elle."
+      content="Une expérience personnelle créée pour célébrer les 18 ans de Princia, prolongée par son espace quotidien."
     />
-    <meta property="og:image" content="/icons/icon-512.png" />
-    <meta property="og:locale" content="fr_FR" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="/og-share.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="PRINCIA — Chapter 18 : emblème du livre bleu marqué de la lettre P"
+    />
+
+    <!-- Twitter / X & messageries compatibles -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PRINCIA — Chapter 18" />
+    <meta
+      name="twitter:description"
+      content="Une expérience personnelle créée pour célébrer les 18 ans de Princia, prolongée par son espace quotidien."
+    />
+    <meta name="twitter:image" content="/og-share.png" />
+    <meta
+      name="twitter:image:alt"
+      content="PRINCIA — Chapter 18 : emblème du livre bleu marqué de la lettre P"
+    />
+
+    <!-- Icônes de l'application (onglet, Android, iOS) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+
     <!-- Photo d'ouverture des Souvenirs préchargée pour éviter l'attente. -->
     <link rel="preload" as="image" href="/souvenirs/souvenirs_behanzin.jpeg" />
-    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-    <title>PRINCIA — Chapter 18</title>
   </head>
   <body>
     <div id="root"></div>

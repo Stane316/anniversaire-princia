@@ -1,14 +1,15 @@
 /**
  * Invitation non intrusive après une mise à jour du service worker
  * (doc 03 §11.7) : l'application ne se remplace pas silencieusement
- * pendant une opération ; l'action est expliquée simplement.
- * Aucune promesse : seules des capacités réellement vérifiées sont
- * annoncées (doc 01 §16.3).
+ * pendant une opération ; l'action est expliquée simplement et protégée
+ * contre toute boucle de rechargement.
  */
+import { useRef } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
 import { Icon } from "../components/ui/Icon";
 
 export function PwaUpdatePrompt() {
+  const updatingRef = useRef(false);
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
@@ -29,6 +30,9 @@ export function PwaUpdatePrompt() {
             className="btn btn--text"
             style={{ color: "#fff", minHeight: 36 }}
             onClick={() => {
+              if (updatingRef.current) return;
+              updatingRef.current = true;
+              setNeedRefresh(false);
               void updateServiceWorker(true);
             }}
           >

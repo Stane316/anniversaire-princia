@@ -120,6 +120,7 @@ Mis à jour après chaque implémentation. Date de référence : 2 octobre 2026.
 | 5.5 | The 18th Case enrichi (vrai dossier) | P1 | — | ✅ Fait (2 oct. 2026) | 3 pièces (Lambo, bleu, campus), mentions de la bibliothécaire, verdict « RÉSOLUE » |
 | 5.6 | Micro-interactions de présence | P1 | — | ✅ Fait (2 oct. 2026) | Ciel ambiant (4 moments), mot du jour, compte à rebours réel J-N, transitions cartes |
 | 5.7 | Intégration contenus personnels de Stane | P1 | Contenu Stane | ✅ Partielle (3 oct. 2026) | 21 photos `souvenirs/` versées (optimisées, alt exacts) dans la Salle des souvenirs en spirale ; autres contenus personnels éventuels : toujours de Stane |
+| 5.8 | Finalisation PWA, hors ligne, stockage local, icône Livre Bleu + P, Open Graph, SEO & `netlify.toml` | P0 | 3.1–3.3, 4.x | ✅ Fait (4 oct. 2026) | Manifeste complet (`autoUpdate`), pré-cache dédupliqué (52 entrées, 2,93 Mo), `PwaInstallCard` (`beforeinstallprompt` + aide iOS/navigateur + détection standalone), repli `localStorage` si IndexedDB indisponible, icônes livre bleu ouvert + « P » (`favicon.svg`, `apple-touch-icon.png`, `192`, `512`, `maskable-512`), `og-share.png` (1200×630), `robots.txt` + `noindex, nofollow, noarchive`, et `netlify.toml` (build, SPA fallback, headers de cache et sécurité) |
 
 ## BASELINE DE STABILITÉ — après 5.3 (2 oct. 2026, §04.2)
 
