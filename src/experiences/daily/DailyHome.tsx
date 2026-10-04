@@ -20,6 +20,7 @@ import {
   presenceGreeting,
   wordOfTheDay,
 } from "./data/presence";
+import { PwaInstallCard } from "../../app/PwaInstallCard";
 
 interface Summary {
   books: number;
@@ -200,6 +201,8 @@ export function DailyHome() {
           </Link>
         </div>
       </aside>
+
+      <PwaInstallCard />
     </section>
   );
 }

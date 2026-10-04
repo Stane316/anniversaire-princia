@@ -1,0 +1,16 @@
+# PRINCIA — Chapter 18
+# Politique robots.txt :
+# - Le site est une expérience personnelle non destinée à l'indexation
+#   publique dans les moteurs de recherche.
+# - La directive d'exclusion d'indexation est portée par
+#   <meta name="robots" content="noindex, nofollow, noarchive"> et
+#   l'en-tête HTTP X-Robots-Tag.
+# - L'accès HTTP n'est pas bloqué ici afin que les robots de
+#   prévisualisation de liens (WhatsApp, iMessage, Telegram, Discord,
+#   Twitterbot, facebookexternalhit) puissent lire les métadonnées
+#   Open Graph et charger /og-share.png, et que les moteurs puissent
+#   lire la directive noindex.
+# - Rappel : robots.txt n'est pas un mécanisme de contrôle d'accès.
+
+User-agent: *
+Allow: /
