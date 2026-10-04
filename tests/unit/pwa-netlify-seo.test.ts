@@ -60,11 +60,25 @@ describe("PWA — Manifest, Service Worker et stratégie de cache", () => {
     ).toBe("ios-manual");
     expect(
       detectInstallPlatform(
+        "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36",
+        false,
+        false,
+      ),
+    ).toBe("android-manual");
+    expect(
+      detectInstallPlatform(
         "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0",
         false,
         false,
       ),
     ).toBe("browser-manual");
+  });
+
+  it("utilise des chemins d'icônes PNG absolus (/icons/...) compatibles WebAPK Android", () => {
+    expect(viteConfig).toContain('src: "/icons/apple-touch-icon.png"');
+    expect(viteConfig).toContain('src: "/icons/icon-192.png"');
+    expect(viteConfig).toContain('src: "/icons/icon-512.png"');
+    expect(viteConfig).toContain('src: "/icons/icon-maskable-512.png"');
   });
 });
 

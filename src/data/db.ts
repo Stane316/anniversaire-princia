@@ -1,28 +1,26 @@
 /**
- * Accès IndexedDB — couche de données (doc 03 §9.4, §9.7).
- * Les composants React n'accèdent jamais directement à IndexedDB :
- * ils passent par les dépôts de `repositories.ts`.
+ * Couche IndexedDB minimale, typée et sans dépendance externe (doc 03 §8).
  *
- * Garanties :
- * - schéma versionné explicite (`DB_NAME`, `DB_VERSION`) avec migration
- *   non destructive (`applySchemaUpgrade`) qui ne supprime jamais les
- *   objectStores existants lors d'une montée de version ;
- * - demande discrète de persistance durable (`navigator.storage.persist`)
- *   lorsque le navigateur le supporte ;
- * - repli automatique contrôlé sur `localStorage` (`princia.chapter18.fallback.*`)
- *   si IndexedDB est absent ou désactivé par le navigateur ;
- * - si aucun stockage n'est accessible ou si l'écriture échoue (quota,
- *   stockage verrouillé), levée d'une `StorageError` explicite pour que
- *   l'interface informe l'utilisatrice sans fausse confirmation.
+ * Responsabilités :
+ * - ouvrir la base locale `princia-chapter-18` ;
+ * - créer et migrer proprement les stores (`books`, `tasks`, `wins`, `proposals`)
+ *   sans jamais détruire les données existantes lors d'une montée de version ;
+ * - demander au navigateur une persistance durable (`navigator.storage.persist`)
+ *   lorsqu'elle est disponible afin de limiter le risque d'éviction automatique ;
+ * - fournir un repli automatique en `localStorage` si IndexedDB est indisponible
+ *   ou bloqué (ex. certains contextes de navigation privée ou WebView restreints) ;
+ * - détecter explicitement les dépassements de quota (`QuotaExceededError`) ;
+ * - exposer des opérations CRUD génériques par store et une classe `StorageError`.
  */
 
 export const DB_NAME = "princia-chapter-18";
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
 
 export const STORES = {
   books: "books",
   tasks: "tasks",
   wins: "wins",
+  proposals: "proposals",
 } as const;
 
 export type StoreName = (typeof STORES)[keyof typeof STORES];
@@ -30,47 +28,57 @@ export type StoreName = (typeof STORES)[keyof typeof STORES];
 const FALLBACK_PREFIX = "princia.chapter18.fallback.";
 
 export class StorageError extends Error {
-  constructor(cause?: unknown) {
-    super(
-      "Les données n'ont pas pu être enregistrées sur cet appareil. Réessaie dans un instant.",
-    );
+  readonly code: "QUOTA_EXCEEDED" | "INVALID_KEY" | "UNAVAILABLE" | "IO_ERROR";
+
+  constructor(
+    message: string,
+    cause?: unknown,
+    code: "QUOTA_EXCEEDED" | "INVALID_KEY" | "UNAVAILABLE" | "IO_ERROR" = "IO_ERROR",
+  ) {
+    super(message);
     this.name = "StorageError";
-    if (cause instanceof Error) this.cause = cause;
+    this.cause = cause;
+    this.code = code;
   }
 }
 
-/**
- * Applique les migrations de schéma IndexedDB de manière additive et
- * non destructive : une mise à jour de version ne vide jamais les
- * données déjà enregistrées par Princia.
- */
-export function applySchemaUpgrade(
-  db: IDBDatabase,
-  oldVersion: number,
-  _newVersion: number | null = DB_VERSION,
-): void {
-  if (oldVersion < 1) {
-    for (const name of Object.values(STORES)) {
-      if (!db.objectStoreNames.contains(name)) {
-        db.createObjectStore(name, { keyPath: "id" });
-      }
-    }
-  } else {
-    // Sécurité supplémentaire : même si oldVersion >= 1, s'assurer que
-    // les trois magasins existent sans toucher à leur contenu.
-    for (const name of Object.values(STORES)) {
-      if (!db.objectStoreNames.contains(name)) {
-        db.createObjectStore(name, { keyPath: "id" });
-      }
-    }
-  }
+export function isQuotaExceededError(err: unknown): boolean {
+  if (!err || typeof err !== "object") return false;
+  const name = (err as { name?: string }).name ?? "";
+  const code = (err as { code?: number }).code;
+  return (
+    name === "QuotaExceededError" ||
+    name === "NS_ERROR_DOM_QUOTA_REACHED" ||
+    code === 22 ||
+    code === 1014
+  );
 }
 
 let dbPromise: Promise<IDBDatabase> | null = null;
 let persistenceRequested = false;
 
-function requestDurableStorage(): void {
-  if (persistenceRequested) return;
+/**
+ * Applique les migrations de schéma IndexedDB de manière non destructive :
+ * seuls les objectStores absents sont créés, de sorte que les données déjà
+ * enregistrées par Princia sont intégralement préservées lors d'une mise à jour.
+ */
+export function applySchemaUpgrade(
+  db: IDBDatabase,
+  _oldVersion: number,
+  _newVersion: number | null,
+): void {
+  for (const storeName of Object.values(STORES)) {
+    if (!db.objectStoreNames.contains(storeName)) {
+      db.createObjectStore(storeName, { keyPath: "id" });
+    }
+  }
+}
+
+/**
+ * Demande de persistance durable au navigateur (non bloquante, silencieuse).
+ */
+export async function requestDurableStorage(): Promise<boolean> {
+  if (persistenceRequested) return false;
   persistenceRequested = true;
   try {
     if (
@@ -78,33 +86,23 @@ function requestDurableStorage(): void {
       navigator.storage &&
       typeof navigator.storage.persist === "function"
     ) {
-      void navigator.storage.persist().catch(() => {
-        /* non bloquant */
-      });
+      const alreadyPersisted =
+        typeof navigator.storage.persisted === "function"
+          ? await navigator.storage.persisted()
+          : false;
+      if (alreadyPersisted) return true;
+      return await navigator.storage.persist();
     }
   } catch {
-    /* non bloquant */
+    /* certains navigateurs refusent ou restreignent l'API : jamais bloquant */
   }
+  return false;
 }
 
-function getStorageFallback(): Storage | null {
+function readFallbackStore<T extends { id: string }>(store: StoreName): T[] {
   try {
-    if (typeof window !== "undefined" && window.localStorage) {
-      return window.localStorage;
-    }
-  } catch {
-    return null;
-  }
-  return null;
-}
-
-function readFallbackList<T extends { id: string }>(store: StoreName): T[] {
-  const storage = getStorageFallback();
-  if (!storage) {
-    throw new StorageError();
-  }
-  try {
-    const raw = storage.getItem(`${FALLBACK_PREFIX}${store}`);
+    if (typeof window === "undefined" || !window.localStorage) return [];
+    const raw = window.localStorage.getItem(`${FALLBACK_PREFIX}${store}`);
     if (!raw) return [];
     const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
@@ -114,45 +112,90 @@ function readFallbackList<T extends { id: string }>(store: StoreName): T[] {
         item !== null &&
         typeof (item as { id?: unknown }).id === "string",
     );
-  } catch (err) {
-    throw new StorageError(err);
+  } catch {
+    return [];
   }
 }
 
-function writeFallbackList<T extends { id: string }>(
+function writeFallbackStore<T extends { id: string }>(
   store: StoreName,
   items: T[],
 ): void {
-  const storage = getStorageFallback();
-  if (!storage) {
-    throw new StorageError();
-  }
   try {
-    storage.setItem(`${FALLBACK_PREFIX}${store}`, JSON.stringify(items));
+    if (typeof window === "undefined" || !window.localStorage) {
+      throw new StorageError(
+        "Le stockage local de ce navigateur est indisponible.",
+        undefined,
+        "UNAVAILABLE",
+      );
+    }
+    window.localStorage.setItem(
+      `${FALLBACK_PREFIX}${store}`,
+      JSON.stringify(items),
+    );
   } catch (err) {
-    throw new StorageError(err);
+    if (err instanceof StorageError) throw err;
+    if (isQuotaExceededError(err)) {
+      throw new StorageError(
+        "L'espace de stockage local de ton navigateur est plein. Supprime un fichier lourd ou libère de l'espace sur ton appareil.",
+        err,
+        "QUOTA_EXCEEDED",
+      );
+    }
+    throw new StorageError(
+      "Impossible d'enregistrer dans le stockage local de cet appareil.",
+      err,
+      "IO_ERROR",
+    );
   }
 }
 
-function openDb(): Promise<IDBDatabase> {
+function isIndexedDbSupported(): boolean {
+  try {
+    return typeof indexedDB !== "undefined" && indexedDB !== null;
+  } catch {
+    return false;
+  }
+}
+
+function openDatabase(): Promise<IDBDatabase> {
   if (dbPromise) return dbPromise;
-  requestDurableStorage();
+
+  if (!isIndexedDbSupported()) {
+    return Promise.reject(
+      new StorageError(
+        "Le stockage local (IndexedDB) n'est pas disponible dans ce navigateur.",
+        undefined,
+        "UNAVAILABLE",
+      ),
+    );
+  }
+
+  void requestDurableStorage();
+
   dbPromise = new Promise((resolve, reject) => {
-    if (typeof indexedDB === "undefined" || indexedDB === null) {
-      reject(new StorageError());
-      return;
-    }
     let request: IDBOpenDBRequest;
     try {
       request = indexedDB.open(DB_NAME, DB_VERSION);
     } catch (err) {
-      reject(new StorageError(err));
+      dbPromise = null;
+      reject(
+        new StorageError(
+          "Impossible d'initialiser la base locale.",
+          err,
+          "UNAVAILABLE",
+        ),
+      );
       return;
     }
+
     request.onupgradeneeded = (event) => {
       const db = request.result;
-      applySchemaUpgrade(db, event.oldVersion, event.newVersion);
+      const oldVersion = event.oldVersion ?? 0;
+      const newVersion = event.newVersion ?? DB_VERSION;
+      applySchemaUpgrade(db, oldVersion, newVersion);
     };
+
     request.onsuccess = () => {
       const db = request.result;
       db.onversionchange = () => {
@@ -161,106 +204,160 @@ function openDb(): Promise<IDBDatabase> {
       };
       resolve(db);
     };
-    request.onerror = () => reject(new StorageError(request.error));
-    request.onblocked = () => reject(new StorageError());
+
+    request.onerror = () => {
+      dbPromise = null;
+      reject(
+        new StorageError(
+          "Impossible d'ouvrir la base locale.",
+          request.error,
+          "UNAVAILABLE",
+        ),
+      );
+    };
+
+    request.onblocked = () => {
+      dbPromise = null;
+      reject(
+        new StorageError(
+          "La base locale est temporairement occupée par un autre onglet.",
+          undefined,
+          "IO_ERROR",
+        ),
+      );
+    };
   });
-  // En cas d'échec, autoriser une nouvelle tentative au prochain appel.
-  dbPromise.catch(() => {
-    dbPromise = null;
-  });
+
   return dbPromise;
 }
 
-function run<T>(
-  store: StoreName,
-  mode: IDBTransactionMode,
-  op: (s: IDBObjectStore) => IDBRequest<T>,
-): Promise<T> {
-  return openDb().then(
-    (db) =>
-      new Promise<T>((resolve, reject) => {
-        let tx: IDBTransaction;
-        try {
-          tx = db.transaction(store, mode);
-        } catch (err) {
-          dbPromise = null;
-          reject(new StorageError(err));
-          return;
-        }
-        const request = op(tx.objectStore(store));
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(new StorageError(request.error));
-        tx.onerror = () => reject(new StorageError(tx.error));
-        tx.onabort = () => reject(new StorageError(tx.error));
-      }),
-  );
+export function resetDbConnectionForTests(): void {
+  dbPromise = null;
 }
 
 export const localStore = {
   async getAll<T extends { id: string }>(store: StoreName): Promise<T[]> {
+    if (!isIndexedDbSupported()) {
+      return readFallbackStore<T>(store);
+    }
     try {
-      return await (run(store, "readonly", (s) => s.getAll()) as Promise<T[]>);
-    } catch (err) {
-      if (getStorageFallback()) {
-        return readFallbackList<T>(store);
-      }
-      throw err instanceof StorageError ? err : new StorageError(err);
+      const db = await openDatabase();
+      return await new Promise<T[]>((resolve, reject) => {
+        const tx = db.transaction(store, "readonly");
+        const req = tx.objectStore(store).getAll();
+        req.onsuccess = () => resolve((req.result as T[]) ?? []);
+        req.onerror = () =>
+          reject(
+            new StorageError(
+              `Lecture impossible (${store}).`,
+              req.error,
+              "IO_ERROR",
+            ),
+          );
+      });
+    } catch {
+      return readFallbackStore<T>(store);
     }
   },
-  async put<T extends { id: string }>(
-    store: StoreName,
-    value: T,
-  ): Promise<void> {
-    if (!value || typeof value.id !== "string" || value.id.trim().length === 0) {
-      throw new StorageError(new Error("Identifiant d'élément invalide."));
+
+  async put<T extends { id: string }>(store: StoreName, value: T): Promise<T> {
+    if (!value || typeof value.id !== "string" || value.id.trim() === "") {
+      throw new StorageError(
+        "Identifiant d'enregistrement manquant ou invalide.",
+        undefined,
+        "INVALID_KEY",
+      );
+    }
+    if (!isIndexedDbSupported()) {
+      const existing = readFallbackStore<T>(store);
+      const next = [
+        value,
+        ...existing.filter((item) => item.id !== value.id),
+      ];
+      writeFallbackStore(store, next);
+      return value;
     }
     try {
-      await run(store, "readwrite", (s) => s.put(value));
+      const db = await openDatabase();
+      return await new Promise<T>((resolve, reject) => {
+        const tx = db.transaction(store, "readwrite");
+        tx.objectStore(store).put(value);
+        tx.oncomplete = () => resolve(value);
+        tx.onerror = () => {
+          if (isQuotaExceededError(tx.error)) {
+            reject(
+              new StorageError(
+                "Quota de stockage local dépassé. Libère de l'espace ou réduis la taille des pièces jointes.",
+                tx.error,
+                "QUOTA_EXCEEDED",
+              ),
+            );
+            return;
+          }
+          reject(
+            new StorageError(
+              `Enregistrement impossible (${store}).`,
+              tx.error,
+              "IO_ERROR",
+            ),
+          );
+        };
+      });
     } catch (err) {
-      if (getStorageFallback()) {
-        const current = readFallbackList<T>(store);
-        const idx = current.findIndex((item) => item.id === value.id);
-        if (idx >= 0) {
-          current[idx] = value;
-        } else {
-          current.push(value);
-        }
-        writeFallbackList(store, current);
-        return;
+      if (err instanceof StorageError && err.code === "QUOTA_EXCEEDED") {
+        throw err;
       }
-      throw err instanceof StorageError ? err : new StorageError(err);
+      const existing = readFallbackStore<T>(store);
+      const next = [
+        value,
+        ...existing.filter((item) => item.id !== value.id),
+      ];
+      writeFallbackStore(store, next);
+      return value;
     }
   },
-  async delete(store: StoreName, id: string): Promise<void> {
+
+  async remove(store: StoreName, id: string): Promise<void> {
+    if (!id || typeof id !== "string") {
+      throw new StorageError(
+        "Identifiant de suppression manquant.",
+        undefined,
+        "INVALID_KEY",
+      );
+    }
+    if (!isIndexedDbSupported()) {
+      const existing = readFallbackStore<{ id: string }>(store);
+      writeFallbackStore(
+        store,
+        existing.filter((item) => item.id !== id),
+      );
+      return;
+    }
     try {
-      await run(store, "readwrite", (s) => s.delete(id));
-    } catch (err) {
-      if (getStorageFallback()) {
-        const current = readFallbackList<{ id: string }>(store);
-        writeFallbackList(
-          store,
-          current.filter((item) => item.id !== id),
-        );
-        return;
-      }
-      throw err instanceof StorageError ? err : new StorageError(err);
+      const db = await openDatabase();
+      await new Promise<void>((resolve, reject) => {
+        const tx = db.transaction(store, "readwrite");
+        tx.objectStore(store).delete(id);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () =>
+          reject(
+            new StorageError(
+              `Suppression impossible (${store}).`,
+              tx.error,
+              "IO_ERROR",
+            ),
+          );
+      });
+    } catch {
+      const existing = readFallbackStore<{ id: string }>(store);
+      writeFallbackStore(
+        store,
+        existing.filter((item) => item.id !== id),
+      );
     }
   },
-  async clear(store: StoreName): Promise<void> {
-    try {
-      await run(store, "readwrite", (s) => s.clear());
-    } catch (err) {
-      if (getStorageFallback()) {
-        writeFallbackList(store, []);
-        return;
-      }
-      throw err instanceof StorageError ? err : new StorageError(err);
-    }
+
+  delete(store: StoreName, id: string): Promise<void> {
+    return this.remove(store, id);
   },
 };
-
-/** Réinitialise la connexion en cache (utile pour les tests unitaires). */
-export function resetDbConnectionForTests(): void {
-  dbPromise = null;
-  persistenceRequested = false;
-}

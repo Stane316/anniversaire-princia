@@ -33,6 +33,7 @@ import { ReadingPage } from "../features/reading/ReadingPage";
 import { PlannerPage } from "../features/planner/PlannerPage";
 import { WinsPage } from "../features/wins/WinsPage";
 import { DiscoverPage } from "../features/discover/DiscoverPage";
+import { AccessCodeGate } from "../features/access/AccessCodeGate";
 import { PwaUpdatePrompt } from "./PwaUpdatePrompt";
 import { GlassCursor } from "../components/effects/GlassCursor";
 
@@ -78,31 +79,33 @@ export function App() {
   return (
     <ToastProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<EntryGate />} />
-          {/* L'accueil à l'enveloppe reste joignable pour toujours,
-              même après la première visite (la redirection « / » →
-              « /app » ne doit jamais rendre l'invitation perdue). */}
-          <Route path="/birthday/accueil" element={<WelcomePage />} />
-          <Route path="/birthday" element={<CoverPage />} />
-          <Route path="/birthday/bibliotheque" element={<LibraryPage />} />
-          <Route path="/birthday/bibliotheque/chapitre/volume-scelle" element={<SealedVolumePage />} />
-          <Route path="/souvenirs" element={<SouvenirsGalleryPage />} />
-          <Route path="/birthday/bibliotheque/chapitre/:chapterId" element={<ChapterPage />} />
-          <Route path="/birthday/lettre" element={<LetterPage />} />
-          <Route path="/birthday/finale" element={<FinalePage />} />
-          <Route path="/enquete" element={<CasePage />} />
-          {/* Ancienne adresse du dossier : redirigée (jamais de route cassée). */}
-          <Route path="/birthday/enquete" element={<Navigate to="/enquete" replace />} />
-          <Route path="/app" element={<DailyLayout />}>
-            <Route index element={<DailyHome />} />
-            <Route path="lectures" element={<ReadingPage />} />
-            <Route path="carnet" element={<PlannerPage />} />
-            <Route path="victoires" element={<WinsPage />} />
-            <Route path="decouvrir" element={<DiscoverPage />} />
-          </Route>
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <AccessCodeGate>
+          <Routes>
+            <Route path="/" element={<EntryGate />} />
+            {/* L'accueil à l'enveloppe reste joignable pour toujours,
+                même après la première visite (la redirection « / » →
+                « /app » ne doit jamais rendre l'invitation perdue). */}
+            <Route path="/birthday/accueil" element={<WelcomePage />} />
+            <Route path="/birthday" element={<CoverPage />} />
+            <Route path="/birthday/bibliotheque" element={<LibraryPage />} />
+            <Route path="/birthday/bibliotheque/chapitre/volume-scelle" element={<SealedVolumePage />} />
+            <Route path="/souvenirs" element={<SouvenirsGalleryPage />} />
+            <Route path="/birthday/bibliotheque/chapitre/:chapterId" element={<ChapterPage />} />
+            <Route path="/birthday/lettre" element={<LetterPage />} />
+            <Route path="/birthday/finale" element={<FinalePage />} />
+            <Route path="/enquete" element={<CasePage />} />
+            {/* Ancienne adresse du dossier : redirigée (jamais de route cassée). */}
+            <Route path="/birthday/enquete" element={<Navigate to="/enquete" replace />} />
+            <Route path="/app" element={<DailyLayout />}>
+              <Route index element={<DailyHome />} />
+              <Route path="lectures" element={<ReadingPage />} />
+              <Route path="carnet" element={<PlannerPage />} />
+              <Route path="victoires" element={<WinsPage />} />
+              <Route path="decouvrir" element={<DiscoverPage />} />
+            </Route>
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </AccessCodeGate>
         <PwaUpdatePrompt />
         <GlassCursor />
       </BrowserRouter>
