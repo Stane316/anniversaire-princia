@@ -4320,3 +4320,191 @@ body[data-daypart="night"] {
 .dossier-scene .falling-rays {
   z-index: 0;
 }
+
+/* ---------- Écran de code d'accès (AccessCodeGate + CodeSlots) ---------- */
+.access-gate {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  background:
+    radial-gradient(circle at 20% 15%, rgba(57, 120, 212, 0.14), transparent 48%),
+    radial-gradient(circle at 82% 85%, rgba(21, 52, 91, 0.1), transparent 52%),
+    var(--color-bg, #F7FAFF);
+}
+
+.access-gate__card {
+  position: relative;
+  width: min(520px, 100%);
+  padding: clamp(1.5rem, 5vw, 2.75rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 50px rgba(21, 52, 91, 0.09);
+  overflow: hidden;
+}
+
+.access-gate__stamp {
+  margin-bottom: var(--space-1);
+}
+
+.access-gate__title {
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.access-gate__lead {
+  margin: 0;
+  max-width: 44ch;
+  font-size: var(--text-body);
+}
+
+.access-gate__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.access-gate__actions {
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.access-gate__hint {
+  margin: 0;
+  font-size: var(--text-caption);
+}
+
+.access-gate__mono {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.code-slots {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.code-slots__row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.28rem, 1.5vw, 0.55rem);
+  max-width: 100%;
+}
+
+.code-slots__sep {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-primary);
+  opacity: 0.55;
+  font-size: clamp(0.95rem, 3vw, 1.25rem);
+  user-select: none;
+}
+
+.code-slots__cell {
+  position: relative;
+  width: clamp(2.25rem, 11vw, 3.15rem);
+  height: clamp(2.85rem, 13.5vw, 3.75rem);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  border: 1.5px solid var(--color-border-strong);
+  box-shadow: 0 4px 12px rgba(21, 52, 91, 0.05);
+  transition:
+    border-color var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard),
+    background-color var(--motion-fast) var(--ease-standard);
+}
+
+.code-slots__cell--focused {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(57, 120, 212, 0.22);
+}
+
+.code-slots__cell--filled {
+  background: #f0f6ff;
+  border-color: var(--color-primary);
+}
+
+.code-slots__cell--error {
+  background: #fff5f5;
+  border-color: #c93b3b;
+  box-shadow: 0 0 0 2px rgba(201, 59, 59, 0.16);
+}
+
+.code-slots__cell--success {
+  background: #eefaf3;
+  border-color: #1f8a52;
+  box-shadow: 0 0 0 3px rgba(31, 138, 82, 0.18);
+}
+
+.code-slots__input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: clamp(1.15rem, 4.5vw, 1.5rem);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  outline: none;
+  padding: 0;
+  caret-color: var(--color-primary);
+}
+
+.code-slots__status {
+  min-height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.code-slots__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+  line-height: 1.35;
+  text-align: left;
+}
+
+.code-slots__badge--idle {
+  background: rgba(57, 120, 212, 0.1);
+  color: var(--color-primary-strong, #15345B);
+}
+
+.code-slots__badge--error {
+  background: rgba(201, 59, 59, 0.1);
+  color: #9e2424;
+}
+
+.code-slots__badge--success {
+  background: rgba(31, 138, 82, 0.12);
+  color: #16693d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code-slots__cell {
+    transition: none;
+  }
+}
+

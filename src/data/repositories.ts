@@ -5,7 +5,7 @@
  * (doc 01 §7.4).
  */
 import { localStore, STORES } from "./db";
-import type { Book, PlannerTask, SmallWin } from "../domain/models";
+import type { Book, PlannerTask, QgProposal, SmallWin } from "../domain/models";
 import { createId, nowIso } from "../lib/id";
 
 /* ------------------------------ Livres ------------------------------ */
@@ -70,6 +70,36 @@ export const winRepository = {
   },
   delete(id: string): Promise<void> {
     return localStore.delete(STORES.wins, id);
+  },
+};
+
+/* ------------------------- Propositions du QG ------------------------- */
+
+export const qgProposalLocalRepository = {
+  getAll(): Promise<QgProposal[]> {
+    return localStore.getAll<QgProposal>(STORES.proposals);
+  },
+  save(proposal: QgProposal): Promise<QgProposal> {
+    return localStore.put(STORES.proposals, proposal);
+  },
+  create(
+    input: Omit<QgProposal, "id" | "createdAt" | "updatedAt">,
+  ): Promise<QgProposal> {
+    const now = nowIso();
+    const proposal: QgProposal = {
+      ...input,
+      id: createId(),
+      createdAt: now,
+      updatedAt: now,
+    };
+    return localStore.put(STORES.proposals, proposal).then(() => proposal);
+  },
+  update(proposal: QgProposal): Promise<QgProposal> {
+    const next: QgProposal = { ...proposal, updatedAt: nowIso() };
+    return localStore.put(STORES.proposals, next).then(() => next);
+  },
+  delete(id: string): Promise<void> {
+    return localStore.delete(STORES.proposals, id);
   },
 };
 

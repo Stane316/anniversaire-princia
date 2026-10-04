@@ -1,29 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PRINCIA — Chapter 18">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#3978D4" />
-      <stop offset="55%" stop-color="#24559F" />
-      <stop offset="100%" stop-color="#15345B" />
-    </linearGradient>
-    <linearGradient id="page" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FFFFFF" />
-      <stop offset="100%" stop-color="#DCEBFF" />
-    </linearGradient>
-  </defs>
-  <!-- Fond bleu identitaire -->
-  <rect width="64" height="64" rx="15" fill="url(#bg)" />
-  <!-- Couverture du livre ouvert -->
-  <rect x="7" y="13" width="50" height="39" rx="7" fill="#0F2444" opacity="0.45" />
-  <rect x="8" y="11" width="48" height="38" rx="6" fill="#8EC5FF" />
-  <!-- Pages gauche et droite du livre ouvert -->
-  <path d="M11 14h19c1.2 0 2 .8 2 2v29c0-1.1-.9-2-2-2H11V14Z" fill="url(#page)" />
-  <path d="M53 14H34c-1.2 0-2 .8-2 2v29c0-1.1.9-2 2-2h19V14Z" fill="url(#page)" />
-  <!-- Reliure centrale -->
-  <line x1="32" y1="14" x2="32" y2="45" stroke="#B8C9DF" stroke-width="2" />
-  <!-- Médaillon central et lettre P -->
-  <circle cx="32" cy="28.5" r="12.5" fill="#174A91" stroke="#8EC5FF" stroke-width="2" />
-  <path
-    d="M27.5 21.5h5.8c3.2 0 5.4 1.8 5.4 4.6 0 2.9-2.2 4.7-5.4 4.7H31v5.2h-3.5V21.5Zm3.5 2.8v3.8h2.1c1.3 0 2.1-.7 2.1-1.9 0-1.2-.8-1.9-2.1-1.9H31Z"
-    fill="#FFFFFF"
-  />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#3978D4"/>
+  <path d="M14 44a5 5 0 0 1 5-5h31" fill="none" stroke="#DCEBFF" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M19 15h31v34H19a5 5 0 0 1-5-5V20a5 5 0 0 1 5-5Z" fill="#F7FAFF"/>
+  <path d="M22 24h20M22 30h14M22 36h20" stroke="#3978D4" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="50" cy="14" r="7" fill="#8EC5FF"/>
+  <path d="M50 10.5l1.2 2.4 2.8.4-2 2 .5 2.7L50 16.8l-2.5 1.2.5-2.7-2-2 2.8-.4Z" fill="#174A91"/>
 </svg>

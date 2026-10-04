@@ -4,11 +4,13 @@
  * États explicites : loading / ready / error (doc 03 §18.6).
  */
 import { useCallback, useEffect, useState } from "react";
-import type { Book, ReadingStatus } from "../../domain/models";
+import type { Book } from "../../domain/models";
 import { bookRepository } from "../../data/repositories";
 import { useToast } from "../../components/ui/Toast";
 
 export type LoadState = "loading" | "ready" | "error";
+
+export type BookCreateInput = Omit<Book, "id" | "createdAt" | "updatedAt">;
 
 export function useBooks() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -24,7 +26,12 @@ export function useBooks() {
       setState("ready");
     } catch (error) {
       setState("error");
-      notify(error instanceof Error ? error.message : "Impossible de charger les livres.", "error");
+      notify(
+        error instanceof Error
+          ? error.message
+          : "Impossible de charger les livres.",
+        "error",
+      );
     }
   }, [notify]);
 
@@ -33,14 +40,19 @@ export function useBooks() {
   }, [reload]);
 
   const create = useCallback(
-    async (input: { title: string; author?: string; category?: string; status: ReadingStatus; notes?: string }) => {
+    async (input: BookCreateInput) => {
       try {
         const book = await bookRepository.create(input);
         setBooks((current) => [book, ...current]);
         notify("Livre ajouté à ta bibliothèque.");
         return true;
       } catch (error) {
-        notify(error instanceof Error ? error.message : "Échec de l'enregistrement.", "error");
+        notify(
+          error instanceof Error
+            ? error.message
+            : "Échec de l'enregistrement.",
+          "error",
+        );
         return false;
       }
     },
@@ -51,10 +63,17 @@ export function useBooks() {
     async (book: Book) => {
       try {
         const next = await bookRepository.update(book);
-        setBooks((current) => current.map((b) => (b.id === next.id ? next : b)));
+        setBooks((current) =>
+          current.map((b) => (b.id === next.id ? next : b)),
+        );
         return true;
       } catch (error) {
-        notify(error instanceof Error ? error.message : "Échec de l'enregistrement.", "error");
+        notify(
+          error instanceof Error
+            ? error.message
+            : "Échec de l'enregistrement.",
+          "error",
+        );
         return false;
       }
     },
@@ -69,7 +88,12 @@ export function useBooks() {
         notify("Livre retiré de la bibliothèque.");
         return true;
       } catch (error) {
-        notify(error instanceof Error ? error.message : "La suppression n'a pas abouti.", "error");
+        notify(
+          error instanceof Error
+            ? error.message
+            : "La suppression n'a pas abouti.",
+          "error",
+        );
         return false;
       }
     },

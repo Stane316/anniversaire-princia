@@ -106,11 +106,21 @@ describe("Stockage local, persistance et repli hors ligne", () => {
     } as unknown as IDBDatabase;
 
     applySchemaUpgrade(fakeDb, 0, DB_VERSION);
-    expect(createdStores).toEqual([STORES.books, STORES.tasks, STORES.wins]);
+    expect(createdStores).toEqual([
+      STORES.books,
+      STORES.tasks,
+      STORES.wins,
+      STORES.proposals,
+    ]);
 
     // Un second appel (montée de version sur une base déjà initialisée) ne recrée rien
     applySchemaUpgrade(fakeDb, 1, DB_VERSION + 1);
-    expect(createdStores).toEqual([STORES.books, STORES.tasks, STORES.wins]);
+    expect(createdStores).toEqual([
+      STORES.books,
+      STORES.tasks,
+      STORES.wins,
+      STORES.proposals,
+    ]);
   });
 
   it("rejette avec StorageError si un élément sans identifiant valide est écrit", async () => {
